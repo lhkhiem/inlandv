@@ -1,0 +1,468 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dual-Font System Variables */
+    /* SINGLE SOURCE OF TRUTH: Change fonts here to update entire site */
+    --font-ui: var(--font-gmv-din-pro);
+    --font-content: var(--font-noto-serif);
+  }
+
+  html {
+    scroll-behavior: auto; /* Disable for transform control */
+    overflow-x: hidden;
+  }
+
+  /* Base body uses NotoSerif for reading comfort */
+  body {
+    @apply bg-[#151313] text-gray-100 antialiased;
+    font-family: var(--font-content);
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    overflow-x: hidden;
+  }
+  
+  /* Lock body scroll only when in fullpage mode (not in footer zone) */
+  body.fullpage-active:not(.footer-zone-active) {
+    overflow-y: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+  }
+
+  /* ALL HEADINGS use GMV DIN Pro (UI/Display font) */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-ui) !important;
+  }
+}
+
+@layer utilities {
+  /* DUAL-FONT SYSTEM - In utilities layer to load LAST and override everything */
+  /* SINGLE SOURCE OF TRUTH: Change fonts in :root variables to update entire site */
+  
+  /* ============================================
+     GMV DIN PRO - UI / DISPLAY FONT
+     For: Headings, Navigation, Buttons, UI Elements, Labels, Badges, CTAs
+     ============================================ */
+  
+  /* All headings use GMV DIN Pro */
+  h1, h1 *,
+  h2, h2 *,
+  h3, h3 *,
+  h4, h4 *,
+  h5, h5 *,
+  h6, h6 * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Navigation & Header elements */
+  nav, nav *,
+  header, header *,
+  nav a, nav a *,
+  nav span, nav span *,
+  nav button, nav button *,
+  nav div, nav div *,
+  footer, footer * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Buttons & CTAs */
+  button, button *,
+  [type="button"], [type="button"] *,
+  [type="submit"], [type="submit"] *,
+  [type="reset"], [type="reset"] *,
+  .btn-primary, .btn-primary *,
+  .btn-secondary, .btn-secondary * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Labels, badges, counters */
+  label, label *,
+  .badge, .badge *,
+  .counter, .counter * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Tabs & Multi-tabs */
+  [role="tab"], [role="tab"] *,
+  [role="tabpanel"], [role="tabpanel"] *,
+  .tab, .tab *,
+  .tabs, .tabs * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Timeline labels & markers */
+  .timeline, .timeline *,
+  .timeline-label, .timeline-label *,
+  .timeline-marker, .timeline-marker * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Full-page scroll indicators */
+  .fullpage-indicator, .fullpage-indicator *,
+  .scroll-indicator, .scroll-indicator * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Section titles & page titles */
+  .section-title, .section-title *,
+  .page-title, .page-title * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Form inputs & selects (UI elements) */
+  input, input *,
+  select, select *,
+  [type="text"], [type="text"] *,
+  [type="email"], [type="email"] *,
+  [type="password"], [type="password"] *,
+  [type="number"], [type="number"] *,
+  [type="search"], [type="search"] *,
+  [type="tel"], [type="tel"] *,
+  [type="url"], [type="url"] * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Table headers (UI elements) */
+  table, table *,
+  thead, thead *,
+  th, th * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Links in navigation/UI context */
+  a, a * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* Tailwind font utilities - UI font */
+  .font-sans, .font-sans *,
+  .font-display, .font-display *,
+  .font-heading, .font-heading * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* ============================================
+     NOTOSERIF - CONTENT / READING FONT
+     For: Long-form content, articles, blog posts, case studies, descriptions
+     ============================================ */
+
+  /* Base paragraphs inherit NotoSerif from body */
+  p {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Content areas - articles, blog posts, news */
+  .article-content, .article-content *,
+  .article-body, .article-body *,
+  .blog-content, .blog-content *,
+  .news-content, .news-content *,
+  .case-study-content, .case-study-content * {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Prose typography (long-form content) */
+  .prose, .prose *,
+  .prose p, .prose p *,
+  .prose li, .prose li *,
+  .prose blockquote, .prose blockquote *,
+  .prose strong, .prose strong *,
+  .prose em, .prose em * {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Prose headings still use UI font */
+  .prose h1, .prose h1 *,
+  .prose h2, .prose h2 *,
+  .prose h3, .prose h3 *,
+  .prose h4, .prose h4 *,
+  .prose h5, .prose h5 *,
+  .prose h6, .prose h6 * {
+    font-family: var(--font-ui) !important;
+  }
+
+  /* List items in content areas */
+  li, ul, ol {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Table body content (data) */
+  tbody, tbody *,
+  td, td * {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Textarea (content input) */
+  textarea, textarea * {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Tailwind font utilities - content font */
+  .font-serif, .font-serif *,
+  .font-content, .font-content * {
+    font-family: var(--font-content) !important;
+  }
+
+  /* Rich text editor output */
+  [contenteditable], [contenteditable] * {
+    font-family: var(--font-content) !important;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-goldDark hover:bg-[#23673b] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-goldDark;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-100 bg-transparent hover:bg-white/5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-goldDark;
+  }
+
+  .section-title {
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-2 md:mb-3;
+  }
+
+  .section-subtitle {
+    @apply text-xs md:text-sm lg:text-base xl:text-lg text-gray-600 max-w-2xl;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* Fullpage section - STRICT ANTI-BLEED RULES */
+.fullpage-section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+/* NEW: Strict fullpage section (no bleeding) */
+.fullpage-section-strict {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  isolation: isolate !important;
+}
+
+.fullpage-section-container {
+  height: 100vh !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.fullpage-scroll-container {
+  position: relative !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+  height: 100vh !important;
+}
+
+.fullpage-sections-wrapper {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Portrait mode: Override fullpage scroll constraints to allow natural stacking */
+@media (orientation: portrait) {
+  .fullpage-scroll-container {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    touch-action: auto !important;
+  }
+  
+  .fullpage-sections-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    will-change: auto !important;
+  }
+  
+  .fullpage-section-container {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    top: auto !important;
+    overflow: visible !important;
+    display: block !important;
+    isolation: isolate;
+  }
+}
+
+.section-content-wrapper {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Smooth scroll snap - DISABLED for transform-based control */
+html {
+  scroll-snap-type: none;
+  scroll-padding-top: 0;
+}
+
+/* Smooth transitions */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* NO smooth scrolling - controlled by transform */
+* {
+  scroll-behavior: auto;
+}
+
+/* Dual Range Slider Styles - Perfect alignment */
+.slider-thumb {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: auto; /* Allow interaction on the input */
+  outline: none;
+  margin: 0;
+  padding: 0;
+  will-change: transform;
+  z-index: 10;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.slider-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #666;
+  cursor: grab;
+  pointer-events: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 100;
+  transform: translateZ(0);
+  will-change: transform;
+  /* Perfect vertical centering: compensate for thumb radius minus half track height */
+  margin-top: -7.5px; /* (16px thumb - 1px track) / 2 */
+}
+
+.slider-thumb:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.slider-thumb::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #666;
+  cursor: grab;
+  pointer-events: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 100;
+  transform: translateZ(0);
+  will-change: transform;
+  /* Perfect vertical centering for Firefox */
+  margin-top: -7.5px;
+}
+
+.slider-thumb:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+
+.slider-thumb::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  background: transparent;
+  border: none;
+  cursor: default; /* Prevent track clicking */
+}
+
+.slider-thumb::-moz-range-track {
+  width: 100%;
+  height: 1px;
+  background: transparent;
+  border: none;
+  cursor: default; /* Prevent track clicking */
+}
+
+/* Prevent clicking on the track area - only allow thumb interaction */
+.slider-thumb {
+  cursor: default;
+}
+
+.slider-thumb::-webkit-slider-thumb {
+  cursor: grab;
+}
+
+.slider-thumb:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.slider-thumb::-moz-range-thumb {
+  cursor: grab;
+}
+
+.slider-thumb:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+
+.slider-thumb:focus {
+  outline: none;
+}
+
+.slider-thumb:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(53, 139, 78, 0.2);
+}
+
+.slider-thumb:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(53, 139, 78, 0.2);
+}

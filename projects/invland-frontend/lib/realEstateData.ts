@@ -1,0 +1,739 @@
+import { Property, IndustrialPark } from './types'
+
+// Sample Properties Data (Bất động sản)
+export const sampleProperties: Property[] = [
+  {
+    id: '1',
+    code: 'INL-BDS-001',
+    name: 'Nhà phố cao cấp Quận 7',
+    slug: 'nha-pho-cao-cap-quan-7',
+    province: 'TP.HCM',
+    district: 'Quận 7',
+    type: 'nha-pho',
+    status: 'available',
+    legal_status: 'so-hong-rieng',
+    area: 120,
+    land_area: 100,
+    construction_area: 300,
+    bedrooms: 4,
+    bathrooms: 3,
+    floors: 3,
+    orientation: 'dong',
+    price: 4800000000,
+    price_per_sqm: 40000000,
+    furniture: 'full',
+    description: 'Nhà phố 1 trệt 2 lầu, thiết kế hiện đại, nội thất cao cấp, khu dân cư an ninh.',
+    description_full: 'Sở hữu vị trí đắc địa tại trung tâm Quận 7, kết nối nhanh đến Phú Mỹ Hưng. Thiết kế tinh tế, tối ưu công năng, nội thất nhập khẩu, sân trước rộng rãi, gara ô tô. Pháp lý minh bạch, sổ hồng riêng.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1200',
+    amenities: ['gara-oto', 'san-vuon', 'an-ninh-24-7'],
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    id: '2',
+    code: 'INL-BDS-002',
+    name: 'Căn hộ Skyline Riverside',
+    slug: 'can-ho-skyline-riverside',
+    province: 'TP.HCM',
+    district: 'Bình Thạnh',
+    type: 'can-ho',
+    status: 'available',
+    legal_status: 'so-hong-rieng',
+    area: 72,
+    bedrooms: 2,
+    bathrooms: 2,
+    floors: 1,
+    orientation: 'nam',
+    price: 2200000000,
+    price_per_sqm: 30555556,
+    furniture: 'basic',
+    description: 'Căn hộ 2PN view sông, tiện ích 5 sao, an ninh 24/7.',
+    description_full: 'Không gian sống đẳng cấp giữa lòng thành phố. Tận hưởng hệ thống tiện ích nội khu hoàn hảo: hồ bơi tràn bờ, gym & yoga, vườn thiền, khu BBQ. Kết nối giao thông thuận tiện.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200',
+    amenities: ['ho-boi', 'gym', 'thang-may', 'an-ninh-24-7'],
+    created_at: '2025-01-02T00:00:00Z',
+    updated_at: '2025-01-02T00:00:00Z',
+  },
+  {
+    id: '3',
+    code: 'INL-BDS-003',
+    name: 'Biệt thự Phú Mỹ Hưng',
+    slug: 'biet-thu-phu-my-hung',
+    province: 'TP.HCM',
+    district: 'Quận 7',
+    type: 'biet-thu',
+    status: 'available',
+    legal_status: 'so-hong-rieng',
+    area: 250,
+    land_area: 200,
+    construction_area: 400,
+    bedrooms: 5,
+    bathrooms: 4,
+    floors: 2,
+    orientation: 'dong-nam',
+    price: 12500000000,
+    price_per_sqm: 50000000,
+    furniture: 'full',
+    description: 'Biệt thự đơn lập, sân vườn rộng, hồ bơi riêng',
+    thumbnail_url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200',
+    amenities: ['ho-boi', 'san-vuon', 'gara-oto', 'an-ninh-24-7'],
+    created_at: '2025-01-03T00:00:00Z',
+    updated_at: '2025-01-03T00:00:00Z',
+  },
+  {
+    id: '4',
+    code: 'INL-BDS-004',
+    name: 'Nhà xưởng KCN Tân Bình',
+    slug: 'nha-xuong-kcn-tan-binh',
+    province: 'TP.HCM',
+    district: 'Tân Bình',
+    type: 'nha-xuong',
+    status: 'available',
+    legal_status: 'hop-le',
+    area: 500,
+    construction_area: 450,
+    price: 8000000000,
+    price_per_sqm: 16000000,
+    furniture: 'empty',
+    description: 'Nhà xưởng khu công nghiệp, hạ tầng hoàn chỉnh',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=1200',
+    amenities: ['cho-dau-xe', 'an-ninh-24-7'],
+    created_at: '2025-01-04T00:00:00Z',
+    updated_at: '2025-01-04T00:00:00Z',
+  },
+  {
+    id: '5',
+    code: 'INL-BDS-005',
+    name: 'Đất nền Bình Chánh',
+    slug: 'dat-nen-binh-chanh',
+    province: 'TP.HCM',
+    district: 'Bình Chánh',
+    type: 'dat-nen',
+    status: 'available',
+    legal_status: 'so-hong-rieng',
+    area: 150,
+    width: 10,
+    length: 15,
+    price: 3000000000,
+    price_per_sqm: 20000000,
+    description: 'Đất nền mặt tiền đường lớn, vị trí đẹp',
+    thumbnail_url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200',
+    created_at: '2025-01-05T00:00:00Z',
+    updated_at: '2025-01-05T00:00:00Z',
+  },
+  {
+    id: '6',
+    code: 'INL-BDS-006',
+    name: 'Shophouse The Manor',
+    slug: 'shophouse-the-manor',
+    province: 'TP.HCM',
+    district: 'Bình Thạnh',
+    type: 'shophouse',
+    status: 'reserved',
+    legal_status: 'so-hong-rieng',
+    area: 180,
+    bedrooms: 3,
+    bathrooms: 3,
+    floors: 4,
+    orientation: 'dong',
+    price: 8500000000,
+    price_per_sqm: 47222222,
+    furniture: 'basic',
+    description: 'Shophouse 1 trệt 3 lầu, kinh doanh tốt',
+    thumbnail_url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200',
+    amenities: ['thang-may', 'cho-dau-xe', 'an-ninh-24-7'],
+    created_at: '2025-01-06T00:00:00Z',
+    updated_at: '2025-01-06T00:00:00Z',
+  },
+]
+
+// Sample Industrial Parks Data (Khu công nghiệp)
+export const sampleIndustrialParks: IndustrialPark[] = [
+  {
+    id: '1',
+    code: 'INL-KCN-001',
+    name: 'KCN Tân Bình',
+    slug: 'kcn-tan-binh',
+    province: 'TP.HCM',
+    district: 'Tân Bình',
+    total_area: 500,
+    available_area: 120,
+    occupancy_rate: 76,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 80000,
+    rental_price_max: 150000,
+    land_price: 4500000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['dien-tu', 'co-khi', 'hoa-chat'],
+    description: 'KCN hiện đại, hạ tầng hoàn chỉnh, gần cảng biển',
+    description_full: 'Khu công nghiệp Tân Bình là một trong những KCN hiện đại nhất khu vực, với hạ tầng kỹ thuật hoàn chỉnh, gần các cảng biển lớn, thuận tiện cho xuất nhập khẩu.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=1200',
+    contact_phone: '0901234567',
+    contact_email: 'kcn.tanbinh@inland.vn',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    id: '2',
+    code: 'INL-KCN-002',
+    name: 'KCN Long Thành',
+    slug: 'kcn-long-thanh',
+    province: 'Đồng Nai',
+    district: 'Long Thành',
+    total_area: 1200,
+    available_area: 450,
+    occupancy_rate: 62.5,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 70000,
+    rental_price_max: 120000,
+    land_price: 4200000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['may-mac', 'co-khi', 'nong-san'],
+    description: 'KCN quy mô lớn, gần sân bay Long Thành',
+    description_full: 'Khu công nghiệp Long Thành nằm tại vị trí chiến lược, cách sân bay quốc tế Long Thành chỉ 5km, thuận lợi cho các doanh nghiệp logistics và sản xuất.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?q=80&w=1200',
+    contact_phone: '0909876543',
+    contact_email: 'kcn.longthanh@inland.vn',
+    created_at: '2025-01-02T00:00:00Z',
+    updated_at: '2025-01-02T00:00:00Z',
+  },
+  {
+    id: '3',
+    code: 'INL-KCN-003',
+    name: 'KCN Hiệp Phước',
+    slug: 'kcn-hiep-phuoc',
+    province: 'TP.HCM',
+    district: 'Nhà Bè',
+    total_area: 800,
+    available_area: 200,
+    occupancy_rate: 75,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 90000,
+    rental_price_max: 160000,
+    land_price: 4800000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['dien-tu', 'duoc-pham', 'thuc-pham'],
+    description: 'KCN sát cảng Hiệp Phước, logistics thuận lợi',
+    thumbnail_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200',
+    contact_phone: '0903456789',
+    contact_email: 'kcn.hiepphuoc@inland.vn',
+    created_at: '2025-01-03T00:00:00Z',
+    updated_at: '2025-01-03T00:00:00Z',
+  },
+  // Thêm các khu công nghiệp từ Footer
+  {
+    id: '4',
+    code: 'INL-KCN-004',
+    name: 'Cụm công nghiệp Bình Minh',
+    slug: 'cum-cong-nghiep-binh-minh',
+    province: 'Bình Dương',
+    district: 'Dầu Tiếng',
+    total_area: 350,
+    available_area: 120,
+    occupancy_rate: 65.7,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 45000,
+    rental_price_max: 75000,
+    land_price: 2800000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['co-khi', 'may-mac', 'go-do-go'],
+    description: 'Cụm công nghiệp quy mô vừa, hạ tầng đầy đủ, giá thuê hợp lý',
+    description_full: 'Cụm công nghiệp Bình Minh được quy hoạch bài bản với hệ thống hạ tầng kỹ thuật hoàn chỉnh. Vị trí thuận lợi gần các trục giao thông chính, phù hợp cho các doanh nghiệp vừa và nhỏ. Hệ thống điện, nước, viễn thông ổn định, an ninh 24/7.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=1200',
+    contact_phone: '0274 3856 789',
+    contact_email: 'ccn.binhminh@inland.vn',
+    created_at: '2025-01-04T00:00:00Z',
+    updated_at: '2025-01-04T00:00:00Z',
+  },
+  {
+    id: '5',
+    code: 'INL-KCN-005',
+    name: 'Khu công nghiệp Hải Long',
+    slug: 'khu-cong-nghiep-hai-long',
+    province: 'Hải Phòng',
+    district: 'An Dương',
+    total_area: 600,
+    available_area: 180,
+    occupancy_rate: 70,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 55000,
+    rental_price_max: 90000,
+    land_price: 3500000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['dien-tu', 'co-khi', 'logistics', 'kho-bai'],
+    description: 'KCN gần cảng biển, logistics thuận lợi, phù hợp xuất khẩu',
+    description_full: 'Khu công nghiệp Hải Long nằm tại vị trí chiến lược gần cảng biển Hải Phòng, thuận lợi cho các doanh nghiệp xuất nhập khẩu. Hạ tầng logistics hoàn chỉnh với đường giao thông rộng, kho bãi hiện đại. Hệ thống điện ổn định, nước sạch đầy đủ, an ninh chặt chẽ.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?q=80&w=1200',
+    contact_phone: '0225 3847 123',
+    contact_email: 'kcn.hailong@inland.vn',
+    created_at: '2025-01-05T00:00:00Z',
+    updated_at: '2025-01-05T00:00:00Z',
+  },
+  {
+    id: '6',
+    code: 'INL-KCN-006',
+    name: 'Khu công nghiệp số 3 Hưng Yên',
+    slug: 'khu-cong-nghiep-so-3-hung-yen',
+    province: 'Hưng Yên',
+    district: 'Mỹ Hào',
+    total_area: 420,
+    available_area: 95,
+    occupancy_rate: 77.4,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 40000,
+    rental_price_max: 65000,
+    land_price: 3200000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['thuc-pham', 'nong-san', 'may-mac'],
+    description: 'KCN phù hợp ngành thực phẩm, nông sản, may mặc',
+    description_full: 'Khu công nghiệp số 3 Hưng Yên được thiết kế chuyên biệt cho các ngành công nghiệp nhẹ, đặc biệt là thực phẩm và nông sản. Hệ thống xử lý nước thải đạt chuẩn, phù hợp với yêu cầu môi trường nghiêm ngặt. Vị trí gần Hà Nội, thuận tiện cho phân phối.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200',
+    contact_phone: '0221 3856 456',
+    contact_email: 'kcn3.hungyen@inland.vn',
+    created_at: '2025-01-06T00:00:00Z',
+    updated_at: '2025-01-06T00:00:00Z',
+  },
+  {
+    id: '7',
+    code: 'INL-KCN-007',
+    name: 'Khu công nghiệp số 5 Hưng Yên',
+    slug: 'khu-cong-nghiep-so-5-hung-yen',
+    province: 'Hưng Yên',
+    district: 'Văn Lâm',
+    total_area: 580,
+    available_area: 220,
+    occupancy_rate: 62.1,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 50000,
+    rental_price_max: 85000,
+    land_price: 4600000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['dien-tu', 'co-khi', 'hoa-chat', 'duoc-pham'],
+    description: 'KCN hiện đại, hạ tầng cao cấp, phù hợp công nghiệp công nghệ cao',
+    description_full: 'Khu công nghiệp số 5 Hưng Yên là một trong những KCN hiện đại nhất khu vực phía Bắc. Hạ tầng kỹ thuật cao cấp với hệ thống điện dự phòng, nước sạch chất lượng cao, internet tốc độ cao. Phù hợp cho các doanh nghiệp công nghệ cao, điện tử, dược phẩm.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200',
+    contact_phone: '0221 3847 789',
+    contact_email: 'kcn5.hungyen@inland.vn',
+    created_at: '2025-01-07T00:00:00Z',
+    updated_at: '2025-01-07T00:00:00Z',
+  },
+  {
+    id: '8',
+    code: 'INL-CCN-001',
+    name: 'Cụm công nghiệp Quảng Lăng - Đặng Lẽ - Hưng Yên',
+    slug: 'cum-cong-nghiep-quang-lang-dang-le-hung-yen',
+    province: 'Hưng Yên',
+    district: 'Yên Mỹ',
+    total_area: 280,
+    available_area: 85,
+    occupancy_rate: 69.6,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: false,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 35000,
+    rental_price_max: 55000,
+    land_price: 2500000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['may-mac', 'da-giay', 'nong-san'],
+    description: 'CCN quy mô nhỏ, giá thuê thấp, phù hợp doanh nghiệp vừa và nhỏ',
+    description_full: 'Cụm công nghiệp Quảng Lăng - Đặng Lẽ được quy hoạch để phục vụ các doanh nghiệp vừa và nhỏ với mức giá thuê hợp lý. Hạ tầng cơ bản đầy đủ, phù hợp cho các ngành may mặc, da giày, chế biến nông sản. Vị trí gần Hà Nội, thuận tiện giao thông.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=1200',
+    contact_phone: '0221 3856 234',
+    contact_email: 'ccn.quanglang@inland.vn',
+    created_at: '2025-01-08T00:00:00Z',
+    updated_at: '2025-01-08T00:00:00Z',
+  },
+  {
+    id: '9',
+    code: 'INL-CCN-002',
+    name: 'Cụm công nghiệp Phạm Ngũ Lão - Nghĩa Dân',
+    slug: 'cum-cong-nghiep-pham-ngu-lao-nghia-dan',
+    province: 'Hưng Yên',
+    district: 'Kim Động',
+    total_area: 320,
+    available_area: 110,
+    occupancy_rate: 65.6,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 38000,
+    rental_price_max: 60000,
+    land_price: 2700000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['thuc-pham', 'nong-san', 'may-mac'],
+    description: 'CCN chuyên biệt ngành thực phẩm, nông sản',
+    description_full: 'Cụm công nghiệp Phạm Ngũ Lão - Nghĩa Dân được thiết kế chuyên biệt cho các doanh nghiệp chế biến thực phẩm và nông sản. Hệ thống xử lý nước thải đạt chuẩn, đảm bảo môi trường sạch. Vị trí thuận lợi gần các vùng nguyên liệu nông nghiệp.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=1200',
+    contact_phone: '0221 3847 567',
+    contact_email: 'ccn.phamngulao@inland.vn',
+    created_at: '2025-01-09T00:00:00Z',
+    updated_at: '2025-01-09T00:00:00Z',
+  },
+  {
+    id: '10',
+    code: 'INL-KCN-008',
+    name: 'Khu công nghiệp Amata Sông Khoai',
+    slug: 'khu-cong-nghiep-amata-song-khoai',
+    province: 'Quảng Ninh',
+    district: 'Đông Triều',
+    total_area: 750,
+    available_area: 280,
+    occupancy_rate: 62.7,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 60000,
+    rental_price_max: 100000,
+    land_price: 5000000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['dien-tu', 'co-khi', 'logistics', 'kho-bai'],
+    description: 'KCN quy mô lớn, hạ tầng cao cấp, gần cảng biển',
+    description_full: 'Khu công nghiệp Amata Sông Khoai là dự án liên doanh với tập đoàn Amata (Thái Lan), quy mô lớn với hạ tầng kỹ thuật đẳng cấp quốc tế. Gần cảng biển Cái Lân, thuận lợi cho xuất nhập khẩu. Hệ thống điện, nước, viễn thông hiện đại, an ninh chặt chẽ.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200',
+    contact_phone: '0203 3856 890',
+    contact_email: 'kcn.amata@inland.vn',
+    created_at: '2025-01-10T00:00:00Z',
+    updated_at: '2025-01-10T00:00:00Z',
+  },
+  {
+    id: '11',
+    code: 'INL-KCN-009',
+    name: 'Khu công nghiệp Sông Lô 2',
+    slug: 'khu-cong-nghiep-song-lo-2',
+    province: 'Vĩnh Phúc',
+    district: 'Bình Xuyên',
+    total_area: 480,
+    available_area: 150,
+    occupancy_rate: 68.8,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 52000,
+    rental_price_max: 88000,
+    land_price: 4400000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['dien-tu', 'co-khi', 'thuc-pham', 'duoc-pham'],
+    description: 'KCN hiện đại, gần Hà Nội, phù hợp nhiều ngành công nghiệp',
+    description_full: 'Khu công nghiệp Sông Lô 2 nằm tại vị trí chiến lược gần Hà Nội, thuận tiện cho các doanh nghiệp cần tiếp cận thị trường miền Bắc. Hạ tầng kỹ thuật hoàn chỉnh, phù hợp cho nhiều ngành công nghiệp từ điện tử, cơ khí đến thực phẩm, dược phẩm.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=1200',
+    contact_phone: '0211 3847 345',
+    contact_email: 'kcn.songlo2@inland.vn',
+    created_at: '2025-01-11T00:00:00Z',
+    updated_at: '2025-01-11T00:00:00Z',
+  },
+  {
+    id: '12',
+    code: 'INL-KCN-010',
+    name: 'Khu công nghiệp Tam Dương 1',
+    slug: 'khu-cong-nghiep-tam-duong-1',
+    province: 'Vĩnh Phúc',
+    district: 'Tam Dương',
+    total_area: 550,
+    available_area: 195,
+    occupancy_rate: 64.5,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 48000,
+    rental_price_max: 82000,
+    land_price: 4100000, // Giá chuyển nhượng đất trong KCN (VND/m²)
+    allowed_industries: ['co-khi', 'dien-tu', 'thuc-pham', 'nong-san'],
+    description: 'KCN đa ngành, hạ tầng tốt, giá thuê cạnh tranh',
+    description_full: 'Khu công nghiệp Tam Dương 1 được quy hoạch đa ngành với hạ tầng kỹ thuật tốt. Phù hợp cho các doanh nghiệp cơ khí, điện tử, chế biến thực phẩm và nông sản. Vị trí gần Hà Nội, thuận tiện giao thông, giá thuê cạnh tranh.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200',
+    contact_phone: '0211 3856 678',
+    contact_email: 'kcn.tamduong1@inland.vn',
+    created_at: '2025-01-12T00:00:00Z',
+    updated_at: '2025-01-12T00:00:00Z',
+  },
+  {
+    id: '13',
+    code: 'INL-CCN-003',
+    name: 'Cụm công nghiệp Tân Phú Trung',
+    slug: 'cum-cong-nghiep-tan-phu-trung',
+    province: 'TP.HCM',
+    district: 'Củ Chi',
+    total_area: 250,
+    available_area: 75,
+    occupancy_rate: 70,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 32000,
+    rental_price_max: 52000,
+    land_price: 2200000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['may-mac', 'thuc-pham', 'nong-san'],
+    description: 'CCN gần TP.HCM, giá thuê hợp lý, phù hợp doanh nghiệp vừa và nhỏ',
+    description_full: 'Cụm công nghiệp Tân Phú Trung nằm tại vị trí thuận lợi gần TP.HCM, phù hợp cho các doanh nghiệp vừa và nhỏ. Hạ tầng cơ bản đầy đủ, giá thuê và chuyển nhượng hợp lý. Phù hợp cho các ngành may mặc, chế biến thực phẩm và nông sản.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=1200',
+    contact_phone: '028 3847 123',
+    contact_email: 'ccn.tanphutrung@inland.vn',
+    created_at: '2025-01-13T00:00:00Z',
+    updated_at: '2025-01-13T00:00:00Z',
+  },
+  {
+    id: '14',
+    code: 'INL-CCN-004',
+    name: 'Cụm công nghiệp An Phú Đông',
+    slug: 'cum-cong-nghiep-an-phu-dong',
+    province: 'TP.HCM',
+    district: 'Quận 12',
+    total_area: 180,
+    available_area: 55,
+    occupancy_rate: 69.4,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: false,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 40000,
+    rental_price_max: 65000,
+    land_price: 3000000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['dien-tu', 'co-khi', 'may-mac'],
+    description: 'CCN trong nội thành, thuận tiện giao thông, phù hợp sản xuất nhẹ',
+    description_full: 'Cụm công nghiệp An Phú Đông nằm trong nội thành TP.HCM, thuận tiện cho giao thông và phân phối. Phù hợp cho các doanh nghiệp sản xuất nhẹ như điện tử, cơ khí, may mặc. Hạ tầng cơ bản đầy đủ, an ninh tốt.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=1200',
+    contact_phone: '028 3847 456',
+    contact_email: 'ccn.anphudong@inland.vn',
+    created_at: '2025-01-14T00:00:00Z',
+    updated_at: '2025-01-14T00:00:00Z',
+  },
+  {
+    id: '15',
+    code: 'INL-CCN-005',
+    name: 'Cụm công nghiệp Tân Tạo',
+    slug: 'cum-cong-nghiep-tan-tao',
+    province: 'Bình Dương',
+    district: 'Dầu Tiếng',
+    total_area: 300,
+    available_area: 95,
+    occupancy_rate: 68.3,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: true,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 36000,
+    rental_price_max: 58000,
+    land_price: 2600000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['co-khi', 'may-mac', 'thuc-pham'],
+    description: 'CCN quy mô vừa, hạ tầng tốt, giá cạnh tranh',
+    description_full: 'Cụm công nghiệp Tân Tạo được quy hoạch với hạ tầng kỹ thuật tốt, phù hợp cho các doanh nghiệp cơ khí, may mặc và chế biến thực phẩm. Vị trí gần TP.HCM và Bình Dương, thuận tiện giao thông. Giá thuê và chuyển nhượng cạnh tranh.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=1200',
+    contact_phone: '0274 3856 234',
+    contact_email: 'ccn.tantao@inland.vn',
+    created_at: '2025-01-15T00:00:00Z',
+    updated_at: '2025-01-15T00:00:00Z',
+  },
+  {
+    id: '16',
+    code: 'INL-CCN-006',
+    name: 'Cụm công nghiệp Phú Mỹ',
+    slug: 'cum-cong-nghiep-phu-my',
+    province: 'Bà Rịa - Vũng Tàu',
+    district: 'Tân Thành',
+    total_area: 220,
+    available_area: 68,
+    occupancy_rate: 69.1,
+    infrastructure_power: true,
+    infrastructure_water: true,
+    infrastructure_drainage: true,
+    infrastructure_waste: false,
+    infrastructure_internet: true,
+    infrastructure_road: true,
+    infrastructure_security: true,
+    rental_price_min: 38000,
+    rental_price_max: 62000,
+    land_price: 2900000, // Giá chuyển nhượng đất ngoài KCN/CCN (VND/m²)
+    allowed_industries: ['logistics', 'kho-bai', 'thuc-pham'],
+    description: 'CCN gần cảng biển, phù hợp logistics và kho bãi',
+    description_full: 'Cụm công nghiệp Phú Mỹ nằm gần cảng biển và các khu công nghiệp lớn, phù hợp cho các doanh nghiệp logistics, kho bãi và chế biến thực phẩm. Hạ tầng giao thông thuận lợi, giá thuê hợp lý.',
+    thumbnail_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200',
+    contact_phone: '0254 3847 567',
+    contact_email: 'ccn.phumy@inland.vn',
+    created_at: '2025-01-16T00:00:00Z',
+    updated_at: '2025-01-16T00:00:00Z',
+  },
+]
+
+// Filter functions
+export function filterProperties(list: Property[], filters: any): Property[] {
+  return list.filter(p => {
+    // Search
+    if (filters.q && !p.name.toLowerCase().includes(filters.q.toLowerCase())) return false
+
+    // Type
+    if (filters.type && p.type !== filters.type) return false
+
+    // Location
+    if (filters.province && p.province !== filters.province) return false
+    if (filters.district && p.district !== filters.district) return false
+
+    // Price
+    if (filters.price_min !== undefined && p.price < filters.price_min) return false
+    if (filters.price_max !== undefined && p.price > filters.price_max) return false
+
+    // Area
+    if (filters.area_min !== undefined && p.area < filters.area_min) return false
+    if (filters.area_max !== undefined && p.area > filters.area_max) return false
+
+    // Status
+    if (filters.status && p.status !== filters.status) return false
+
+    // Legal status
+    if (filters.legal_status && p.legal_status !== filters.legal_status) return false
+
+    // Bedrooms
+    if (filters.bedrooms !== undefined && p.bedrooms !== undefined) {
+      if (filters.bedrooms >= 4 && p.bedrooms < 4) return false
+      else if (filters.bedrooms < 4 && p.bedrooms !== filters.bedrooms) return false
+    }
+
+    // Orientation
+    if (filters.orientation && p.orientation !== filters.orientation) return false
+
+    // Furniture
+    if (filters.furniture && p.furniture !== filters.furniture) return false
+
+    // Amenities
+    if (filters.amenities && filters.amenities.length > 0) {
+      if (!p.amenities || !filters.amenities.every((a: string) => p.amenities!.includes(a))) {
+        return false
+      }
+    }
+
+    return true
+  })
+}
+
+export function filterIndustrialParks(list: IndustrialPark[], filters: any): IndustrialPark[] {
+  return list.filter(park => {
+    // Search - by name or IIP code
+    if (filters.q) {
+      const query = filters.q.toLowerCase()
+      const matchesName = park.name.toLowerCase().includes(query)
+      const matchesCode = park.code?.toLowerCase().includes(query)
+      if (!matchesName && !matchesCode) return false
+    }
+
+    // Location
+    if (filters.province && park.province !== filters.province) return false
+    if (filters.district && park.district !== filters.district) return false
+
+    // Rental price
+    if (filters.rental_price_min !== undefined && park.rental_price_min && park.rental_price_min < filters.rental_price_min) return false
+    if (filters.rental_price_max !== undefined && park.rental_price_max && park.rental_price_max > filters.rental_price_max) return false
+
+    // Available area
+    if (filters.available_area_min !== undefined && park.available_area && park.available_area < filters.available_area_min / 10000) return false
+
+    // Industries
+    if (filters.industries && filters.industries.length > 0) {
+      if (!park.allowed_industries || !filters.industries.some((i: string) => park.allowed_industries!.includes(i))) {
+        return false
+      }
+    }
+
+    // Infrastructure
+    if (filters.infrastructure && filters.infrastructure.length > 0) {
+      const infraMap: Record<string, boolean | undefined> = {
+        power: park.infrastructure_power,
+        water: park.infrastructure_water,
+        drainage: park.infrastructure_drainage,
+        waste: park.infrastructure_waste,
+        internet: park.infrastructure_internet,
+        road: park.infrastructure_road,
+        security: park.infrastructure_security,
+      }
+      if (!filters.infrastructure.every((i: string) => infraMap[i])) {
+        return false
+      }
+    }
+
+    // Scope filter (trong-kcn, trong-ccn, ngoai-kcn, ngoai-kcn-ccn)
+    // Note: This is a placeholder - actual filtering would depend on park data structure
+    // For now, we'll just pass through if scope is set
+    if (filters.scope) {
+      // In a real implementation, you would check park.scope or similar field
+      // For now, we'll just allow all parks if scope filter is set
+    }
+
+    // NX (Nhà xưởng) filter
+    // Note: This is a placeholder - actual filtering would depend on park data structure
+    if (filters.nx) {
+      // In a real implementation, you would check park.has_factory or similar field
+      // For now, we'll just allow all parks if nx filter is set
+    }
+
+    // Type filter (cho-thue, chuyen-nhuong)
+    if (filters.type) {
+      // In a real implementation, you would check park.type or similar field
+    }
+
+    // Category filter (nha-xuong, dat)
+    if (filters.category) {
+      // In a real implementation, you would check park.category or similar field
+    }
+
+    return true
+  })
+}
