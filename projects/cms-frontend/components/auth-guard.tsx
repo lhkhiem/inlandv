@@ -22,6 +22,7 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
 
   useEffect(() => {
     let isMounted = true;
+    let timeoutId: NodeJS.Timeout | null = null;
     
     const checkAuth = async () => {
       try {
@@ -33,15 +34,30 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
           
           // After hydration, check if we have a user
           const currentUser = useAuthStore.getState().user;
+          
           if (!currentUser) {
             // No valid session, redirect to login
+            // 401 is expected when not logged in, don't log as error
             router.push('/login');
             return;
           }
         }
-      } catch (error) {
+      } catch (error: unknown) {
         if (!isMounted) return;
-        console.error('Auth check failed:', error);
+        
+        // 401 (Unauthorized) và 429 (Too Many Requests) là expected responses
+        // Không nên log như error
+        const axiosError = error as { response?: { status?: number; data?: unknown }; message?: string; stack?: string };
+        const status = axiosError?.response?.status;
+        if (status !== 401 && status !== 429) {
+          // Chỉ log các lỗi thực sự (network error, 500, etc.)
+          console.error('[AuthGuard] Auth check failed:', {
+            message: axiosError?.message,
+            stack: axiosError?.stack,
+            response: axiosError?.response?.data,
+            status: axiosError?.response?.status,
+          });
+        }
         router.push('/login');
       } finally {
         if (isMounted) {
@@ -50,10 +66,16 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
       }
     };
 
-    checkAuth();
+    // Debounce để tránh gọi hydrate quá nhiều lần khi component re-render
+    timeoutId = setTimeout(() => {
+      checkAuth();
+    }, 100);
     
     return () => {
       isMounted = false;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, [user, hydrate, router]);
 
@@ -61,10 +83,10 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
   if (isChecking) {
     return (
       fallback || (
-        <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-muted-foreground">Verifying authentication...</p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p className="mt-4 text-gray-600">Verifying authentication...</p>
           </div>
         </div>
       )
@@ -72,13 +94,21 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
   }
 
   // Only render children if user is authenticated
+  // If no user after checking, show loading (redirect should happen via useEffect)
   if (!user) {
-    return null;
+    return (
+      fallback || (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p className="mt-4 text-gray-600">Redirecting to login...</p>
+          </div>
+        </div>
+      )
+    );
   }
 
   return <>{children}</>;
 }
-
-
 
 

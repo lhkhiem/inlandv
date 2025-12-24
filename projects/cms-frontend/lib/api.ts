@@ -71,3 +71,18 @@ export const buildBackendUrl = (path = '') => {
   if (!path) return base;
   return path.startsWith('/') ? `${base}${path}` : `${base}/${path}`;
 };
+
+export const getAssetUrl = (path: string | null | undefined): string => {
+  if (!path) return '';
+  // If path already has protocol, return as is
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  // Otherwise prepend backend URL
+  return buildBackendUrl(path);
+};
+
+export const getThumbnailUrl = (asset: { thumb_url?: string; url?: string } | null | undefined): string => {
+  if (!asset) return '';
+  return getAssetUrl(asset.thumb_url || asset.url);
+};

@@ -22,9 +22,11 @@ function parseCookie(header?: string) {
 }
 
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  // Try Authorization header first, then cookie from cookieParser, then manual parse
   const bearer = req.headers.authorization?.split(' ')[1];
+  const tokenFromCookieParser = (req as any).cookies?.token;
   const cookies = parseCookie(req.headers.cookie as string | undefined);
-  const token = bearer || cookies['token'];
+  const token = bearer || tokenFromCookieParser || cookies['token'];
 
   // Debug logging
   if (process.env.NODE_ENV === 'development') {
@@ -56,4 +58,20 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     console.error('[AuthMiddleware] Token verification failed:', error);
     return res.status(401).json({ error: 'Invalid token' });
   }
+};
+
+// Alias for backward compatibility
+export const authenticate = authMiddleware;
+
+// Middleware to check if user is admin
+export const isAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  next();
 };

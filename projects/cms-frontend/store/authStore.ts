@@ -73,7 +73,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
         }
       );
       console.log('[AuthStore] Login response:', response.data);
-      const { user } = response.data as LoginResponse;
+      const { user, token } = response.data as LoginResponse;
+      
+      // Store token in localStorage as backup (cookie may not work in some browsers)
+      if (token) {
+        localStorage.setItem('auth_token', token);
+        console.log('[AuthStore] Token stored in localStorage');
+      }
+      
       set({ user, isLoading: false });
     } catch (error: any) {
       console.error('[AuthStore] Login error:', error);
@@ -118,16 +125,67 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       await axios.post(`${getApiUrl()}/api/auth/logout`, {}, { withCredentials: true });
     } catch {}
+    
+    // Clear token from localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+    }
+    
     set({ user: null });
   },
 
-  // Khôi phục session từ cookie
+  // Khôi phục session từ cookie hoặc localStorage
   hydrate: async () => {
     try {
-      const res = await axios.get(`${getApiUrl()}/api/auth/verify`, { withCredentials: true });
+      const apiUrl = getApiUrl();
+      const verifyUrl = `${apiUrl}/api/auth/verify`;
+      
+      // Try to get token from localStorage as fallback
+      const tokenFromStorage = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+      
+      console.log('[AuthStore] Hydrate attempt:', { 
+        apiUrl, 
+        verifyUrl,
+        hasTokenInStorage: !!tokenFromStorage 
+      });
+      
+      // Prepare headers - include Authorization if we have token in storage
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (tokenFromStorage) {
+        headers['Authorization'] = `Bearer ${tokenFromStorage}`;
+        console.log('[AuthStore] Using token from localStorage in Authorization header');
+      }
+      
+      const res = await axios.get(verifyUrl, { 
+        withCredentials: true,
+        headers
+      });
+      
+      console.log('[AuthStore] Hydrate success:', res.data);
       const { user } = res.data as { user: User };
       set({ user });
-    } catch {
+    } catch (error: any) {
+      // 401 (Unauthorized) và 429 (Too Many Requests) là expected responses
+      // Không nên log như error
+      const status = error?.response?.status;
+      if (status !== 401 && status !== 429) {
+        console.error('[AuthStore] Hydrate error:', error);
+        console.error('[AuthStore] Hydrate error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+          url: error.config?.url,
+        });
+      }
+      
+      // If verify fails, clear localStorage token
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+      }
+      
       set({ user: null });
     }
   },

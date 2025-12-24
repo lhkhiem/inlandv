@@ -43,9 +43,18 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    if (!user.password_hash) {
+      console.error('[AuthController] User has no password_hash:', user.email);
+      return res.status(500).json({ error: 'User account is not properly configured' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
@@ -61,18 +70,24 @@ export const login = async (req: Request, res: Response) => {
 
     // Set HTTP-only cookie for session
     const maxAgeMs = 7 * 24 * 60 * 60 * 1000; // 7 days
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    
     const cookieOptions: any = {
       httpOnly: true,
-      sameSite: 'lax' as const,
-      secure: process.env.NODE_ENV === 'production',
       maxAge: maxAgeMs,
       path: '/',
     };
     
     // In development, allow cross-origin cookies
-    if (process.env.NODE_ENV === 'development') {
-      cookieOptions.sameSite = 'none';
+    // Note: sameSite: 'none' requires secure: true in modern browsers
+    // But for localhost, we can use 'lax' which works better
+    if (isDevelopment) {
+      // Try 'lax' first for same-origin requests, fallback to 'none' if needed
+      cookieOptions.sameSite = 'lax';
       cookieOptions.secure = false;
+    } else {
+      cookieOptions.sameSite = 'lax';
+      cookieOptions.secure = true;
     }
     
     res.cookie('token', token, cookieOptions);
@@ -95,25 +110,77 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: 'Login failed' });
+    console.error('[AuthController] Login error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ 
+      error: 'Login failed',
+      details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+    });
   }
 };
 
 // Xác thực session hiện tại từ cookie và trả về user
 export const verify = async (req: Request, res: Response) => {
   try {
-    const header = req.headers.cookie || '';
-    const cookies = header.split(';').reduce((acc: any, p) => {
-      const [k, ...v] = p.trim().split('=');
-      if (k) acc[k] = decodeURIComponent(v.join('='));
-      return acc;
-    }, {} as Record<string, string>);
+    // Use cookieParser middleware to get cookies (already parsed by app.ts)
+    // Also check Authorization header as fallback
     const bearer = req.headers.authorization?.split(' ')[1];
-    const token = bearer || cookies['token'];
-    if (!token) return res.status(401).json({ error: 'No session' });
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+    const token = bearer || (req as any).cookies?.token;
+
+    // Debug logging in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[AuthController] Verify request:', {
+        hasCookieHeader: !!req.headers.cookie,
+        cookies: (req as any).cookies,
+        cookieKeys: (req as any).cookies ? Object.keys((req as any).cookies) : [],
+        hasBearer: !!bearer,
+        hasToken: !!token,
+        tokenLength: token?.length,
+        tokenPreview: token ? `${token.substring(0, 20)}...` : null,
+      });
+    }
+
+    if (!token) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[AuthController] No token found in cookie or Authorization header');
+      }
+      return res.status(401).json({ error: 'No session' });
+    }
+
+    // Verify JWT token
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[AuthController] JWT decoded:', { id: decoded.id, email: decoded.email });
+      }
+    } catch (jwtError: any) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[AuthController] JWT verification failed:', {
+          message: jwtError.message,
+          name: jwtError.name,
+        });
+      }
+      return res.status(401).json({ 
+        error: 'Invalid or expired token',
+        details: process.env.NODE_ENV === 'development' ? jwtError.message : undefined
+      });
+    }
+
+    // Find user by ID from token
     const user = await User.findByPk(decoded.id);
-    if (!user) return res.status(401).json({ error: 'Invalid session' });
+    if (!user) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[AuthController] User not found in database:', decoded.id);
+      }
+      return res.status(401).json({ error: 'User not found' });
+    }
+
+    // Return user data
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[AuthController] Verify success:', { id: user.id, email: user.email });
+    }
+    
     res.json({
       user: {
         id: user.id,
@@ -122,8 +189,12 @@ export const verify = async (req: Request, res: Response) => {
         role: (user as any).role,
       },
     });
-  } catch (e) {
-    return res.status(401).json({ error: 'Invalid session' });
+  } catch (e: any) {
+    console.error('[AuthController] Verify error:', e);
+    return res.status(401).json({ 
+      error: 'Invalid session',
+      details: process.env.NODE_ENV === 'development' ? e.message : undefined
+    });
   }
 };
 

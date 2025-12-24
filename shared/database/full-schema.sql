@@ -670,3 +670,10 @@ CREATE TRIGGER update_job_applications_updated_at BEFORE UPDATE ON job_applicati
 
 
 
+
+
+
+
+
+
+

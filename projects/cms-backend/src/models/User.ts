@@ -1,6 +1,6 @@
 // Model User 
-// - Lưu thông tin người dùng: email, password hash, name...
-// - Status: active/inactive
+// - Lưu thông tin người dùng: email, password hash, name, role
+// - Schema: id, email, password_hash, name, role, first_name, created_at
 // - Có quan hệ One-to-Many với Post (author)
 
 import { DataTypes, Model } from 'sequelize';
@@ -11,10 +11,9 @@ class User extends Model {
   public email!: string;        // Email, unique
   public password_hash!: string; // Mật khẩu đã hash
   public name!: string;         // Tên hiển thị
-  public status!: string;       // active/inactive
-  public role!: string;         // owner/admin/editor/author
+  public role!: string;         // owner/admin/editor/author/sale
+  public first_name?: string;   // Tên (optional)
   public readonly created_at!: Date;
-  public readonly updated_at!: Date;
 }
 
 User.init(
@@ -35,21 +34,20 @@ User.init(
     },
     name: {
       type: DataTypes.STRING(255),
-    },
-    status: {
-      type: DataTypes.STRING(50),
-      defaultValue: 'active',
+      allowNull: false,
     },
     role: {
       type: DataTypes.STRING(50),
-      defaultValue: 'admin',
+      allowNull: false,
+      defaultValue: 'sale',
+    },
+    first_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
+      allowNull: true,
       defaultValue: DataTypes.NOW,
     },
   },

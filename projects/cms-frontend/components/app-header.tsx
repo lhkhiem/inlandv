@@ -1,24 +1,17 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Bell, Search, Moon, Sun, LogOut, User } from 'lucide-react';
+import { Bell, Search, Moon, Sun, LogOut, User, Menu } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
 import { useAuthStore } from '@/store/authStore';
+import { useSidebar } from '@/components/app-sidebar';
 import { cn } from '@/lib/utils';
-import { useState, useEffect } from 'react';
 
 export function AppHeader() {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const { logout, user } = useAuthStore();
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [theme]);
+  const { isCollapsed, isMobile, toggleCollapse } = useSidebar();
 
   const handleLogout = async () => {
     try {
@@ -39,13 +32,28 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 z-30 h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-full items-center justify-between gap-4 px-6">
+        {/* Mobile Menu Button */}
+        {isMobile && (
+          <button
+            onClick={toggleCollapse}
+            className={cn(
+              'flex h-9 w-9 items-center justify-center rounded-lg md:hidden',
+              'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+              'transition-colors'
+            )}
+            aria-label="Toggle menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        )}
+        
         {/* Search */}
         <div className="flex flex-1 items-center gap-4 md:max-w-md">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Search... (Ctrl+K)"
+              placeholder="Tìm kiếm... (Ctrl+K)"
               className={cn(
                 'h-9 w-full rounded-lg border border-input bg-background pl-9 pr-4',
                 'text-sm placeholder:text-muted-foreground',
@@ -66,7 +74,7 @@ export function AppHeader() {
               'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
               'transition-colors'
             )}
-            aria-label="Toggle theme"
+            aria-label="Chuyển đổi giao diện"
           >
             {theme === 'dark' ? (
               <Sun className="h-4 w-4" />
@@ -82,7 +90,7 @@ export function AppHeader() {
               'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
               'transition-colors'
             )}
-            aria-label="Notifications"
+            aria-label="Thông báo"
           >
             <Bell className="h-4 w-4" />
             <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-destructive" />
@@ -104,7 +112,7 @@ export function AppHeader() {
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
                 {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
               </div>
-              <span className="hidden md:inline">{user?.name || user?.email || 'User'}</span>
+              <span className="hidden md:inline">{user?.name || user?.email || 'Người dùng'}</span>
             </button>
 
             <button
@@ -114,7 +122,7 @@ export function AppHeader() {
                 'text-destructive hover:bg-destructive/10',
                 'transition-colors'
               )}
-              aria-label="Logout"
+              aria-label="Đăng xuất"
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -124,7 +132,3 @@ export function AppHeader() {
     </header>
   );
 }
-
-
-
-

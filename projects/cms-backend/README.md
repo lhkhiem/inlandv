@@ -18,7 +18,7 @@ npm install
 ### 2. Environment Variables
 Create `.env` file:
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/inland_realestate
+DATABASE_URL=postgresql://user:password@localhost:5432/inlandv_realestate
 PORT=4001
 NODE_ENV=development
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production

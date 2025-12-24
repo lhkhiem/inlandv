@@ -4,6 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 
+// Demo credentials - Remove this section when done testing
+const DEMO_CREDENTIALS = {
+  email: 'demo@inland.com',
+  password: 'demo123',
+  enabled: true, // Set to false to hide demo credentials
+};
+
 export default function LoginPage() {
   const router = useRouter();
   const { login, isLoading, error, user, hydrate } = useAuthStore();
@@ -92,15 +99,36 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm text-gray-600">
-              Default credentials:
-              <br />
-              Email: <code className="bg-gray-100 px-2 py-1 rounded text-xs">admin@inland.com</code>
-              <br />
-              Password: <code className="bg-gray-100 px-2 py-1 rounded text-xs">admin123</code>
-            </p>
-          </div>
+          {DEMO_CREDENTIALS.enabled && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-sm font-semibold text-blue-900 mb-2">🧪 Demo Account (Testing Only)</p>
+                <div className="space-y-1 text-xs text-blue-800">
+                  <p>
+                    <span className="font-medium">Email:</span>{' '}
+                    <code className="bg-blue-100 px-2 py-1 rounded text-xs font-mono">{DEMO_CREDENTIALS.email}</code>
+                  </p>
+                  <p>
+                    <span className="font-medium">Password:</span>{' '}
+                    <code className="bg-blue-100 px-2 py-1 rounded text-xs font-mono">{DEMO_CREDENTIALS.password}</code>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail(DEMO_CREDENTIALS.email);
+                    setPassword(DEMO_CREDENTIALS.password);
+                  }}
+                  className="mt-3 w-full text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded transition"
+                >
+                  Fill Demo Credentials
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 text-center">
+                ⚠️ This demo account will be removed before production
+              </p>
+            </div>
+          )}
         </div>
 
         <p className="text-center text-gray-400 text-sm mt-6">© 2024 Inland CMS. All rights reserved.</p>

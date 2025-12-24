@@ -1,8 +1,6 @@
 // Server entry: use app + ready()
-import dotenv from 'dotenv';
+// Note: .env.local is already loaded in app.ts, so we don't need to load it again here
 import { app, ready } from './app';
-
-dotenv.config();
 
 const PORT = process.env.PORT || 4001;
 

@@ -346,3 +346,10 @@ FROM properties WHERE id = '...';
 4. ⏭️ Frontend Public cần consume menu data và tracking scripts
 
 
+
+
+
+
+
+
+

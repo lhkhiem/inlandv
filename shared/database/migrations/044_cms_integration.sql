@@ -6,6 +6,18 @@
 -- Mục đích: Thêm các bảng cần thiết cho CMS functionality
 
 -- ============================================
+-- 0. HELPER FUNCTION - Auto-update updated_at
+-- ============================================
+
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ============================================
 -- 1. SETTINGS - CMS Configuration
 -- ============================================
 
@@ -324,5 +336,8 @@ CREATE TRIGGER trigger_tracking_scripts_updated_at
 CREATE TRIGGER trigger_newsletter_subscriptions_updated_at
   BEFORE UPDATE ON newsletter_subscriptions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+
 
 

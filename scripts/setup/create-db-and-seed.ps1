@@ -2,7 +2,7 @@
 # Usage: .\scripts\setup\create-db-and-seed.ps1
 
 param(
-    [string]$DbName = "inland_realestate",
+    [string]$DbName = "inlandv_realestate",
     [string]$DbUser = "postgres",
     [string]$DbPassword = "postgres",
     [string]$DbHost = "localhost",
