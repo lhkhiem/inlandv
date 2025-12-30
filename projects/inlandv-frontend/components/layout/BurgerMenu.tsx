@@ -150,7 +150,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
           left: 0,
           width: '100vw',
           height: '100vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          backgroundColor: 'rgba(255, 255, 255, 0.7)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           zIndex: 9998,
@@ -171,7 +171,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
           zIndex: 9999,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#151313',
+          backgroundColor: '#ffffff',
           overflow: 'hidden',
         }}
         aria-label="Site navigation"
@@ -183,7 +183,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '1rem 1.5rem',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
             flexShrink: 0,
           }}
         >
@@ -211,7 +211,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
             aria-label="Đóng menu"
             style={{
               padding: '0.5rem',
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'rgba(0, 0, 0, 0.7)',
               backgroundColor: 'transparent',
               border: 'none',
               borderRadius: '50%',
@@ -222,11 +222,11 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
               transition: 'all 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#ffffff';
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.color = '#000000';
+              e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+              e.currentTarget.style.color = 'rgba(0, 0, 0, 0.7)';
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
@@ -287,7 +287,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                     padding: '0.75rem 1rem',
                     borderRadius: '0.5rem',
                     cursor: hasChildren ? 'pointer' : 'default',
-                    backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                    backgroundColor: isExpanded ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
                     transition: 'background-color 0.2s',
                   }}
                   onClick={(e) => {
@@ -308,7 +308,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                         textDecoration: 'none',
                         fontSize: '1.125rem',
                         fontWeight: isCurrentPage ? 600 : 500,
-                        color: isCurrentPage ? '#2E8C4F' : '#ffffff',
+                        color: isCurrentPage ? '#2E8C4F' : '#000000',
                       }}
                     >
                       {viTitleCase(item.title)}
@@ -320,7 +320,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                         textAlign: 'left',
                         fontSize: '1.125rem',
                         fontWeight: isCurrentPage ? 600 : 500,
-                        color: isCurrentPage ? '#2E8C4F' : '#ffffff',
+                        color: isCurrentPage ? '#2E8C4F' : '#000000',
                       }}
                     >
                       {viTitleCase(item.title)}
@@ -330,7 +330,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                     <ChevronDown
                       size={16}
                       style={{
-                        color: 'rgba(255, 255, 255, 0.7)',
+                        color: 'rgba(0, 0, 0, 0.7)',
                         transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                         transition: 'transform 0.2s',
                       }}
@@ -345,7 +345,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                       marginTop: '0.5rem',
                       marginLeft: '1rem',
                       paddingLeft: '1rem',
-                      borderLeft: '2px solid rgba(255, 255, 255, 0.2)',
+                      borderLeft: '2px solid rgba(0, 0, 0, 0.2)',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '0.25rem',
@@ -376,7 +376,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                       const sub1Style = {
                         fontSize: '1rem',
                         fontWeight: isChildActive ? 600 : 500,
-                        color: isChildActive ? '#2E8C4F' : '#ffffff',
+                        color: isChildActive ? '#2E8C4F' : '#000000',
                       };
 
                       return (
@@ -397,7 +397,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                                 borderRadius: '0.375rem',
                                 ...sub1Style,
                                 cursor: 'pointer',
-                                backgroundColor: isSubExpanded ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                                backgroundColor: isSubExpanded ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
                                 transition: 'background-color 0.2s',
                               }}
                             >
@@ -405,7 +405,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                               <ChevronDown
                                 size={14}
                                 style={{
-                                  color: 'rgba(255, 255, 255, 0.7)',
+                                  color: 'rgba(0, 0, 0, 0.7)',
                                   transform: isSubExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                                   transition: 'transform 0.2s',
                                 }}
@@ -427,7 +427,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                               }}
                               onMouseEnter={(e) => {
                                 if (!isChildActive) {
-                                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
                                 }
                               }}
                               onMouseLeave={(e) => {
@@ -476,13 +476,13 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                                           textDecoration: 'none',
                                           fontSize: '0.875rem',
                                           fontWeight: isGrandchildActive ? 600 : 400,
-                                          color: isGrandchildActive ? '#2E8C4F' : 'rgba(255, 255, 255, 0.7)',
+                                          color: isGrandchildActive ? '#2E8C4F' : 'rgba(0, 0, 0, 0.7)',
                                           backgroundColor: isGrandchildActive ? 'rgba(46, 140, 79, 0.1)' : 'transparent',
                                           transition: 'all 0.2s',
                                         }}
                                         onMouseEnter={(e) => {
                                           if (!isGrandchildActive) {
-                                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                            e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
                                           }
                                         }}
                                         onMouseLeave={(e) => {
@@ -500,7 +500,7 @@ export default function BurgerMenu({ open, onClose }: BurgerMenuProps) {
                                           padding: '0.375rem 0.75rem',
                                           fontSize: '0.875rem',
                                           fontWeight: isGrandchildActive ? 600 : 400,
-                                          color: isGrandchildActive ? '#2E8C4F' : 'rgba(255, 255, 255, 0.7)',
+                                          color: isGrandchildActive ? '#2E8C4F' : 'rgba(0, 0, 0, 0.7)',
                                         }}
                                       >
                                         {capitalizeFirst(g.title)}

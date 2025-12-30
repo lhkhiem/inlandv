@@ -34,3 +34,19 @@ BEGIN
   RAISE NOTICE 'Hero section content updated successfully';
 END $$;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

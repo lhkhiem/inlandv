@@ -26,7 +26,10 @@ export const getRealEstates = async (req: Request, res: Response) => {
       type,
       status,
       province,
-      q 
+      q,
+      main_category,
+      industrial_park_id,
+      industrial_cluster_id
     } = req.query;
     
     const offset = ((page as any) - 1) * (pageSize as any);
@@ -35,8 +38,25 @@ export const getRealEstates = async (req: Request, res: Response) => {
     const whereConditions: string[] = [];
     const replacements: any = { limit, offset };
 
+    // Main category filter
+    if (main_category) {
+      whereConditions.push(`COALESCE(p.main_category, CASE WHEN p.industrial_park_id IS NOT NULL THEN 'kcn' ELSE 'bds' END) = :main_category`);
+      replacements.main_category = main_category;
+    }
+
+    // Industrial park/cluster filter
+    if (industrial_park_id) {
+      whereConditions.push(`p.industrial_park_id = :industrial_park_id`);
+      replacements.industrial_park_id = industrial_park_id;
+    }
+
+    if (industrial_cluster_id) {
+      whereConditions.push(`p.industrial_cluster_id = :industrial_cluster_id`);
+      replacements.industrial_cluster_id = industrial_cluster_id;
+    }
+
     if (type) {
-      whereConditions.push(`p.type = :type`);
+      whereConditions.push(`COALESCE(p.property_type, p.type) = :type`);
       replacements.type = type;
     }
 
@@ -205,7 +225,14 @@ export const createRealEstate = async (req: Request, res: Response) => {
       rental_price,
       rental_price_min,
       rental_price_max,
-      rental_price_per_sqm
+      rental_price_per_sqm,
+      // New fields for KCN redesign
+      main_category,
+      property_type,
+      transaction_type,
+      sub_category,
+      industrial_park_id,
+      industrial_cluster_id
     } = req.body;
 
     // Validate required fields
@@ -255,9 +282,17 @@ export const createRealEstate = async (req: Request, res: Response) => {
     // Format published_at
     const publishedAtSql = published_at ? `'${published_at}'::timestamp with time zone` : 'NULL';
 
+    // Determine main_category if not provided
+    const finalMainCategory = main_category || (industrial_park_id ? 'kcn' : 'bds');
+    // Determine property_type if not provided (fallback to type)
+    const finalPropertyType = property_type || type;
+    // Determine transaction_type from has_rental/has_transfer if not provided
+    const finalTransactionType = transaction_type || (has_transfer ? 'chuyen-nhuong' : (has_rental ? 'cho-thue' : 'chuyen-nhuong'));
+
     const query = `
       INSERT INTO properties (
         id, code, name, slug,
+        main_category, sub_category, property_type, transaction_type,
         province, ward, address,
         type, category, status, legal_status,
         area, land_area, construction_area, width, length,
@@ -269,10 +304,12 @@ export const createRealEstate = async (req: Request, res: Response) => {
         furniture, description, description_full,
         thumbnail_url, video_url,
         contact_name, contact_phone, contact_email,
-        meta_title, meta_description, meta_keywords, published_at
+        meta_title, meta_description, meta_keywords, published_at,
+        industrial_park_id, industrial_cluster_id
       )
       VALUES (
         :id::uuid, :code, :name, :slug,
+        :main_category, :sub_category, :property_type, :transaction_type,
         :province, :ward, :address,
         :type, :category, :status, :legal_status,
         :area, :land_area, :construction_area, :width, :length,
@@ -284,7 +321,8 @@ export const createRealEstate = async (req: Request, res: Response) => {
         :furniture, :description, :description_full,
         :thumbnail_url, :video_url,
         :contact_name, :contact_phone, :contact_email,
-        :meta_title, :meta_description, :meta_keywords, ${publishedAtSql}
+        :meta_title, :meta_description, :meta_keywords, ${publishedAtSql},
+        :industrial_park_id::uuid, :industrial_cluster_id::uuid
       )
       RETURNING *
     `;
@@ -294,6 +332,10 @@ export const createRealEstate = async (req: Request, res: Response) => {
       code,
       name,
       slug: generatedSlug,
+      main_category: finalMainCategory,
+      sub_category: sub_category || null,
+      property_type: finalPropertyType,
+      transaction_type: finalTransactionType,
       province: province ? String(province) : null,
       ward: ward ? String(ward) : null,
       address: address ? String(address) : null,
@@ -331,7 +373,9 @@ export const createRealEstate = async (req: Request, res: Response) => {
       contact_email: contact_email || null,
       meta_title: meta_title || null,
       meta_description: meta_description || null,
-      meta_keywords: meta_keywords || null
+      meta_keywords: meta_keywords || null,
+      industrial_park_id: industrial_park_id || null,
+      industrial_cluster_id: industrial_cluster_id || null
     };
 
     console.log('[createRealEstate] Query:', query);
@@ -428,7 +472,14 @@ export const updateRealEstate = async (req: Request, res: Response) => {
       rental_price,
       rental_price_min,
       rental_price_max,
-      rental_price_per_sqm
+      rental_price_per_sqm,
+      // KCN redesign fields (for properties that belong to industrial parks)
+      main_category,
+      property_type,
+      transaction_type,
+      sub_category,
+      industrial_park_id,
+      industrial_cluster_id
     } = req.body;
 
     // Build dynamic update query
@@ -695,6 +746,37 @@ export const updateRealEstate = async (req: Request, res: Response) => {
       } else {
         updateFields.push('published_at = NULL');
       }
+    }
+
+    // New fields for KCN redesign
+    if (main_category !== undefined) {
+      updateFields.push('main_category = :main_category');
+      replacements.main_category = main_category;
+    }
+
+    if (sub_category !== undefined) {
+      updateFields.push('sub_category = :sub_category');
+      replacements.sub_category = sub_category || null;
+    }
+
+    if (property_type !== undefined) {
+      updateFields.push('property_type = :property_type');
+      replacements.property_type = property_type;
+    }
+
+    if (transaction_type !== undefined) {
+      updateFields.push('transaction_type = :transaction_type');
+      replacements.transaction_type = transaction_type;
+    }
+
+    if (industrial_park_id !== undefined) {
+      updateFields.push('industrial_park_id = :industrial_park_id::uuid');
+      replacements.industrial_park_id = industrial_park_id || null;
+    }
+
+    if (industrial_cluster_id !== undefined) {
+      updateFields.push('industrial_cluster_id = :industrial_cluster_id::uuid');
+      replacements.industrial_cluster_id = industrial_cluster_id || null;
     }
 
     // Always update the updated_at timestamp

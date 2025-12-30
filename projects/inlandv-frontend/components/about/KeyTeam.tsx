@@ -166,7 +166,7 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
 
   return (
     <section 
-      className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+      className={`relative w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] ${
         isPortrait ? 'min-h-0 py-4' : 'h-screen'
       }`}
     >
@@ -210,7 +210,7 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
               transition={{ duration: 0.6 }}
               className="text-center mb-6 md:mb-8"
             >
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#2E8C4F] mb-2">
                 Đội ngũ <span className="text-[#2E8C4F]">lãnh đạo</span>
               </h2>
             </motion.div>
@@ -230,7 +230,7 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
                 }}
                 aria-label="Previous slide"
               >
-                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-[#2E8C4F]" />
               </button>
               
               <button
@@ -245,7 +245,7 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
                 }}
                 aria-label="Next slide"
               >
-                <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-[#2E8C4F]" />
               </button>
 
           {/* Swiper Slider */}
@@ -254,10 +254,15 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
             modules={[Navigation]}
             loop={true}
             loopAdditionalSlides={2}
-            spaceBetween={8}
-            slidesPerView={2}
-            slidesPerGroup={2}
+            spaceBetween={isPortrait ? 16 : 8}
+            slidesPerView={isPortrait ? 1 : 2}
+            slidesPerGroup={isPortrait ? 1 : 2}
             breakpoints={{
+              0: {
+                slidesPerView: 1,
+                slidesPerGroup: 1,
+                spaceBetween: 16,
+              },
               640: {
                 slidesPerView: 2,
                 slidesPerGroup: 2,
@@ -293,14 +298,14 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
                           const parent = target.parentElement
                           if (parent && !parent.querySelector('.error-placeholder')) {
                             const placeholder = document.createElement('div')
-                            placeholder.className = 'error-placeholder w-full h-full flex items-center justify-center text-gray-400 text-sm'
+                            placeholder.className = 'error-placeholder w-full h-full flex items-center justify-center text-[#2E8C4F] text-sm'
                             placeholder.textContent = 'Image Placeholder'
                             parent.appendChild(placeholder)
                           }
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                      <div className="w-full h-full flex items-center justify-center text-[#2E8C4F] text-sm">
                         No Image
                       </div>
                     )}
@@ -308,13 +313,13 @@ export default function KeyTeam({ section }: KeyTeamProps = {}) {
 
                   {/* Member Info */}
                   <div className="text-center space-y-1">
-                    <h3 className="text-lg md:text-xl font-bold text-white">
+                    <h3 className="text-lg md:text-xl font-bold text-[#2E8C4F]">
                       {member.name}
                     </h3>
                     <p className="text-base md:text-lg text-[#2E8C4F] font-semibold">
                       {member.position}
                     </p>
-                    <p className="text-xs md:text-sm text-gray-300">
+                    <p className="text-xs md:text-sm text-[#2E8C4F]">
                       {member.description}
                     </p>
                   </div>

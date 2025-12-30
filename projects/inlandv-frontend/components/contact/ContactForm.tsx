@@ -144,23 +144,31 @@ export default function ContactForm() {
 
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-20 md:pt-24">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900" />
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${encodeURI('/images/PressUp - Ol0PCd8hlw-13.webp')})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* White Overlay */}
+      <div className="absolute inset-0 bg-white/70 z-[1]" />
       
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-[0.03] z-[2]">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 2px 2px, #2E8C4F 1px, transparent 0)`,
           backgroundSize: '40px 40px'
         }} />
       </div>
       
       {/* Decorative Elements */}
-      <div className="absolute top-20 left-20 w-72 h-72 bg-goldDark/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-goldLight/10 rounded-full blur-3xl" />
-      
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute top-20 left-20 w-72 h-72 bg-goldDark/10 rounded-full blur-3xl z-[2]" />
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-goldLight/5 rounded-full blur-3xl z-[2]" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-16 max-w-4xl py-12">
@@ -171,10 +179,10 @@ export default function ContactForm() {
         >
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#2E8C4F] mb-3">
               Để lại <span className="text-goldLight">thông tin</span>
             </h2>
-            <p className="text-base md:text-lg text-white/90">
+            <p className="text-base md:text-lg text-[#2E8C4F]">
               Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất
             </p>
           </div>

@@ -12,23 +12,23 @@ Database design cho hệ thống Inland Real Estate Platform, hỗ trợ quản 
 
 ## 📚 Tài liệu chính (Nên đọc trước)
 
-### 1. **[database-schema-final.md](./database-schema-final.md)** ⭐ **MỚI NHẤT - Khuyến nghị**
+### 1. **[database-tables-audit.md](./database-tables-audit.md)** ⭐ **MỚI NHẤT - Khuyến nghị**
+**Tổng hợp tất cả các bảng hiện tại:**
+- Danh sách đầy đủ ~35 bảng
+- Mô tả từng bảng với các cột chính
+- Relationships giữa các bảng
+- Bảng đã deprecated
+- **Đây là tài liệu chính thức nên dùng để tra cứu**
+
+### 2. **[database-schema-final.md](./database-schema-final.md)** ⭐ **Khuyến nghị**
 **Schema cuối cùng đã chốt:**
 - Tổng hợp đầy đủ 17 bảng
 - Chi tiết tất cả các trường
 - Ví dụ dữ liệu
 - **Đây là tài liệu chính thức nên dùng**
 
-### 2. **[database-design-simplified.md](./database-design-simplified.md)** 
-**Thiết kế đơn giản hóa (tham khảo):**
-- 2 bảng chính: `industrial_parks`, `properties`
-- Mỗi bảng có thể có cả 2 dịch vụ: cho thuê và chuyển nhượng
-- Dùng JSONB cho hạ tầng (KCN) và đặc điểm (BDS)
-- Tập trung vào filter requirements
-- **Đây là thiết kế mới nhất, phù hợp với logic đơn giản**
-
-### 3. **[database-design-final.md](./database-design-final.md)** ⚠️ (Thiết kế cũ - Hybrid Approach)
-**Thiết kế Hybrid Approach (đã deprecated):**
+### 3. **[database-design-final.md](./database-design-final.md)** ⭐
+**Thiết kế chi tiết cuối cùng (Final Design)**
 - ERD (Entity Relationship Diagram)
 - Mô tả từng bảng với chú thích chi tiết
 - Relationships và constraints
@@ -58,20 +58,20 @@ Database design cho hệ thống Inland Real Estate Platform, hỗ trợ quản 
 
 ## 🔧 Setup & Migration
 
-### 6. **[setup-guide.md](./setup-guide.md)**
+### 7. **[setup-guide.md](./setup-guide.md)**
 **Hướng dẫn setup database:**
 - Cách setup PostgreSQL
 - Cấu hình DATABASE_URL
 - Scripts tự động
 
-### 7. **[CMS_INTEGRATION.md](./CMS_INTEGRATION.md)** ⭐ **MỚI**
+### 8. **[CMS_INTEGRATION.md](./CMS_INTEGRATION.md)** ⭐ **MỚI**
 **CMS Integration Guide:**
 - Hướng dẫn tích hợp CMS vào Inland Platform
 - Chi tiết các bảng CMS mới
 - Usage examples và best practices
 - **Đọc để hiểu cách sử dụng CMS tables**
 
-### 8. **[migrations.md](./migrations.md)**
+### 9. **[migrations.md](./migrations.md)**
 **Hướng dẫn migrations:**
 - Cách chạy migrations
 - Best practices
@@ -93,14 +93,6 @@ Database design cho hệ thống Inland Real Estate Platform, hỗ trợ quản 
 ### 9. **`shared/database/schema.sql`**
 **SQL schema cũ (tham khảo)**
 - Schema cũ, không khuyến khích dùng
-
-## ⚠️ Tài liệu cũ (Tham khảo)
-
-### 10. **[database-design.md](./database-design.md)**
-**Thiết kế cũ (đã deprecated)**
-- Giữ lại để tham khảo lịch sử
-- Đã được cập nhật để reference đến `database-design-final.md`
-- **KHÔNG nên dùng làm tài liệu chính thức**
 
 ## Các bảng chính (26 bảng - với CMS Integration)
 

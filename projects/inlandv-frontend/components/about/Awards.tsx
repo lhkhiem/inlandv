@@ -58,12 +58,12 @@ export default function Awards() {
               Thành tựu
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2E8C4F] mb-4">
             Thành Tựu
             <br />
             <span className="text-goldDark">& Chứng Nhận</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#2E8C4F] max-w-2xl mx-auto">
             Những giải thưởng và chứng nhận uy tín khẳng định vị thế của Inland
           </p>
         </motion.div>
@@ -98,12 +98,12 @@ export default function Awards() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight">
+                  <h3 className="text-lg font-bold text-[#2E8C4F] mb-3 leading-tight">
                     {achievement.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <p className="text-[#2E8C4F] text-sm leading-relaxed">
                     {achievement.description}
                   </p>
 
@@ -123,7 +123,7 @@ export default function Awards() {
           viewport={{ once: true }}
           className="mt-10 text-center"
         >
-          <p className="text-gray-600">
+          <p className="text-[#2E8C4F]">
             Hơn <span className="font-bold text-goldDark text-xl">20+ giải thưởng</span> và chứng nhận uy tín trong 15 năm hoạt động
           </p>
         </motion.div>

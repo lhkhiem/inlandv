@@ -6,7 +6,7 @@ import ProductFilterBar, { type ProductFilters } from '@/components/products/Pro
 import ProductGrid from '@/components/products/ProductGrid'
 
 export default function ProductsPage(){
-  const [filters, setFilters] = useState<ProductFilters>({ q: '', type: undefined, provinces: [], wards: [], price: [0, 1000000000], area: [0, 100000] })
+  const [filters, setFilters] = useState<ProductFilters>({ q: '', type: undefined, locationTypes: [], provinces: [], wards: [], price: [0, 1000000000], area: [0, 100000] })
 
   return (
     <div className="min-h-screen bg-[#151313]">

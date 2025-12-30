@@ -32,12 +32,12 @@ export default function DynamicPageRenderer({ page }: DynamicPageRendererProps) 
         if (!Component) {
           // Render generic section if no component mapped
           return (
-            <section key={section.id} className="min-h-screen flex items-center justify-center bg-[#151313]">
+            <section key={section.id} className="min-h-screen flex items-center justify-center bg-[#F5F5F5]">
               <div className="container mx-auto px-6">
-                <h2 className="text-3xl font-bold mb-4 text-white">{section.name}</h2>
+                <h2 className="text-3xl font-bold mb-4 text-[#2E8C4F]">{section.name}</h2>
                 {section.content && (
                   <div 
-                    className="prose prose-invert max-w-none text-white"
+                    className="prose prose-invert max-w-none text-[#2E8C4F]"
                     dangerouslySetInnerHTML={{ __html: section.content }}
                   />
                 )}
@@ -57,4 +57,11 @@ export default function DynamicPageRenderer({ page }: DynamicPageRendererProps) 
     </>
   )
 }
+
+
+
+
+
+
+
 

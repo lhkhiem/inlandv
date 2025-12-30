@@ -45,3 +45,19 @@ COMMENT ON COLUMN properties.rental_price_per_sqm IS 'Giá thuê/m² (VND/tháng
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

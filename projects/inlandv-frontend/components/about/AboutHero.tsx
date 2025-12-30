@@ -197,7 +197,6 @@ export default function AboutHero({ section }: AboutHeroProps = {}) {
     }`}>
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/60 to-goldDark/30 z-[5]" />
         <div
           className="absolute inset-0 w-full h-full"
           style={{
@@ -206,6 +205,8 @@ export default function AboutHero({ section }: AboutHeroProps = {}) {
             backgroundPosition: 'center'
           }}
         />
+        {/* White Overlay */}
+        <div className="absolute inset-0 bg-white/70 z-[1]" />
       </div>
 
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
@@ -259,7 +260,7 @@ export default function AboutHero({ section }: AboutHeroProps = {}) {
           </motion.div>
           
           {heroData.description && (
-            <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-[#2E8C4F] mb-8 max-w-3xl mx-auto leading-relaxed">
               {heroData.description}
             </p>
           )}
@@ -274,9 +275,9 @@ export default function AboutHero({ section }: AboutHeroProps = {}) {
             className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto"
           >
             {heroData.stats.map((stat, index) => (
-              <div key={index} className="text-center backdrop-blur-sm bg-white/5 rounded-2xl p-6 border border-goldLight/10">
+              <div key={index} className="text-center backdrop-blur-md bg-white/90 rounded-2xl p-6 border-2 border-[#2E8C4F]/50 shadow-xl shadow-[#2E8C4F]/20">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix || ''} duration={2000 + index * 200} />
-                <div className="text-sm md:text-base text-gray-300 font-medium">
+                <div className="text-sm md:text-base text-[#2E8C4F] font-medium">
                   {stat.label}
                 </div>
               </div>

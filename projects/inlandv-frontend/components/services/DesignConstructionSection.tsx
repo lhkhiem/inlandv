@@ -303,9 +303,23 @@ export default function DesignConstructionSection({ section }: DesignConstructio
   const advantages = sectionData.advantages;
 
   return (
-    <section ref={sectionRef} className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section ref={sectionRef} className={`relative w-full flex items-center justify-center overflow-hidden ${
       isPortrait ? 'min-h-screen py-8' : 'h-screen'
     }`}>
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${encodeURI('/images/PressUp - GEvlghqmWh-18.webp')})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* White Overlay */}
+      <div className="absolute inset-0 bg-white/70 z-[1]" />
+      
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
         className={`relative z-[90] ${
@@ -322,7 +336,7 @@ export default function DesignConstructionSection({ section }: DesignConstructio
           initial={{ opacity: 0 }}
           animate={revealed ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className={isPortrait ? 'w-full py-6 text-white' : 'w-full text-white'}
+          className={isPortrait ? 'w-full py-6 text-[#2E8C4F]' : 'w-full text-[#2E8C4F]'}
           style={!isPortrait ? {
             // Max-width động để đảm bảo không chạm timeline
             maxWidth: maxContainerWidth ? `${maxContainerWidth}px` : '1600px',
@@ -352,10 +366,10 @@ export default function DesignConstructionSection({ section }: DesignConstructio
               {sectionData.badge}
             </span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold mb-2">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 text-[#2E8C4F]">
             {sectionData.title} <span className="text-goldLight">{sectionData.title_highlight}</span> & Tối ưu Dòng Chảy Sản Xuất
           </h2>
-          <p className="text-sm md:text-base text-gray-100 max-w-3xl mx-auto mb-4">
+          <p className="text-sm md:text-base text-[#2E8C4F] max-w-3xl mx-auto mb-4">
             {sectionData.subtitle}
           </p>
         </motion.div>
@@ -387,10 +401,10 @@ export default function DesignConstructionSection({ section }: DesignConstructio
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="bg-white/10 rounded-2xl p-6 shadow-lg border border-white/15 backdrop-blur-sm"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-[#2E8C4F]/15 backdrop-blur-sm"
           >
-            <h3 className="text-lg font-bold mb-4">Lợi thế tích hợp</h3>
-            <ul className="space-y-3 text-sm text-gray-100">
+            <h3 className="text-lg font-bold mb-4 text-[#2E8C4F]">Lợi thế tích hợp</h3>
+            <ul className="space-y-3 text-sm text-[#2E8C4F]">
               {advantages.map((a, i) => (
                 <li key={i} className="flex gap-3">
                   <div className="w-5 h-5 rounded-md bg-goldLight/30 text-goldLight flex items-center justify-center text-xs font-bold">✓</div>
@@ -405,17 +419,17 @@ export default function DesignConstructionSection({ section }: DesignConstructio
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-white/10 rounded-2xl p-6 shadow-lg border border-white/15 backdrop-blur-sm"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-[#2E8C4F]/15 backdrop-blur-sm"
           >
-            <h3 className="text-lg font-bold mb-4">{sectionData.quality_title}</h3>
-            <p className="text-sm text-gray-100 leading-relaxed">
+            <h3 className="text-lg font-bold mb-4 text-[#2E8C4F]">{sectionData.quality_title}</h3>
+            <p className="text-sm text-[#2E8C4F] leading-relaxed">
               {sectionData.quality_description}
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
               {sectionData.quality_stats.map((stat, i) => (
-                <div key={i} className="p-3 rounded-xl bg-black/30 border border-white/10">
+                <div key={i} className="p-3 rounded-xl bg-white/30 border border-[#2E8C4F]/10">
                   <div className="text-goldLight font-bold">{stat.value}</div>
-                  <div>{stat.label}</div>
+                  <div className="text-[#2E8C4F]">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -426,15 +440,15 @@ export default function DesignConstructionSection({ section }: DesignConstructio
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
-            className="bg-white/10 rounded-2xl p-6 shadow-lg border border-white/15 backdrop-blur-sm"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-[#2E8C4F]/15 backdrop-blur-sm"
           >
-            <h3 className="text-lg font-bold mb-3">{sectionData.interlink_title}</h3>
-            <p className="text-sm text-gray-100 leading-relaxed mb-3">
+            <h3 className="text-lg font-bold mb-3 text-[#2E8C4F]">{sectionData.interlink_title}</h3>
+            <p className="text-sm text-[#2E8C4F] leading-relaxed mb-3">
               {sectionData.interlink_description}
             </p>
             <div className="space-y-2 text-xs">
               {sectionData.interlink_items.map((item, i) => (
-                <div key={i} className="p-2 rounded-lg bg-black/30 border border-white/10">{item}</div>
+                <div key={i} className="p-2 rounded-lg bg-white/30 border border-[#2E8C4F]/10 text-[#2E8C4F]">{item}</div>
               ))}
             </div>
           </motion.div>

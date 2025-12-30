@@ -20,7 +20,7 @@ export default function ProductGallery({ images }: { images: string[] }){
       </div>
 
       {lightbox && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center" onClick={()=>setLightbox(false)}>
+        <div className="fixed inset-0 z-50 bg-white/80 flex items-center justify-center" onClick={()=>setLightbox(false)}>
           <img src={images[current]} className="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl" />
         </div>
       )}

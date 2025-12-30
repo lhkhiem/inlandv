@@ -57,6 +57,21 @@ router.get('/:namespace', async (req: Request, res: Response) => {
     }
     
     console.log(`[Settings API] Returning setting with value keys:`, Object.keys(setting.value || {}))
+    
+    // Log detailed value for debugging - ALWAYS log
+    console.log(`[Settings API] Setting value details:`, {
+      namespace: setting.namespace,
+      hasBusinessInfo: !!(setting.value as any)?.businessInfo,
+      businessInfoPhone: (setting.value as any)?.businessInfo?.phone,
+      hotline: (setting.value as any)?.hotline,
+      phone: (setting.value as any)?.phone,
+      valueKeys: Object.keys(setting.value || {}),
+      businessInfoKeys: setting.value && typeof setting.value === 'object' 
+        ? Object.keys((setting.value as any).businessInfo || {})
+        : [],
+      fullValue: setting.value, // Log full value to see structure
+    })
+    
     res.json({ success: true, data: setting })
   } catch (error: any) {
     // If table doesn't exist, return empty value

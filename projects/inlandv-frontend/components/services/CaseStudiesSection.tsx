@@ -65,7 +65,7 @@ export default function CaseStudiesSection() {
   ]
 
   return (
-    <section className={`relative w-full isolate flex items-start justify-start overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full isolate flex items-start justify-start overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-screen py-8' : 'h-screen'
     }`}>
       <div 
@@ -85,10 +85,10 @@ export default function CaseStudiesSection() {
               Case Study
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2E8C4F] mb-2 md:mb-3">
             Dự Án <span className="text-goldLight">Tiêu Biểu</span>
           </h2>
-          <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-[#2E8C4F] max-w-3xl mx-auto">
             Một số ví dụ điển hình thể hiện khả năng tối ưu thời gian triển khai & chi phí vận hành cho khách hàng FDI.
           </p>
         </motion.div>
@@ -102,7 +102,7 @@ export default function CaseStudiesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="group relative rounded-xl overflow-hidden bg-[#1f1b1b] shadow-md hover:shadow-xl transition-all duration-500"
+                className="group relative rounded-xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-500"
               >
                 {/* Image Container with 4:3 aspect ratio */}
                 <div className="relative w-full aspect-[4/3] overflow-hidden">
@@ -132,13 +132,13 @@ export default function CaseStudiesSection() {
 
                 {/* Text Content Block */}
                   <motion.div
-                  className="p-4 bg-[#151313]"
+                  className="p-4 bg-white"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
                   {/* Result highlight */}
-                  <div className="mb-3 pb-3 border-b border-gray-700">
-                    <div className="text-sm font-bold text-white">
+                  <div className="mb-3 pb-3 border-b border-gray-300">
+                    <div className="text-sm font-bold text-[#2E8C4F]">
                       {project.result}
                     </div>
                   </div>
@@ -146,7 +146,7 @@ export default function CaseStudiesSection() {
                   {/* Highlights list */}
                   <ul className="space-y-2">
                     {project.highlights.map((highlight, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs text-gray-300 leading-relaxed">
+                      <li key={idx} className="flex items-start gap-2 text-xs text-[#2E8C4F] leading-relaxed">
                         <span className="inline-block w-1.5 h-1.5 rounded-full bg-goldLight mt-1.5 flex-shrink-0" />
                         <span>{highlight}</span>
                       </li>
@@ -154,8 +154,8 @@ export default function CaseStudiesSection() {
                   </ul>
 
                   {/* Footer note */}
-                  <div className="mt-3 pt-3 border-t border-gray-700">
-                    <p className="text-[10px] text-gray-500 italic">
+                  <div className="mt-3 pt-3 border-t border-gray-300">
+                    <p className="text-[10px] text-[#2E8C4F] italic">
                       * Số liệu minh hoạ nội bộ
                     </p>
                   </div>

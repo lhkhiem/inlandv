@@ -26,7 +26,7 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
       
       <style jsx global>{`
         .article-content {
-          color: #ffffff;
+          color: #2E8C4F;
           line-height: 1.8;
           /* Font handled by global CSS: NotoSerif for content, GMV DIN Pro for headings */
         }
@@ -34,7 +34,7 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
         .article-content h2 {
           font-size: 2rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #2E8C4F;
           margin-top: 3rem;
           margin-bottom: 1.5rem;
           line-height: 1.3;
@@ -44,7 +44,7 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
         .article-content h3 {
           font-size: 1.5rem;
           font-weight: 600;
-          color: #ffffff;
+          color: #2E8C4F;
           margin-top: 2.5rem;
           margin-bottom: 1rem;
           /* Font handled by global CSS: GMV DIN Pro for headings */
@@ -54,7 +54,7 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
           font-size: 1.125rem;
           margin-bottom: 1.5rem;
           max-width: 760px;
-          color: #ffffff;
+          color: #2E8C4F;
           /* Font handled by global CSS: NotoSerif for content */
         }
 
@@ -63,8 +63,8 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
           padding-left: 1.5rem;
           margin: 2rem 0;
           font-style: italic;
-          color: #d1d5db;
-          background: #1f1f1f;
+          color: #2E8C4F;
+          background: #f5f5f5;
           padding: 1.5rem;
           border-radius: 0.5rem;
           /* Font handled by global CSS: NotoSerif for content */
@@ -79,7 +79,7 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
         .article-content li {
           margin-bottom: 0.75rem;
           font-size: 1.125rem;
-          color: #ffffff;
+          color: #2E8C4F;
           /* Font handled by global CSS: NotoSerif for content */
         }
 
@@ -103,12 +103,12 @@ export default function ArticleBody({ content }: ArticleBodyProps) {
 
         .article-content strong {
           font-weight: 600;
-          color: #ffffff;
+          color: #2E8C4F;
           /* Font handled by global CSS: NotoSerif for content */
         }
 
         .article-content code {
-          background: #1f1f1f;
+          background: #f5f5f5;
           padding: 0.2rem 0.4rem;
           border-radius: 0.25rem;
           font-size: 0.9em;

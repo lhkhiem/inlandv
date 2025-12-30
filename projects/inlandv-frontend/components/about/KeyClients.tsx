@@ -183,8 +183,8 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
         />
       </div>
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 z-10 bg-black/70" />
+      {/* White Overlay */}
+      <div className="absolute inset-0 z-10 bg-white/70" />
 
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
@@ -232,7 +232,7 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
             </div>
           )}
           {sectionData.title && (
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#2E8C4F] mb-2">
               {sectionData.title.includes('Tiêu biểu') ? (
                 <>
                   {sectionData.title.split('Tiêu biểu')[0]}
@@ -245,7 +245,7 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
             </h2>
           )}
           {sectionData.subtitle && (
-            <p className="text-sm md:text-base text-white/80 max-w-3xl mx-auto">
+            <p className="text-sm md:text-base text-[#2E8C4F]/80 max-w-3xl mx-auto">
               {sectionData.subtitle}
             </p>
           )}
@@ -260,10 +260,10 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
             className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3"
           >
             {stats.map((stat, index) => (
-              <div key={index} className="bg-[#1a1a1a] rounded-xl p-4 border border-white/10 text-center">
+              <div key={index} className="bg-white rounded-xl p-4 border border-[#2E8C4F]/10 text-center">
                 {React.createElement(stat.icon, { className: 'w-8 h-8 text-[#2E8C4F] mx-auto mb-2' })}
                 <div className="text-3xl font-bold text-[#2E8C4F] mb-1">{stat.value}</div>
-                <div className="text-sm text-white/70">{stat.label}</div>
+                <div className="text-sm text-[#2E8C4F]/70">{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -279,9 +279,9 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.5, delay: revealed ? 0.3 + index * 0.1 : 0 }}
-                className="bg-[#1a1a1a] rounded-2xl p-6 shadow-lg border-2 border-white/10 hover:border-[#2E8C4F]/50 hover:shadow-xl transition-all duration-300"
+                className="bg-white rounded-2xl p-6 shadow-lg border-2 border-[#2E8C4F]/10 hover:border-[#2E8C4F]/50 hover:shadow-xl transition-all duration-300"
               >
-                <div className="aspect-video bg-[#151313] rounded-xl mb-4 flex items-center justify-center border border-white/10 overflow-hidden">
+                <div className="aspect-video bg-[#F5F5F5] rounded-xl mb-4 flex items-center justify-center border border-[#2E8C4F]/10 overflow-hidden">
                   {logoUrls.length > 0 ? (
                     <div className="grid grid-cols-2 gap-2 p-2 w-full h-full">
                       {logoUrls.slice(0, 4).map((logoUrl: string, logoIndex: number) => (
@@ -299,14 +299,14 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
                     </div>
                   ) : (
                     <div className="text-center">
-                      <Building2 className="w-12 h-12 text-white/30 mx-auto mb-2" />
-                      <p className="text-sm text-white/50">{client.name}</p>
+                      <Building2 className="w-12 h-12 text-[#2E8C4F]/30 mx-auto mb-2" />
+                      <p className="text-sm text-[#2E8C4F]/50">{client.name}</p>
                     </div>
                   )}
                 </div>
-                <h3 className="font-bold text-white mb-2">{client.description}</h3>
+                <h3 className="font-bold text-[#2E8C4F] mb-2">{client.description}</h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/70">Dự án thành công</span>
+                  <span className="text-sm text-[#2E8C4F]/70">Dự án thành công</span>
                   <span className="text-2xl font-bold text-[#2E8C4F]">{client.projects}</span>
                 </div>
               </motion.div>
@@ -321,7 +321,7 @@ export default function KeyClients({ section }: KeyClientsProps = {}) {
             transition={{ duration: 0.6, delay: revealed ? 0.6 : 0 }}
             className="text-center mt-8"
           >
-            <p className="text-white/60 italic">
+            <p className="text-[#2E8C4F]/60 italic">
               {sectionData.footerNote}
             </p>
           </motion.div>

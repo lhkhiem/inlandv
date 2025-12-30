@@ -21,7 +21,7 @@ export default function ArticleHero({
   category 
 }: ArticleHeroProps) {
   return (
-    <section className="relative w-full bg-gray-800">
+    <section className="relative w-full bg-[#F5F5F5]">
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
         {/* Category Badge */}
         {category && (

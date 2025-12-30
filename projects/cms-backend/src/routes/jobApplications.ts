@@ -31,3 +31,19 @@ router.delete('/:id', deleteJobApplication);
 export default router;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

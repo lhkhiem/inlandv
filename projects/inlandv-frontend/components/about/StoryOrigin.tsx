@@ -118,7 +118,7 @@ export default function StoryOrigin({ section }: StoryOriginProps = {}) {
   }, [uniformScale, isLandscape, timelineWidth, viewport])
 
   return (
-    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-0 py-4' : 'h-screen'
     }`}>
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
@@ -158,7 +158,7 @@ export default function StoryOrigin({ section }: StoryOriginProps = {}) {
               initial={{ opacity: 0, y: 20 }}
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6 }}
-              className="space-y-6 text-white"
+              className="space-y-6 text-[#2E8C4F]"
             >
               {storyData.paragraphs?.map((paragraph, index) => (
                 <p key={index} className="text-base md:text-lg leading-relaxed italic font-semibold text-justify">
@@ -176,11 +176,11 @@ export default function StoryOrigin({ section }: StoryOriginProps = {}) {
             >
               {/* Vision */}
               {storyData.vision && (
-                <div className="text-center p-6 rounded-xl border-2 border-[#2E8C4F] bg-gray-800/30">
+                <div className="text-center p-6 rounded-xl border-2 border-[#2E8C4F] bg-white/30">
                   <div className="flex justify-center mb-4">
                     <Eye className="w-8 h-8 text-[#2E8C4F]" />
                   </div>
-                  <h3 className="text-base md:text-lg text-white leading-relaxed italic font-semibold">
+                  <h3 className="text-base md:text-lg text-[#2E8C4F] leading-relaxed italic font-semibold">
                     <span className="font-semibold italic">{storyData.vision.title}:</span> {storyData.vision.content}
                   </h3>
                 </div>
@@ -188,11 +188,11 @@ export default function StoryOrigin({ section }: StoryOriginProps = {}) {
 
               {/* Mission */}
               {storyData.mission && (
-                <div className="text-center p-6 rounded-xl border-2 border-[#2E8C4F] bg-gray-800/30">
+                <div className="text-center p-6 rounded-xl border-2 border-[#2E8C4F] bg-white/30">
                   <div className="flex justify-center mb-4">
                     <Rocket className="w-8 h-8 text-[#2E8C4F]" />
                   </div>
-                  <h3 className="text-base md:text-lg text-white leading-relaxed italic font-semibold">
+                  <h3 className="text-base md:text-lg text-[#2E8C4F] leading-relaxed italic font-semibold">
                     <span className="font-semibold italic">{storyData.mission.title}:</span> {storyData.mission.content}
                   </h3>
                 </div>
@@ -200,11 +200,11 @@ export default function StoryOrigin({ section }: StoryOriginProps = {}) {
 
               {/* Core Values */}
               {storyData.coreValues && (
-                <div className="text-center p-6 rounded-xl border-2 border-[#2E8C4F] bg-gray-800/30">
+                <div className="text-center p-6 rounded-xl border-2 border-[#2E8C4F] bg-white/30">
                   <div className="flex justify-center mb-4">
                     <Heart className="w-8 h-8 text-[#2E8C4F]" />
                   </div>
-                  <h3 className="text-base md:text-lg text-white leading-relaxed italic font-semibold">
+                  <h3 className="text-base md:text-lg text-[#2E8C4F] leading-relaxed italic font-semibold">
                     <span className="font-semibold italic">{storyData.coreValues.title}:</span> {storyData.coreValues.content}
                   </h3>
                 </div>

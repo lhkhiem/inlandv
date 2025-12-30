@@ -185,39 +185,17 @@ export default function RealEstateFormPage() {
     }
   };
 
-  const loadPropertyTypes = async () => {
-    try {
-      setLoadingPropertyTypes(true);
-      const response = await axios.get(buildApiUrl('/properties/types'), {
-        withCredentials: true,
-      });
-      if (response.data?.success && response.data?.data) {
-        setPropertyTypes(response.data.data);
-      } else {
-        // Fallback to default types if API fails
-        setPropertyTypes([
-          { value: 'nha-pho', label: 'Nhà phố' },
-          { value: 'can-ho', label: 'Căn hộ' },
-          { value: 'dat-nen', label: 'Đất nền' },
-          { value: 'biet-thu', label: 'Biệt thự' },
-          { value: 'shophouse', label: 'Shophouse' },
-          { value: 'nha-xuong', label: 'Nhà xưởng' },
-        ]);
-      }
-    } catch (error) {
-      console.error('Failed to load property types:', error);
-      // Fallback to default types on error
-      setPropertyTypes([
-        { value: 'nha-pho', label: 'Nhà phố' },
-        { value: 'can-ho', label: 'Căn hộ' },
-        { value: 'dat-nen', label: 'Đất nền' },
-        { value: 'biet-thu', label: 'Biệt thự' },
-        { value: 'shophouse', label: 'Shophouse' },
-        { value: 'nha-xuong', label: 'Nhà xưởng' },
-      ]);
-    } finally {
-      setLoadingPropertyTypes(false);
-    }
+  const loadPropertyTypes = () => {
+    // Use hardcoded property types - no need for API call
+    setPropertyTypes([
+      { value: 'nha-pho', label: 'Nhà phố' },
+      { value: 'can-ho', label: 'Căn hộ' },
+      { value: 'dat-nen', label: 'Đất nền' },
+      { value: 'biet-thu', label: 'Biệt thự' },
+      { value: 'shophouse', label: 'Shophouse' },
+      { value: 'nha-xuong', label: 'Nhà xưởng' },
+    ]);
+    setLoadingPropertyTypes(false);
   };
 
   // Load wards when province changes

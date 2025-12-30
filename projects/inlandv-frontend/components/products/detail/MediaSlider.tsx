@@ -204,7 +204,7 @@ export const MediaSlider: React.FC<MediaSliderProps> = ({ images, videoUrl, aspe
                       sizes="(max-width:768px) 100vw, (max-width:1200px) 100vw, 100vw"
                       priority={idx === 0}
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center">
+                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition flex items-center justify-center">
                       <ZoomIn className="h-12 w-12 text-white opacity-0 group-hover:opacity-80 transition" />
                     </div>
                   </div>
@@ -323,7 +323,7 @@ export const MediaSlider: React.FC<MediaSliderProps> = ({ images, videoUrl, aspe
       {/* Zoom Modal */}
       {zoomImage && (
         <div
-          className="fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[300] bg-white/95 flex items-center justify-center p-4"
           onClick={() => setZoomImage(null)}
         >
           <button
@@ -352,8 +352,8 @@ export const MediaSlider: React.FC<MediaSliderProps> = ({ images, videoUrl, aspe
           width: 42px;
           height: 42px;
           border-radius: 50%;
-          background: rgba(0,0,0,0.28);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+          background: rgba(255,255,255,0.28);
+          box-shadow: 0 4px 12px rgba(255,255,255,0.25);
           backdrop-filter: blur(4px);
         }
         .media-slider-container .swiper-button-next:after, 

@@ -17,6 +17,7 @@ interface IndustrialPark {
   scope: 'trong-kcn' | 'ngoai-kcn';
   has_rental: boolean;
   has_transfer: boolean;
+  has_factory: boolean;
   province: string;
   ward?: string;
   total_area: number;
@@ -404,6 +405,11 @@ export default function IndustrialParksPage() {
                       {park.has_transfer && (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
                           Chuyển nhượng
+                        </span>
+                      )}
+                      {park.has_factory && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400">
+                          Có nhà xưởng
                         </span>
                       )}
                     </div>

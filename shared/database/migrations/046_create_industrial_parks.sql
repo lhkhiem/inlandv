@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS industrial_parks (
   -- Dịch vụ có sẵn (1 KCN có thể có cả 2)
   has_rental BOOLEAN DEFAULT false,
   has_transfer BOOLEAN DEFAULT false,
+  has_factory BOOLEAN DEFAULT false, -- Có nhà xưởng/kho bãi
   
   -- Location
   province VARCHAR(100) NOT NULL,

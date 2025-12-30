@@ -26,7 +26,7 @@ export const SimilarItemsSection: React.FC<SimilarItemsSectionProps> = ({ items,
         <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
       </div>
       {items.length === 0 ? (
-        <div className="text-sm text-gray-500">Chưa có sản phẩm phù hợp khác theo nhu cầu của bạn</div>
+        <div className="text-sm text-[#2E8C4F]">Chưa có sản phẩm phù hợp khác theo nhu cầu của bạn</div>
       ) : hasEnoughForSlider ? (
         <div className="similar-items-slider px-1 py-2">
           <Swiper

@@ -333,3 +333,19 @@ export default function JobApplicationDetailPage() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

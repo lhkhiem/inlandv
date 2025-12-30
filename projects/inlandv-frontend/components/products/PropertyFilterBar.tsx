@@ -5,7 +5,7 @@ import { Search, SlidersHorizontal } from 'lucide-react'
 import ProductFilterDropdown from './ProductFilterDropdown'
 import DualThumbPriceSlider from './DualThumbPriceSlider'
 import MultiSelectDropdown from './MultiSelectDropdown'
-import { provinces as vnProvinces, wardsByProvince } from '@/lib/vietnam'
+import { getProvinces, getWardsByProvince, type Province, type Ward } from '@/lib/provinces-api'
 import { PropertyFilter } from '@/lib/types'
 
 type Option = { label: string; value: string }
@@ -64,14 +64,41 @@ export default function PropertyFilterBar({
     { label: 'Mua sở hữu', value: 'buy' },
   ]
 
-  const typeOptions: Option[] = [
-    { label: 'Nhà phố', value: 'nha-pho' },
-    { label: 'Căn hộ', value: 'can-ho' },
-    { label: 'Biệt thự', value: 'biet-thu' },
-    { label: 'Đất nền', value: 'dat-nen' },
-    { label: 'Shophouse', value: 'shophouse' },
-    { label: 'Nhà xưởng', value: 'nha-xuong' },
-  ]
+  const [typeOptions, setTypeOptions] = useState<Option[]>([])
+  const [loadingTypes, setLoadingTypes] = useState(false)
+
+  // Load property types from API
+  useEffect(() => {
+    const loadTypes = async () => {
+      try {
+        setLoadingTypes(true)
+        const { api } = await import('@/lib/api')
+        const response = await api.getPropertyTypes()
+        if (response.success && response.data) {
+          const options = response.data.map(item => ({
+            label: item.label,
+            value: item.value,
+          }))
+          setTypeOptions(options)
+        }
+      } catch (err) {
+        console.error('Error loading property types:', err)
+        // Fallback to default options
+        setTypeOptions([
+          { label: 'Nhà phố', value: 'nha-pho' },
+          { label: 'Căn hộ', value: 'can-ho' },
+          { label: 'Biệt thự', value: 'biet-thu' },
+          { label: 'Đất nền', value: 'dat-nen' },
+          { label: 'Shophouse', value: 'shophouse' },
+          { label: 'Nhà xưởng', value: 'nha-xuong' },
+        ])
+      } finally {
+        setLoadingTypes(false)
+      }
+    }
+    
+    loadTypes()
+  }, [])
 
   const legalStatusOptions: Option[] = [
     { label: 'Sổ hồng riêng', value: 'so-hong-rieng' },
@@ -117,12 +144,65 @@ export default function PropertyFilterBar({
     { label: 'Gara ô tô', value: 'gara-oto' },
   ]
 
-  const provinceOptions = useMemo(() => vnProvinces.map(p => ({ label: p, value: p })), [])
-  const districtOptions = useMemo(() => {
-    if (!filters.province) return []
-    const districts = wardsByProvince[filters.province] || []
-    return districts.map(d => ({ label: d, value: d }))
+  const [provinceOptions, setProvinceOptions] = useState<Option[]>([])
+  const [wardOptions, setWardOptions] = useState<Option[]>([])
+  const [loadingProvinces, setLoadingProvinces] = useState(false)
+
+  // Load provinces from API
+  useEffect(() => {
+    const loadProvinces = async () => {
+      try {
+        setLoadingProvinces(true)
+        const provinces = await getProvinces()
+        const options = provinces.map(p => ({
+          label: p.name,
+          value: p.name, // Use name for API compatibility
+        }))
+        setProvinceOptions(options)
+      } catch (err) {
+        console.error('Error loading provinces:', err)
+        setProvinceOptions([])
+      } finally {
+        setLoadingProvinces(false)
+      }
+    }
+    
+    loadProvinces()
+  }, [])
+
+  // Load wards when province is selected
+  useEffect(() => {
+    const loadWards = async () => {
+      if (!filters.province) {
+        setWardOptions([])
+        return
+      }
+
+      try {
+        // Find province code by name
+        const provinces = await getProvinces()
+        const province = provinces.find(p => p.name === filters.province)
+        if (!province) {
+          setWardOptions([])
+          return
+        }
+
+        const wards = await getWardsByProvince(province.code)
+        const options = wards.map(w => ({
+          label: w.name,
+          value: w.name, // Use name for API compatibility
+        }))
+        setWardOptions(options)
+      } catch (err) {
+        console.error('Error loading wards:', err)
+        setWardOptions([])
+      }
+    }
+    
+    loadWards()
   }, [filters.province])
+
+  const districtOptions = wardOptions
 
   // Price presets based on demand type
   const pricePresetsForRent: Array<{ label: string; min: number; max: number }> = [
@@ -208,11 +288,12 @@ export default function PropertyFilterBar({
           <ProductFilterDropdown
             label="Quận/Huyện"
             options={districtOptions}
-            value={filters.district || ''}
-            onChange={v => emit({ district: v || undefined })}
+            value={filters.district || filters.ward || ''}
+            onChange={v => emit({ district: v || undefined, ward: v || undefined })}
             isOpen={activeDropdown === 'district'}
             onOpen={() => setActiveDropdown('district')}
             onClose={() => setActiveDropdown(null)}
+            disabled={!filters.province || loadingProvinces}
           />
         </div>
       </div>

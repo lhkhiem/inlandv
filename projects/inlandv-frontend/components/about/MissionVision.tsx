@@ -166,8 +166,8 @@ export default function MissionVision({ section }: MissionVisionProps = {}) {
           backgroundRepeat: 'no-repeat'
         }}
       />
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 z-[1] bg-black/75" />
+      {/* White Overlay */}
+      <div className="absolute inset-0 z-[1] bg-white/75" />
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
         className={`relative z-[10] ${
@@ -214,7 +214,7 @@ export default function MissionVision({ section }: MissionVisionProps = {}) {
             </div>
           )}
           {sectionData.title && (
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#2E8C4F] mb-2">
               {sectionData.title.includes('Inlandv') ? (
                 <>
                   {sectionData.title.split('Inlandv')[0]}
@@ -227,7 +227,7 @@ export default function MissionVision({ section }: MissionVisionProps = {}) {
             </h2>
           )}
           {sectionData.subtitle && (
-            <p className="text-sm md:text-base text-white/80 max-w-3xl mx-auto">
+            <p className="text-sm md:text-base text-[#2E8C4F]/80 max-w-3xl mx-auto">
               {sectionData.subtitle}
             </p>
           )}
@@ -240,20 +240,20 @@ export default function MissionVision({ section }: MissionVisionProps = {}) {
               initial={{ opacity: 0, y: 30 }}
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.5, delay: revealed ? 0.1 + index * 0.1 : 0 }}
-              className="bg-[#1a1a1a] rounded-2xl p-6 border-2 border-white/10 hover:border-[#2E8C4F]/50 hover:shadow-xl transition-all duration-300"
+              className="bg-white rounded-2xl p-6 border-2 border-[#2E8C4F]/10 hover:border-[#2E8C4F]/50 hover:shadow-xl transition-all duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="w-14 h-14 rounded-xl bg-[#2E8C4F]/20 flex items-center justify-center flex-shrink-0">
                   {React.createElement(item.icon, { className: 'w-7 h-7 text-[#2E8C4F]' })}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-1">
+                  <h3 className="text-xl font-bold text-[#2E8C4F] mb-1">
                     {item.title}
                   </h3>
                   <p className="text-sm font-medium text-[#2E8C4F] mb-2">
                     {item.subtitle}
                   </p>
-                  <p className="text-sm text-white/80 leading-relaxed">
+                  <p className="text-sm text-[#2E8C4F]/80 leading-relaxed">
                     {item.description}
                   </p>
                 </div>

@@ -55,7 +55,7 @@ export default function AboutValuesSection() {
   }, [])
 
   return (
-    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-screen py-8' : 'h-screen'
     }`}>
       <div className={`w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 py-6 md:py-8 ${
@@ -68,10 +68,10 @@ export default function AboutValuesSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#2E8C4F] mb-4">
             Giá Trị Cốt Lõi
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-[#2E8C4F] max-w-2xl mx-auto">
             Những giá trị định hướng mọi hoạt động của chúng tôi
           </p>
         </motion.div>
@@ -89,7 +89,7 @@ export default function AboutValuesSection() {
               <div className="w-14 h-14 bg-[#2E8C4F]/20 rounded-full flex items-center justify-center mb-4">
                 <value.icon className="w-7 h-7 text-goldLight" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-3">
+              <h3 className="text-lg font-bold text-[#2E8C4F] mb-3">
                 {value.title}
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">

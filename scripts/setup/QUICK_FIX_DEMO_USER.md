@@ -57,3 +57,19 @@ psql -U inlandv_user -d inlandv_realestate -c "SELECT email, name, role FROM use
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

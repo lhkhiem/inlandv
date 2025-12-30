@@ -182,8 +182,8 @@ export default function ServicesHero({ section }: ServicesHeroProps = {}) {
       }`}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      {/* Dark overlay - 70% (giảm 20% so với 90%) */}
-      <div className="absolute inset-0 bg-black/70 z-10" />
+      {/* White overlay - 70% (giảm 20% so với 90%) */}
+      <div className="absolute inset-0 bg-white/70 z-10" />
       
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
@@ -226,7 +226,7 @@ export default function ServicesHero({ section }: ServicesHeroProps = {}) {
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2E8C4F] mb-4 leading-tight">
             {heroData.title}
             {heroData.title_highlight && (
               <>
@@ -237,7 +237,7 @@ export default function ServicesHero({ section }: ServicesHeroProps = {}) {
           </h1>
           
           {heroData.subtitle && (
-            <p className="text-base md:text-lg text-gray-200 mb-6 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-[#2E8C4F] mb-6 max-w-3xl mx-auto leading-relaxed">
               {heroData.subtitle}
             </p>
           )}

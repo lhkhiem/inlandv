@@ -83,7 +83,7 @@ export default function LanguageSwitcher({ scrolled, backgroundType = 'image' }:
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.15 }}
             className={`absolute mt-1 right-0 w-24 rounded-md shadow-lg ring-1 ring-black/10 backdrop-blur-sm ${
-              scrolled ? 'bg-white/90' : 'bg-black/30'
+              scrolled ? 'bg-white/90' : 'bg-white/90'
             } py-1`} 
             role="listbox"
           >

@@ -11,6 +11,8 @@ import projectRoutes from './routes/projects'
 import listingRoutes from './routes/listings'
 import propertyRoutes from './routes/properties'
 import industrialParkRoutes from './routes/industrial-parks'
+import productRoutes from './routes/products'
+import lookupRoutes from './routes/lookup'
 import postRoutes from './routes/posts'
 import leadRoutes from './routes/leads'
 import jobRoutes from './routes/jobs'
@@ -154,6 +156,8 @@ app.use('/api/projects', projectRoutes)
 app.use('/api/listings', listingRoutes)
 app.use('/api/properties', propertyRoutes)
 app.use('/api/industrial-parks', industrialParkRoutes)
+app.use('/api/products', productRoutes)
+app.use('/api/lookup', lookupRoutes)
 app.use('/api/posts', postRoutes)
 app.use('/api/leads', leadRoutes)
 app.use('/api/jobs', jobRoutes)

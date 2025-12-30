@@ -8,3 +8,19 @@ COMMENT ON COLUMN properties.google_maps_link IS 'Link Google Maps đến vị t
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

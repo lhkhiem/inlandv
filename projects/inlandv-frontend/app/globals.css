@@ -17,7 +17,7 @@
 
   /* Base body uses NotoSerif for reading comfort */
   body {
-    @apply bg-[#151313] text-gray-100 antialiased;
+    @apply bg-[#ffffff] text-gray-900 antialiased;
     font-family: var(--font-content);
     font-feature-settings: 'rlig' 1, 'calt' 1;
     overflow-x: hidden;
@@ -220,15 +220,15 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-100 bg-transparent hover:bg-white/5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-goldDark;
+    @apply inline-flex items-center justify-center px-6 py-3 border border-[#2E8C4F] text-base font-medium rounded-md text-gray-900 bg-white hover:bg-white/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-goldDark;
   }
 
   .section-title {
-    @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-2 md:mb-3;
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-[#2E8C4F] mb-2 md:mb-3;
   }
 
   .section-subtitle {
-    @apply text-xs md:text-sm lg:text-base xl:text-lg text-gray-600 max-w-2xl;
+    @apply text-xs md:text-sm lg:text-base xl:text-lg text-[#2E8C4F] max-w-2xl;
   }
 
   .scrollbar-hide {
@@ -248,7 +248,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-gray-200;
 }
 
 ::-webkit-scrollbar-thumb {

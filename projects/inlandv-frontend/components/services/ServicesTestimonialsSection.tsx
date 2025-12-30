@@ -52,7 +52,7 @@ export default function ServicesTestimonialsSection() {
   ]
 
   return (
-    <section className={`relative w-full isolate flex items-start justify-start overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full isolate flex items-start justify-start overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-screen py-8' : 'h-screen'
     }`}>
       <div 
@@ -72,10 +72,10 @@ export default function ServicesTestimonialsSection() {
               Đánh giá khách hàng
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2E8C4F] mb-2 md:mb-3">
             Niềm Tin <span className="text-goldLight">Khách Hàng</span>
           </h2>
-          <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-[#2E8C4F] max-w-3xl mx-auto">
             Phản hồi thực tế từ các doanh nghiệp FDI đã đồng hành cùng Inland trong nhiều giai đoạn triển khai dự án.
           </p>
         </motion.div>
@@ -86,14 +86,14 @@ export default function ServicesTestimonialsSection() {
             initial={{ opacity: 0, x: -40 }}
             animate={revealed ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
             transition={{ duration: 0.6, delay: revealed ? 0.1 : 0 }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Quote className="w-5 h-5 text-goldLight" /> Chia sẻ</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4 flex items-center gap-2"><Quote className="w-5 h-5 text-goldLight" /> Chia sẻ</h3>
             <div className="space-y-5 max-h-[300px] overflow-y-auto pr-2">
               {testimonials.map((t, i) => (
                 <div key={i} className="border-b border-gray-100 pb-4 last:border-none">
-                  <p className="text-sm text-gray-200 mb-2 leading-relaxed">“{t.quote}”</p>
-                  <div className="text-xs text-gray-400">{t.author} — {t.role}</div>
+                  <p className="text-sm text-[#2E8C4F] mb-2 leading-relaxed">"{t.quote}"</p>
+                  <div className="text-xs text-[#2E8C4F]">{t.author} — {t.role}</div>
                 </div>
               ))}
             </div>
@@ -105,14 +105,14 @@ export default function ServicesTestimonialsSection() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Star className="w-5 h-5 text-goldLight" /> Chỉ số</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4 flex items-center gap-2"><Star className="w-5 h-5 text-goldLight" /> Chỉ số</h3>
             <div className="grid grid-cols-2 gap-4">
               {metrics.map((m, i) => (
-                <div key={i} className="p-4 rounded-xl bg-[#151313] border border-gray-700">
+                <div key={i} className="p-4 rounded-xl bg-white border border-gray-300">
                   <div className="text-goldLight font-bold text-xl">{m.value}</div>
-                  <div className="text-xs text-gray-300">{m.label}</div>
+                  <div className="text-xs text-[#2E8C4F]">{m.label}</div>
                 </div>
               ))}
             </div>
@@ -126,14 +126,14 @@ export default function ServicesTestimonialsSection() {
             viewport={{ once: true }}
             className="bg-gradient-to-br from-goldLight/25 to-goldLight/10 rounded-2xl p-6 shadow-lg border border-goldLight/40"
           >
-            <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2"><Users className="w-5 h-5 text-goldLight" /> Giá trị duy trì</h3>
-            <p className="text-sm text-gray-100 leading-relaxed mb-4">
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-3 flex items-center gap-2"><Users className="w-5 h-5 text-goldLight" /> Giá trị duy trì</h3>
+            <p className="text-sm text-[#2E8C4F] leading-relaxed mb-4">
               Sự kết hợp giữa tư vấn đầu tư, pháp lý, thiết kế và nhân sự tạo ra chuỗi hỗ trợ xuyên suốt giúp giảm ma sát, tăng tốc độ ổn định tổ chức và hiệu quả vận hành.
             </p>
-            <div className="space-y-3 text-xs text-gray-200">
-              <div className="p-3 rounded-xl bg-[#151313] shadow-sm border border-goldLight/40">Liên hệ hỗ trợ nội bộ phản hồi trong 2h làm việc.</div>
-              <div className="p-3 rounded-xl bg-[#151313] shadow-sm border border-goldLight/40">Checklist tiêu chuẩn áp dụng nhất quán giữa các dự án.</div>
-              <div className="p-3 rounded-xl bg-[#151313] shadow-sm border border-goldLight/40">Đánh giá cải tiến định kỳ theo giai đoạn mở rộng.</div>
+            <div className="space-y-3 text-xs text-[#2E8C4F]">
+              <div className="p-3 rounded-xl bg-white shadow-sm border border-goldLight/40">Liên hệ hỗ trợ nội bộ phản hồi trong 2h làm việc.</div>
+              <div className="p-3 rounded-xl bg-white shadow-sm border border-goldLight/40">Checklist tiêu chuẩn áp dụng nhất quán giữa các dự án.</div>
+              <div className="p-3 rounded-xl bg-white shadow-sm border border-goldLight/40">Đánh giá cải tiến định kỳ theo giai đoạn mở rộng.</div>
             </div>
           </motion.div>
         </div>

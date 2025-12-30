@@ -37,7 +37,7 @@ export default function RelatedArticles({ articles, basePath }: RelatedArticlesP
   )
 
   return (
-    <section className="bg-gray-800 py-16 md:py-24">
+    <section className="bg-[#F5F5F5] py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <motion.div

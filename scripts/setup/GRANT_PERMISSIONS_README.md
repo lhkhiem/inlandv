@@ -66,3 +66,19 @@ psql -U inlandv_user -d inlandv_realestate -c "SELECT current_user, has_database
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

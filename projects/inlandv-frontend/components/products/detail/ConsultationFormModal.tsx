@@ -28,7 +28,7 @@ export const ConsultationFormModal: React.FC<ConsultationFormModalProps> = ({ is
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4 bg-white/60 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
       <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 my-4" onClick={(e) => e.stopPropagation()}>
         <button
           onClick={onClose}

@@ -202,10 +202,16 @@ Bạn có thể:
 
 ## 📚 Tài liệu tham khảo
 
-- [NEXT_STEPS.md](./NEXT_STEPS.md) - Chi tiết các bước tiếp theo
 - [SETUP.md](./SETUP.md) - Hướng dẫn setup đầy đủ
 - [API Documentation](./API/cms-api.md) - API endpoints
 - [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Xử lý lỗi
+
+
+
+
+
+
+
 
 
 

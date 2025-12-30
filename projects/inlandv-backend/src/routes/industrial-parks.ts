@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
       scope, // 'trong-kcn' | 'ngoai-kcn'
       has_rental, // boolean
       has_transfer, // boolean
+      has_factory, // boolean
       province,
       rental_price_min,
       rental_price_max,
@@ -44,6 +45,13 @@ router.get('/', async (req, res) => {
       paramCount++
       queryText += ` AND has_transfer = $${paramCount}`
       queryParams.push(has_transfer === 'true' || has_transfer === true)
+    }
+
+    // Filter by has_factory
+    if (has_factory !== undefined) {
+      paramCount++
+      queryText += ` AND has_factory = $${paramCount}`
+      queryParams.push(has_factory === 'true' || has_factory === true)
     }
 
     // Filter by province

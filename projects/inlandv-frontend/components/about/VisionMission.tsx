@@ -40,12 +40,12 @@ export default function VisionMission() {
               Triết lý kinh doanh
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2E8C4F] mb-4">
             Tầm Nhìn - Sứ Mệnh
             <br />
             <span className="text-goldDark">Giá Trị Cốt Lõi</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#2E8C4F] max-w-2xl mx-auto">
             Những giá trị định hướng và dẫn dắt mọi hoạt động phát triển của Inland
           </p>
         </motion.div>
@@ -68,16 +68,16 @@ export default function VisionMission() {
               <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-gray-100 h-full">
                 {/* Icon */}
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-goldDark to-goldLight flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-300">
-                  <value.icon className="w-8 h-8 text-white" />
+                  <value.icon className="w-8 h-8 text-[#2E8C4F]" />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                <h3 className="text-2xl font-bold text-[#2E8C4F] mb-4">
                   {value.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[#2E8C4F] leading-relaxed">
                   {value.description}
                 </p>
 

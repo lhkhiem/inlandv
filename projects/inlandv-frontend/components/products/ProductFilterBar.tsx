@@ -13,6 +13,7 @@ const tpHcmDistricts = ['Quận 1','Quận 2','Quận 3','Quận 4','Quận 5','
 export type ProductFilters = {
   q: string
   type?: string
+  locationTypes: string[] // ['trong-kcn', 'ngoai-kcn', 'trong-ccn', 'ngoai-ccn', 'ngoai-kcn-ccn']
   provinces: string[]
   wards: string[]
   price: [number, number]
@@ -34,14 +35,16 @@ export default function ProductFilterBar({
   priceConfig?: { min:number; max:number; step:number }
   initialQ?: string
 }){
-  const [filters, setFilters] = useState<ProductFilters>({ q: initialQ, type: defaultType, provinces: [], wards: [], price:[priceConfig?.min ?? 0, priceConfig?.max ?? 1000000000], area:[0, 100000] })
+  const [filters, setFilters] = useState<ProductFilters>({ q: initialQ, type: defaultType, locationTypes: [], provinces: [], wards: [], price:[priceConfig?.min ?? 0, priceConfig?.max ?? 1000000000], area:[0, 100000] })
   
   // State for loading data from APIs
   const [typeOptions, setTypeOptions] = useState<Option[]>(typeOptionsProp ?? [])
   const [provinceOptions, setProvinceOptions] = useState<Option[]>([])
   const [wardOptions, setWardOptions] = useState<Option[]>([])
+  const [locationTypeOptions, setLocationTypeOptions] = useState<Option[]>([])
   const [loadingTypes, setLoadingTypes] = useState(false)
   const [loadingProvinces, setLoadingProvinces] = useState(false)
+  const [loadingLocationTypes, setLoadingLocationTypes] = useState(false)
 
   // Load property types from database
   useEffect(() => {
@@ -76,6 +79,37 @@ export default function ProductFilterBar({
     
     loadTypes()
   }, [typeOptionsProp])
+
+  // Load location types from API
+  useEffect(() => {
+    const loadLocationTypes = async () => {
+      try {
+        setLoadingLocationTypes(true)
+        const response = await api.getLocationTypes()
+        if (response.success && response.data) {
+          const options = response.data.map(item => ({
+            label: item.label || item.name_vi,
+            value: item.code,
+          }))
+          setLocationTypeOptions(options)
+        }
+      } catch (err) {
+        console.error('Error loading location types:', err)
+        // Fallback to default options
+        setLocationTypeOptions([
+          { label: 'Trong KCN', value: 'trong-kcn' },
+          { label: 'Trong CCN', value: 'trong-ccn' },
+          { label: 'Ngoài KCN / CCN', value: 'ngoai-kcn-ccn' },
+          { label: 'Ngoài KCN', value: 'ngoai-kcn' },
+          { label: 'Ngoài CCN', value: 'ngoai-ccn' },
+        ])
+      } finally {
+        setLoadingLocationTypes(false)
+      }
+    }
+    
+    loadLocationTypes()
+  }, [])
 
   // Load provinces from API
   useEffect(() => {
@@ -168,6 +202,34 @@ export default function ProductFilterBar({
         <MultiSelectDropdown showLabel={false} display="summary" label="Tỉnh/Thành" options={provinceOptions} values={filters.provinces} onChange={(vals)=>emit({ provinces: vals, wards: [] })} />
         <div className="lg:col-span-2">
           <MultiSelectDropdown showLabel={false} display="summary" label="Xã/Phường" options={wardOptions} values={filters.wards} onChange={(vals)=>emit({ wards: vals })} disabled={filters.provinces.length === 0} />
+        </div>
+      </div>
+
+      {/* Row 1.5: Location Type filter */}
+      <div className="mt-3">
+        <div className="text-sm text-gray-500 mb-2">Loại vị trí</div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          {locationTypeOptions.map((option) => {
+            const isSelected = filters.locationTypes.includes(option.value)
+            return (
+              <button
+                key={option.value}
+                onClick={() => {
+                  const newLocationTypes = isSelected
+                    ? filters.locationTypes.filter(v => v !== option.value)
+                    : [...filters.locationTypes, option.value]
+                  emit({ locationTypes: newLocationTypes })
+                }}
+                className={`px-3 py-2 rounded-lg text-sm font-semibold border transition-all ${
+                  isSelected
+                    ? 'bg-goldDark text-white border-goldDark'
+                    : 'bg-gray-50 text-gray-800 border-gray-200 hover:border-goldDark/50 hover:bg-goldLight/10'
+                }`}
+              >
+                {option.label}
+              </button>
+            )
+          })}
         </div>
       </div>
 

@@ -57,6 +57,7 @@ function mapPropertyToProduct(property: Property, provinces: Province[], wardsMa
     code: property.code,
     type: (property.property_type || property.type) as any,
     category: property.property_type || property.type,
+    main_category: property.main_category, // Add main_category to determine route
     location: {
       province: provinceName,
       district: districtName,
@@ -77,7 +78,7 @@ export default function ProductGrid({
   pageSize = 12,
   transactionType = 'chuyen-nhuong' // 'chuyen-nhuong' | 'cho-thue'
 }: { 
-  filters: { q?: string; type?: string; provinces?: string[]; wards?: string[]; price?: [number, number]; area?: [number, number] }
+  filters: { q?: string; type?: string; locationTypes?: string[]; provinces?: string[]; wards?: string[]; price?: [number, number]; area?: [number, number] }
   pageSize?: number
   transactionType?: 'chuyen-nhuong' | 'cho-thue'
 }){
@@ -114,22 +115,19 @@ export default function ProductGrid({
       try {
         setLoading(true)
         
-        // Map filters to API params
-        const apiFilters: any = {
-          transaction_type: transactionType,
-          status: 'available', // Only show available properties
+        // Map filters to API params for products
+        const apiFilters: any = {}
+
+        // Map transaction type to has_rental/has_transfer
+        if (transactionType === 'cho-thue') {
+          apiFilters.has_rental = true
+        } else if (transactionType === 'chuyen-nhuong') {
+          apiFilters.has_transfer = true
         }
 
-        // Map property_type
-        if (filters.type) {
-          // Map frontend type to backend property_type
-          const typeMap: Record<string, string> = {
-            'nha-pho': 'nha-pho',
-            'can-ho': 'can-ho',
-            'van-phong': 'van-phong',
-            'dat-nen': 'dat-nen',
-          }
-          apiFilters.property_type = typeMap[filters.type] || filters.type
+        // Map location_types filter
+        if (filters.locationTypes && filters.locationTypes.length > 0) {
+          apiFilters.location_types = filters.locationTypes
         }
 
         // Map province filter
@@ -137,18 +135,23 @@ export default function ProductGrid({
           apiFilters.province = filters.provinces[0] // API supports single province for now
         }
 
-        // Map price range
+        // Map price range - products use rental_price or transfer_price
         if (filters.price) {
           const [min, max] = filters.price
-          if (min > 0) apiFilters.price_min = min
-          if (max < Infinity) apiFilters.price_max = max
+          if (transactionType === 'cho-thue') {
+            if (min > 0) apiFilters.rental_price_min = min
+            if (max < Infinity) apiFilters.rental_price_max = max
+          } else if (transactionType === 'chuyen-nhuong') {
+            if (min > 0) apiFilters.transfer_price_min = min
+            if (max < Infinity) apiFilters.transfer_price_max = max
+          }
         }
 
-        // Map area range
+        // Map area range - products use available_area
         if (filters.area) {
           const [min, max] = filters.area
-          if (min > 0) apiFilters.area_min = min
-          if (max < Infinity) apiFilters.area_max = max
+          if (min > 0) apiFilters.available_area_min = min
+          if (max < Infinity) apiFilters.available_area_max = max
         }
 
         // Search query - pass to backend API
@@ -156,19 +159,19 @@ export default function ProductGrid({
           apiFilters.q = filters.q.trim()
         }
         
-        const response = await api.getProperties(apiFilters, currentPage, pageSize)
-        let properties = response.data || []
+        const response = await api.getProducts(apiFilters, currentPage, pageSize)
+        let products = response.data || []
 
         // Filter by ward if specified
         if (filters.wards && filters.wards.length > 0) {
-          properties = properties.filter((p: Property) => 
+          products = products.filter((p: any) => 
             filters.wards!.includes(p.ward || '')
           )
         }
 
-        // Load wards for properties' provinces
+        // Load wards for products' provinces
         const provinceCodes = new Set<number>()
-        properties.forEach((p: Property) => {
+        products.forEach((p: any) => {
           if (p.province) {
             const code = typeof p.province === 'string' ? parseInt(p.province, 10) : p.province
             if (!isNaN(code)) {
@@ -194,8 +197,65 @@ export default function ProductGrid({
         )
         setWardsMap(newWardsMap)
 
-        // Map to Product format with location names
-        const mappedItems = properties.map((prop: Property) => mapPropertyToProduct(prop, provinces, newWardsMap))
+        // Map products to Product format with location names
+        const mappedItems = products.map((product: any) => {
+          // Convert product to Product format
+          let provinceName = product.province || ''
+          if (provinceName && provinces.length > 0) {
+            const provinceCode = typeof product.province === 'string' ? parseInt(product.province, 10) : product.province
+            if (!isNaN(provinceCode)) {
+              const province = provinces.find(p => p.code === provinceCode)
+              if (province) {
+                provinceName = province.name
+              } else {
+                provinceName = String(product.province)
+              }
+            } else {
+              provinceName = String(product.province)
+            }
+          } else if (provinceName) {
+            provinceName = String(product.province)
+          }
+
+          let districtName = product.district || product.ward || ''
+          if (districtName && product.province) {
+            const provinceCode = typeof product.province === 'string' ? parseInt(product.province, 10) : product.province
+            if (!isNaN(provinceCode)) {
+              const wards = newWardsMap.get(provinceCode) || []
+              if (wards.length > 0) {
+                const wardCode = typeof districtName === 'string' ? parseInt(districtName, 10) : districtName
+                if (!isNaN(wardCode)) {
+                  const ward = wards.find(w => w.code === wardCode)
+                  if (ward) {
+                    districtName = ward.name
+                  }
+                }
+              }
+            }
+          }
+
+          return {
+            id: product.id,
+            slug: product.slug,
+            name: product.name,
+            code: product.code,
+            type: 'nha-xuong' as any, // Products are typically industrial
+            category: 'kcn',
+            main_category: 'kcn' as const,
+            location: {
+              province: provinceName,
+              district: districtName,
+            },
+            price: product.transfer_price_min || product.rental_price_min || 0,
+            area: product.available_area || product.total_area || 0,
+            thumbnail: product.thumbnail_url ? getAssetUrl(product.thumbnail_url) : '',
+            gallery: (product.images || []).map((img: any) => getAssetUrl(img.url || img)).filter(Boolean),
+            description: {
+              short: product.description || product.description_full || '',
+              long: product.description_full || product.description || '',
+            }
+          }
+        })
         
         if (currentPage === 1) {
           setItems(mappedItems)

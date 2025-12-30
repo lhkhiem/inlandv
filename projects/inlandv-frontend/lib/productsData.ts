@@ -5,6 +5,7 @@ export type Product = {
   code: string
   type: 'nha-xuong' | 'nha-pho' | 'can-ho' | 'van-phong' | 'mua-ban' | 'cho-thue'
   category: string
+  main_category?: 'kcn' | 'bds' // Add main_category to determine route
   location: {
     province: string
     district?: string

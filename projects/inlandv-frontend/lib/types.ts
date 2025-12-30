@@ -145,6 +145,7 @@ export interface IndustrialPark {
   scope: 'trong-kcn' | 'ngoai-kcn'              // Phạm vi
   has_rental: boolean                           // Có dịch vụ cho thuê
   has_transfer: boolean                          // Có dịch vụ chuyển nhượng
+  has_factory: boolean                           // Có nhà xưởng/kho bãi
   
   // Location
   province: string
@@ -242,10 +243,15 @@ export interface Post {
   title: string
   slug: string
   category: string
-  thumbnail_url: string
+  thumbnail_url?: string
   content: string
   excerpt?: string
+  author?: string
+  featured?: boolean
+  view_count?: number
+  published_at?: string
   created_at: string
+  updated_at?: string
 }
 
 // Lead types
@@ -331,11 +337,20 @@ export interface Job {
   id: string
   title: string
   slug: string
-  location: string
-  salary_range: string
-  description: string
-  requirements: string
+  location?: string
+  salary_range?: string
+  quantity?: number
+  deadline?: string
+  description?: string
+  description_overview?: string
+  description_responsibilities?: string
+  description_requirements?: string
+  description_benefits?: string
+  requirements?: string
+  status?: string
+  view_count?: number
   created_at: string
+  updated_at?: string
 }
 
 // User types

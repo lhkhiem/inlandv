@@ -103,8 +103,8 @@ const navigation = [
     title: 'Bất động sản',
     items: [
       {
-        title: 'Khu công nghiệp',
-        href: '/dashboard/industrial-parks',
+        title: 'Sản phẩm KCN',
+        href: '/dashboard/products',
         icon: Building2,
       },
       {
@@ -123,19 +123,9 @@ const navigation = [
         icon: Newspaper,
       },
       {
-        title: 'Tin hoạt động',
-        href: '/dashboard/news-activities',
-        icon: FileText,
-      },
-      {
-        title: 'Góc nhìn chuyên gia',
-        href: '/dashboard/expert-insights',
-        icon: Eye,
-      },
-      {
-        title: 'Case Studies',
-        href: '/dashboard/case-studies',
-        icon: Briefcase,
+        title: 'Quản lý trang',
+        href: '/dashboard/pages',
+        icon: FolderTree,
       },
     ],
   },
@@ -175,43 +165,23 @@ const navigation = [
     ],
   },
   {
-    title: 'Media',
+    title: 'Hệ thống',
     items: [
       {
         title: 'Thư viện Media',
         href: '/dashboard/media',
         icon: Image,
       },
-    ],
-  },
-  {
-    title: 'Giao diện',
-    items: [
       {
         title: 'Menus',
         href: '/dashboard/menus',
         icon: Menu,
       },
       {
-        title: 'Quản lý trang',
-        href: '/dashboard/pages',
-        icon: FolderTree,
-      },
-    ],
-  },
-  {
-    title: 'SEO',
-    items: [
-      {
         title: 'Quản lý SEO',
         href: '/dashboard/seo',
         icon: Code,
       },
-    ],
-  },
-  {
-    title: 'Hệ thống',
-    items: [
       {
         title: 'Người dùng & Vai trò',
         href: '/dashboard/users',

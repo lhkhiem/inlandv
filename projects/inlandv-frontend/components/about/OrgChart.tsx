@@ -54,12 +54,12 @@ export default function OrgChart() {
               Cơ cấu tổ chức
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#2E8C4F] mb-2">
             Sơ Đồ
             <br />
             <span className="text-goldDark">Tổ Chức</span>
           </h2>
-          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-[#2E8C4F] max-w-2xl mx-auto">
             Đội ngũ chuyên nghiệp với cơ cấu tổ chức rõ ràng và hiệu quả
           </p>
         </motion.div>
@@ -82,12 +82,12 @@ export default function OrgChart() {
                     <Building2 className="w-8 h-8 text-goldDark" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white text-center mb-3">
+                <h3 className="text-2xl font-bold text-[#2E8C4F] text-center mb-3">
                   {orgData[0].title}
                 </h3>
                 <div className="space-y-1">
                   {orgData[0].members?.map((member, idx) => (
-                    <div key={idx} className="text-center text-white/90 text-sm font-medium">
+                    <div key={idx} className="text-center text-[#2E8C4F]/90 text-sm font-medium">
                       {member}
                     </div>
                   ))}
@@ -128,12 +128,12 @@ export default function OrgChart() {
                       <DeptIcon className="w-7 h-7 text-goldDark" />
                     </div>
                   </div>
-                  <h4 className="text-xl font-bold text-white text-center mb-3">
+                  <h4 className="text-xl font-bold text-[#2E8C4F] text-center mb-3">
                     {dept.title}
                   </h4>
                   <div className="space-y-1">
                     {dept.members.map((member, idx) => (
-                      <div key={idx} className="text-center text-white/90 text-sm font-medium">
+                      <div key={idx} className="text-center text-[#2E8C4F]/90 text-sm font-medium">
                         {member}
                       </div>
                     ))}
@@ -151,7 +151,7 @@ export default function OrgChart() {
           transition={{ duration: 0.6, delay: revealed ? 0.8 : 0 }}
           className="mt-6 md:mt-8 text-center"
         >
-          <p className="text-gray-600 text-sm">
+          <p className="text-[#2E8C4F] text-sm">
             Tổng số nhân sự: <span className="font-bold text-goldDark">235+ thành viên</span> chuyên nghiệp
           </p>
         </motion.div>

@@ -23,13 +23,13 @@ export default function CompanyIntro() {
               </span>
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2E8C4F] leading-tight">
               Inland Real Estate
               <br />
               <span className="text-goldDark">Đối Tác Tin Cậy</span>
             </h2>
 
-            <div className="space-y-4 text-gray-700 leading-relaxed">
+            <div className="space-y-4 text-[#2E8C4F] leading-relaxed">
               <p>
                 <strong className="text-goldDark">Inland Real Estate</strong> là một trong những sàn giao dịch 
                 bất động sản hàng đầu Việt Nam với hơn 15 năm kinh nghiệm trong lĩnh vực phát triển, 
@@ -57,8 +57,8 @@ export default function CompanyIntro() {
                   <Building2 className="w-5 h-5 text-goldDark" />
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">200+ Dự án</div>
-                  <div className="text-sm text-gray-600">Thành công</div>
+                  <div className="font-bold text-[#2E8C4F]">200+ Dự án</div>
+                  <div className="text-sm text-[#2E8C4F]">Thành công</div>
                 </div>
               </div>
 
@@ -67,8 +67,8 @@ export default function CompanyIntro() {
                   <Users className="w-5 h-5 text-goldDark" />
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">5000+ Khách hàng</div>
-                  <div className="text-sm text-gray-600">Tin tưởng</div>
+                  <div className="font-bold text-[#2E8C4F]">5000+ Khách hàng</div>
+                  <div className="text-sm text-[#2E8C4F]">Tin tưởng</div>
                 </div>
               </div>
 
@@ -77,8 +77,8 @@ export default function CompanyIntro() {
                   <TrendingUp className="w-5 h-5 text-goldDark" />
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">Top 10</div>
-                  <div className="text-sm text-gray-600">Sàn BĐS uy tín</div>
+                  <div className="font-bold text-[#2E8C4F]">Top 10</div>
+                  <div className="text-sm text-[#2E8C4F]">Sàn BĐS uy tín</div>
                 </div>
               </div>
 
@@ -87,8 +87,8 @@ export default function CompanyIntro() {
                   <Award className="w-5 h-5 text-goldDark" />
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">15+ Năm</div>
-                  <div className="text-sm text-gray-600">Kinh nghiệm</div>
+                  <div className="font-bold text-[#2E8C4F]">15+ Năm</div>
+                  <div className="text-sm text-[#2E8C4F]">Kinh nghiệm</div>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function CompanyIntro() {
               <div className="text-goldDark font-bold text-lg mb-1">
                 Cam kết chất lượng
               </div>
-              <div className="text-gray-700 text-sm">
+              <div className="text-[#2E8C4F] text-sm">
                 Mọi giao dịch đều được đảm bảo minh bạch, pháp lý rõ ràng và hỗ trợ tận tâm
               </div>
             </div>

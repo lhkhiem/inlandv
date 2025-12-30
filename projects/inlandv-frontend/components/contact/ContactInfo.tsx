@@ -178,18 +178,18 @@ export default function ContactInfo() {
   }, [])
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 overflow-hidden pt-20 md:pt-24">
+    <section className="relative min-h-screen w-full flex items-center justify-center bg-[#F5F5F5] overflow-hidden pt-20 md:pt-24">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 2px 2px, #2E8C4F 1px, transparent 0)`,
           backgroundSize: '40px 40px'
         }} />
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-20 left-20 w-72 h-72 bg-goldDark/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-goldLight/10 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-20 w-72 h-72 bg-goldDark/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-goldLight/5 rounded-full blur-3xl" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-16 max-w-6xl">
@@ -199,10 +199,10 @@ export default function ContactInfo() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#2E8C4F] mb-3">
             Thông tin <span className="text-goldLight">liên hệ</span>
           </h2>
-          <p className="text-base text-neutral-300 max-w-2xl mx-auto">
+          <p className="text-base text-[#2E8C4F] max-w-2xl mx-auto">
             Hãy để chúng tôi giúp bạn tìm kiếm cơ hội bất động sản hoàn hảo
           </p>
         </motion.div>
@@ -217,9 +217,9 @@ export default function ContactInfo() {
                 animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.6, delay: revealed ? index * 0.15 : 0 }}
                 className={`
-                  group relative bg-neutral-800/50 backdrop-blur-sm border border-goldDark/20
+                  group relative bg-white/50 backdrop-blur-sm border border-goldDark/20
                   rounded-2xl p-6 text-center h-full flex flex-col
-                  hover:bg-neutral-800/80 hover:border-goldDark/40 hover:shadow-xl hover:shadow-goldDark/10
+                  hover:bg-white/80 hover:border-goldDark/40 hover:shadow-xl hover:shadow-goldDark/10
                   transition-all duration-300
                   ${item.link ? 'cursor-pointer' : 'cursor-default'}
                 `}
@@ -235,7 +235,7 @@ export default function ContactInfo() {
                 </h3>
 
                 {/* Value */}
-                <p className="text-sm text-neutral-200 leading-relaxed group-hover:text-white transition-colors duration-300 flex-grow">
+                <p className="text-sm text-[#2E8C4F] leading-relaxed group-hover:text-[#2E8C4F] transition-colors duration-300 flex-grow">
                   {item.value}
                 </p>
 
@@ -265,7 +265,7 @@ export default function ContactInfo() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-8"
         >
-          <div className="bg-neutral-800/50 backdrop-blur-sm border border-goldDark/20 rounded-2xl p-4 overflow-hidden">
+          <div className="bg-white/50 backdrop-blur-sm border border-goldDark/20 rounded-2xl p-4 overflow-hidden">
             <h3 className="text-lg font-semibold text-goldLight mb-3 text-center">Bản đồ dẫn đường</h3>
             <div className="rounded-xl overflow-hidden">
               <LeafletMap

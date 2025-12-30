@@ -62,3 +62,19 @@ CREATE TRIGGER trigger_newsletter_subscriptions_updated_at
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

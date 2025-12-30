@@ -34,3 +34,19 @@ CREATE TRIGGER update_job_applications_updated_at
   EXECUTE FUNCTION update_updated_at_column();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

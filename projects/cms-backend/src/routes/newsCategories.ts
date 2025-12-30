@@ -31,3 +31,19 @@ router.delete('/:id', deleteNewsCategory);
 export default router;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

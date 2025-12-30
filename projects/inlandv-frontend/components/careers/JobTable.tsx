@@ -22,7 +22,7 @@ export default function JobTable({ jobs }: { jobs: JobPosting[] }) {
             <th className="py-3 px-4 text-center font-bold text-sm uppercase w-48">Ngày hết hạn</th>
           </tr>
         </thead>
-        <tbody className="bg-[#1f1b1b]">
+        <tbody className="bg-white">
           {jobs.map((job, index) => (
             <motion.tr
               key={job.id}

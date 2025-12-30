@@ -206,8 +206,8 @@ export const DetailLayout: React.FC<DetailLayoutProps> = ({ entity, similarItems
           ) : (
             <InfoCard title="Thông tin Khu công nghiệp" icon={Building2}>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-sm">
-                <li><span className="font-medium">Tổng diện tích:</span> {(data as any).total_area || '--'} ha</li>
-                <li><span className="font-medium">Diện tích trống:</span> {(data as any).available_area || '--'} ha</li>
+                <li><span className="font-medium">Tổng diện tích:</span> {(data as any).total_area ? `${(data as any).total_area.toLocaleString('vi-VN')} ha` : '--'}</li>
+                <li><span className="font-medium">Diện tích trống:</span> {(data as any).available_area ? `${(data as any).available_area.toLocaleString('vi-VN')} ha` : '--'}</li>
                 <li><span className="font-medium">Ngành nghề ưu đãi:</span> {
                   (() => {
                     const industries = (data as any).allowed_industries
@@ -235,7 +235,29 @@ export const DetailLayout: React.FC<DetailLayoutProps> = ({ entity, similarItems
                     return industryNames.length > 0 ? industryNames.join(', ') : '--'
                   })()
                 }</li>
-                <li><span className="font-medium">Giá thuê tham khảo:</span> {(data as any).rental_price_min ? (data as any).rental_price_min.toLocaleString('vi-VN') + '₫' : '--'}</li>
+                <li className="sm:col-span-2">
+                  <span className="font-medium">Dịch vụ có sẵn:</span>
+                  <div className="mt-1 flex flex-wrap gap-2">
+                    {(data as any).has_rental && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Cho thuê
+                      </span>
+                    )}
+                    {(data as any).has_transfer && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        Chuyển nhượng
+                      </span>
+                    )}
+                    {(data as any).has_factory && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        Nhà xưởng
+                      </span>
+                    )}
+                    {!(data as any).has_rental && !(data as any).has_transfer && !(data as any).has_factory && (
+                      <span className="text-gray-500 text-xs">--</span>
+                    )}
+                  </div>
+                </li>
               </ul>
             </InfoCard>
           )}
@@ -282,7 +304,38 @@ export const DetailLayout: React.FC<DetailLayoutProps> = ({ entity, similarItems
           {/* Long Description replaces previous map position */}
           <InfoCard title="Mô tả chi tiết" icon={BadgeInfo}>
             <div className="prose max-w-none prose-sm">
-              <p>{(data as any).description_full || 'Đang cập nhật mô tả chi tiết...'}</p>
+              <p className="whitespace-pre-wrap">
+                {(() => {
+                  const description = (data as any).description_full || (data as any).description || 'Đang cập nhật mô tả chi tiết...'
+                  // Strip HTML tags and decode HTML entities
+                  if (typeof description !== 'string') return description
+                  
+                  // Create a temporary element to decode HTML entities (client-side)
+                  // For server-side, use regex fallback
+                  if (typeof window !== 'undefined') {
+                    const tempDiv = document.createElement('div')
+                    tempDiv.innerHTML = description
+                    const text = tempDiv.textContent || tempDiv.innerText || description
+                    return text.trim()
+                  } else {
+                    // Server-side: Remove HTML tags and decode common entities
+                    let text = description.replace(/<[^>]*>/g, '')
+                    // Decode HTML entities
+                    text = text
+                      .replace(/&nbsp;/g, ' ')
+                      .replace(/&amp;/g, '&')
+                      .replace(/&lt;/g, '<')
+                      .replace(/&gt;/g, '>')
+                      .replace(/&quot;/g, '"')
+                      .replace(/&#39;/g, "'")
+                      .replace(/&apos;/g, "'")
+                      .replace(/&#x27;/g, "'")
+                      .replace(/&#x2F;/g, '/')
+                      .replace(/&#x60;/g, '`')
+                    return text.trim()
+                  }
+                })()}
+              </p>
             </div>
           </InfoCard>
         </div>
@@ -294,15 +347,74 @@ export const DetailLayout: React.FC<DetailLayoutProps> = ({ entity, similarItems
             pricePerSqm={(data as any).price_per_sqm}
             rentalPriceMin={(data as any).rental_price_min}
             rentalPriceMax={(data as any).rental_price_max}
+            transferPriceMin={(data as any).transfer_price_min}
+            transferPriceMax={(data as any).transfer_price_max}
             negotiable={(data as any).negotiable}
+            hasRental={(data as any).has_rental}
+            hasTransfer={(data as any).has_transfer}
           />
           <ContactSection
             type={isProperty ? 'property' : 'industrialPark'}
-            phoneNumber={(data as any).contact_phone || '0896686645'}
+            // Don't pass phoneNumber - ContactSection will use businessInfo.phone from settings
             onOpenForm={() => setIsFormOpen(true)}
           />
           <InfoCard title="Địa điểm" icon={MapPin}>
-            <div className="text-sm">{(data as any).province || 'Chưa cập nhật'}</div>
+            <div className="text-sm">
+              {(() => {
+                const address = (data as any).address
+                const ward = (data as any).ward
+                const province = (data as any).province
+                const district = (data as any).district
+                
+                // Helper function to remove codes (standalone numbers that might be postal codes or ward codes)
+                const removeCodes = (text: string): string => {
+                  if (!text || typeof text !== 'string') return text
+                  // Remove standalone numbers (likely codes) that are separated by commas or spaces
+                  // Pattern: matches numbers that are standalone (preceded/followed by comma, space, or start/end)
+                  let cleaned = text
+                    .replace(/,\s*\d+\s*,/g, ',') // Remove numbers between commas: ", 12052,"
+                    .replace(/,\s*\d+\s*$/g, '') // Remove numbers at the end after comma: ", 12052"
+                    .replace(/^\d+\s*,/g, '') // Remove numbers at the start before comma: "12052,"
+                    .replace(/\s+\d+\s*$/g, '') // Remove numbers at the end with space: " 12052"
+                    .replace(/^\d+\s+/g, '') // Remove numbers at the start with space: "12052 "
+                    .replace(/,\s*\d+$/g, '') // Remove trailing numbers after comma: ", 33"
+                    .trim()
+                    .replace(/,\s*,/g, ',') // Clean up double commas
+                    .replace(/^,|,$/g, '') // Remove leading/trailing commas
+                    .trim()
+                  
+                  // Also remove if the entire field is just a number (likely a code)
+                  if (/^\d+$/.test(cleaned)) {
+                    return ''
+                  }
+                  
+                  return cleaned
+                }
+                
+                // Build full address
+                const addressParts: string[] = []
+                if (address) {
+                  const cleanAddress = removeCodes(address)
+                  if (cleanAddress) addressParts.push(cleanAddress)
+                }
+                if (ward) {
+                  const cleanWard = removeCodes(ward)
+                  if (cleanWard) addressParts.push(cleanWard)
+                }
+                if (district) {
+                  const cleanDistrict = removeCodes(district)
+                  if (cleanDistrict) addressParts.push(cleanDistrict)
+                }
+                if (province) {
+                  const cleanProvince = removeCodes(province)
+                  if (cleanProvince) addressParts.push(cleanProvince)
+                }
+                
+                return addressParts.length > 0 
+                  ? addressParts.join(', ') 
+                  : 'Chưa cập nhật'
+              })()}
+            </div>
           </InfoCard>
           <MapSection
             latitude={(data as any).latitude}

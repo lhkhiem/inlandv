@@ -32,7 +32,7 @@ interface Infrastructure {
   security?: boolean;
 }
 
-export default function IndustrialParkFormPage() {
+export default function ProductFormPage() {
   const router = useRouter();
   const params = useParams();
   // Safely extract id from params
@@ -43,9 +43,11 @@ export default function IndustrialParkFormPage() {
     code: '',
     name: '',
     slug: '',
+    park_type: 'kcn' as 'kcn' | 'ccn',
     scope: 'trong-kcn' as 'trong-kcn' | 'ngoai-kcn',
     has_rental: false,
     has_transfer: false,
+    has_factory: false,
     province: '',
     ward: '',
     address: '',
@@ -61,6 +63,10 @@ export default function IndustrialParkFormPage() {
     meta_title: '',
     meta_description: '',
     published_at: '',
+    // KCN redesign fields
+    product_types: [] as string[],
+    transaction_types: [] as string[],
+    location_types: [] as string[],
   });
 
   const [infrastructure, setInfrastructure] = useState<Infrastructure>({
@@ -88,6 +94,11 @@ export default function IndustrialParkFormPage() {
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
   const [loadingProvinces, setLoadingProvinces] = useState(false);
+  // States for KCN redesign lookup data
+  const [productTypes, setProductTypes] = useState<Array<{ code: string; name_vi: string; name_en: string }>>([]);
+  const [transactionTypes, setTransactionTypes] = useState<Array<{ code: string; name_vi: string; name_en: string }>>([]);
+  const [locationTypes, setLocationTypes] = useState<Array<{ code: string; name_vi: string; name_en: string }>>([]);
+  const [loadingLookupData, setLoadingLookupData] = useState(false);
 
   // Common industries list with Vietnamese labels
   const industriesList = [
@@ -123,9 +134,10 @@ export default function IndustrialParkFormPage() {
   const [newIndustryLabel, setNewIndustryLabel] = useState('');
 
   // Get available wards based on selected province
-  // Load provinces on mount
+  // Load provinces and lookup data on mount
   useEffect(() => {
     loadProvinces();
+    loadLookupData();
   }, []);
 
   const loadProvinces = async () => {
@@ -149,6 +161,32 @@ export default function IndustrialParkFormPage() {
       setFormData(prev => ({ ...prev, ward: '' }));
     }
   }, [formData.province]);
+
+  // Load lookup data (product_types, transaction_types, location_types)
+  const loadLookupData = async () => {
+    try {
+      setLoadingLookupData(true);
+      const [productRes, transactionRes, locationRes] = await Promise.all([
+        axios.get(buildApiUrl('/lookup/product-types'), { withCredentials: true }),
+        axios.get(buildApiUrl('/lookup/transaction-types'), { withCredentials: true }),
+        axios.get(buildApiUrl('/lookup/location-types'), { withCredentials: true }),
+      ]);
+      
+      if (productRes.data?.success && productRes.data?.data) {
+        setProductTypes(productRes.data.data);
+      }
+      if (transactionRes.data?.success && transactionRes.data?.data) {
+        setTransactionTypes(transactionRes.data.data);
+      }
+      if (locationRes.data?.success && locationRes.data?.data) {
+        setLocationTypes(locationRes.data.data);
+      }
+    } catch (error) {
+      console.error('Failed to load lookup data:', error);
+    } finally {
+      setLoadingLookupData(false);
+    }
+  };
 
   const loadWardsByProvince = async (provinceCode: string): Promise<Ward[]> => {
     if (!provinceCode) {
@@ -185,9 +223,11 @@ export default function IndustrialParkFormPage() {
         code: '',
         name: '',
         slug: '',
+        park_type: 'kcn',
         scope: 'trong-kcn',
         has_rental: false,
         has_transfer: false,
+        has_factory: false,
         province: '',
         ward: '',
         address: '',
@@ -205,6 +245,10 @@ export default function IndustrialParkFormPage() {
         meta_title: '',
         meta_description: '',
         published_at: !isEdit ? getTodayDate() : '',
+        // KCN redesign fields
+        product_types: [],
+        transaction_types: [],
+        location_types: [],
       });
       setInfrastructure({
         power: false,
@@ -234,7 +278,7 @@ export default function IndustrialParkFormPage() {
 
   const fetchPark = async (retryCount = 0) => {
     if (!parkId) {
-      setError('Industrial park ID is missing');
+      setError('Product ID is missing');
       return;
     }
 
@@ -242,7 +286,7 @@ export default function IndustrialParkFormPage() {
       setLoadingPark(true);
       setError(null);
       
-      const response: any = await axios.get(buildApiUrl(`/industrial-parks/${parkId}`), {
+      const response: any = await axios.get(buildApiUrl(`/products/${parkId}`), {
         withCredentials: true,
         timeout: 10000,
       });
@@ -250,10 +294,10 @@ export default function IndustrialParkFormPage() {
       const park = response.data?.data || response.data;
       
       if (!park || !park.id) {
-        throw new Error('Invalid industrial park data received');
+        throw new Error('Invalid product data received');
       }
       
-      console.log('Loaded park data:', park);
+      console.log('Loaded product data:', park);
       
       // Load provinces if not loaded yet
       if (provinces.length === 0) {
@@ -310,9 +354,11 @@ export default function IndustrialParkFormPage() {
         code: park.code || '',
         name: park.name || '',
         slug: park.slug || '',
+        park_type: (park.park_type || 'kcn') as 'kcn' | 'ccn',
         scope: park.scope || 'trong-kcn',
         has_rental: Boolean(park.has_rental),
         has_transfer: Boolean(park.has_transfer),
+        has_factory: Boolean(park.has_factory),
         province: provinceCode,
         ward: wardCode,
         address: park.address || '',
@@ -328,6 +374,10 @@ export default function IndustrialParkFormPage() {
         meta_title: park.meta_title || '',
         meta_description: park.meta_description || '',
         published_at: park.published_at ? (park.published_at.split('T')[0] || '') : '',
+        // KCN redesign fields
+        product_types: Array.isArray(park.product_types) ? park.product_types : [],
+        transaction_types: Array.isArray(park.transaction_types) ? park.transaction_types : [],
+        location_types: Array.isArray(park.location_types) ? park.location_types : [],
       });
 
       // Load infrastructure
@@ -408,18 +458,34 @@ export default function IndustrialParkFormPage() {
         setThumbnailId('');
       }
 
-      // Load gallery images - Find asset IDs from URLs
-      if (park.images && Array.isArray(park.images) && park.images.length > 0) {
-        const imageUrls = park.images.map((img: any) => img.url || img).filter(Boolean);
-        if (imageUrls.length > 0) {
-          const foundIds: string[] = [];
-          for (const imageUrl of imageUrls) {
-            const assetId = await findAssetIdFromUrl(imageUrl);
-            if (assetId) {
-              foundIds.push(assetId);
-            }
+      // Load gallery images - products table uses JSONB array
+      // Handle both old format (array of objects) and new format (JSONB array)
+      if (park.images) {
+        let imageArray: any[] = [];
+        if (typeof park.images === 'string') {
+          try {
+            imageArray = JSON.parse(park.images);
+          } catch (e) {
+            imageArray = [];
           }
-          setGalleryImageIds(foundIds);
+        } else if (Array.isArray(park.images)) {
+          imageArray = park.images;
+        }
+        
+        if (imageArray.length > 0) {
+          const imageUrls = imageArray.map((img: any) => img.url || img).filter(Boolean);
+          if (imageUrls.length > 0) {
+            const foundIds: string[] = [];
+            for (const imageUrl of imageUrls) {
+              const assetId = await findAssetIdFromUrl(imageUrl);
+              if (assetId) {
+                foundIds.push(assetId);
+              }
+            }
+            setGalleryImageIds(foundIds);
+          } else {
+            setGalleryImageIds([]);
+          }
         } else {
           setGalleryImageIds([]);
         }
@@ -448,7 +514,7 @@ export default function IndustrialParkFormPage() {
           fetchPark(retryCount + 1);
         }, delay);
       } else {
-        alert(`Không thể tải khu công nghiệp: ${errorMessage}\n\nVui lòng làm mới trang hoặc thử lại sau.`);
+        alert(`Không thể tải sản phẩm: ${errorMessage}\n\nVui lòng làm mới trang hoặc thử lại sau.`);
       }
     } finally {
       setLoadingPark(false);
@@ -563,9 +629,11 @@ export default function IndustrialParkFormPage() {
         code: formData.code,
         name: formData.name,
         slug: formData.slug || null,
+        park_type: formData.park_type,
         scope: formData.scope,
         has_rental: Boolean(formData.has_rental),
         has_transfer: Boolean(formData.has_transfer),
+        has_factory: Boolean(formData.has_factory),
         // Store province and ward as codes (strings)
         province: provinceCode,
         ward: wardCode,
@@ -582,11 +650,18 @@ export default function IndustrialParkFormPage() {
         description: formData.description && formData.description.trim() ? formData.description.trim() : null,
         description_full: formData.description_full && formData.description_full.trim() ? formData.description_full.trim() : null,
         thumbnail_url: thumbnailUrl,
+        // KCN redesign fields
+        product_types: formData.product_types && formData.product_types.length > 0 ? formData.product_types : [],
+        transaction_types: formData.transaction_types && formData.transaction_types.length > 0 ? formData.transaction_types : [],
+        location_types: formData.location_types && formData.location_types.length > 0 ? formData.location_types : [],
         video_url: formData.video_url && formData.video_url.trim() ? formData.video_url.trim() : null,
         meta_title: formData.meta_title && formData.meta_title.trim() ? formData.meta_title.trim() : null,
         meta_description: formData.meta_description && formData.meta_description.trim() ? formData.meta_description.trim() : null,
         published_at: publishedAt,
+        // Products table uses JSONB arrays
         images: imageUrls,
+        documents: [], // Can be added later if needed
+        tenants: [], // Can be added later if needed
       };
 
       console.log('[Form Submit] Full data being sent:', JSON.stringify({
@@ -597,14 +672,14 @@ export default function IndustrialParkFormPage() {
 
       let response;
       if (isEdit && parkId) {
-        console.log('[Form Submit] Updating industrial park:', parkId);
-        response = await axios.put(buildApiUrl(`/industrial-parks/${parkId}`), data, {
+        console.log('[Form Submit] Updating product:', parkId);
+        response = await axios.put(buildApiUrl(`/products/${parkId}`), data, {
           withCredentials: true
         });
         console.log('[Form Submit] Update response:', response.data);
       } else {
-        console.log('[Form Submit] Creating new industrial park');
-        response = await axios.post(buildApiUrl('/industrial-parks'), data, {
+        console.log('[Form Submit] Creating new product');
+        response = await axios.post(buildApiUrl('/products'), data, {
           withCredentials: true
         });
         console.log('[Form Submit] Create response:', response.data);
@@ -612,18 +687,18 @@ export default function IndustrialParkFormPage() {
 
       // Verify the saved data
       if (isEdit && parkId) {
-        const verifyResponse = await axios.get(buildApiUrl(`/industrial-parks/${parkId}`), {
+        const verifyResponse = await axios.get(buildApiUrl(`/products/${parkId}`), {
           withCredentials: true
         });
         console.log('[Form Submit] Verified saved data - allowed_industries:', verifyResponse.data?.allowed_industries);
       }
 
-      router.push('/dashboard/industrial-parks');
+      router.push('/dashboard/products');
     } catch (error: any) {
       console.error('[Form Submit] Failed to save industrial park:', error);
       console.error('[Form Submit] Error response:', error.response?.data);
       console.error('[Form Submit] Error status:', error.response?.status);
-      const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'Không thể lưu khu công nghiệp';
+      const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'Không thể lưu sản phẩm';
       alert(`Lỗi: ${errorMsg}\n\nVui lòng kiểm tra console để xem chi tiết.`);
     } finally {
       setLoading(false);
@@ -701,14 +776,14 @@ export default function IndustrialParkFormPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">
-            {isEdit ? 'Chỉnh sửa khu công nghiệp' : 'Tạo khu công nghiệp'}
+            {isEdit ? 'Chỉnh sửa sản phẩm khu công nghiệp' : 'Tạo sản phẩm khu công nghiệp'}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {isEdit ? 'Cập nhật chi tiết khu công nghiệp' : 'Thêm khu công nghiệp mới'}
+            {isEdit ? 'Cập nhật chi tiết sản phẩm khu công nghiệp' : 'Thêm sản phẩm khu công nghiệp mới'}
           </p>
         </div>
         <Link
-          href="/dashboard/industrial-parks"
+          href="/dashboard/products"
           className="inline-flex items-center gap-2 rounded-lg border border-input bg-background text-foreground px-3 py-2 text-sm hover:bg-accent transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -720,7 +795,7 @@ export default function IndustrialParkFormPage() {
       {error && (
         <div className="rounded-lg border border-red-500 bg-red-50 dark:bg-red-900/20 p-4">
           <p className="text-sm text-red-800 dark:text-red-400">
-            <strong>Lỗi khi tải khu công nghiệp:</strong> {error}
+            <strong>Lỗi khi tải sản phẩm:</strong> {error}
           </p>
           <button
             type="button"
@@ -740,7 +815,7 @@ export default function IndustrialParkFormPage() {
       {loadingPark && (
         <div className="rounded-lg border border-border bg-card p-6 text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent mb-2" />
-          <p className="text-sm text-muted-foreground">Đang tải dữ liệu khu công nghiệp...</p>
+          <p className="text-sm text-muted-foreground">Đang tải dữ liệu sản phẩm...</p>
         </div>
       )}
 
@@ -853,6 +928,101 @@ export default function IndustrialParkFormPage() {
                   onChange={(html) => setFormData({ ...formData, description_full: html })}
                   placeholder="Nhập mô tả chi tiết về khu công nghiệp..."
                 />
+              </div>
+            </div>
+
+            {/* KCN Redesign Section */}
+            <div className="rounded-lg border border-border bg-card p-6 space-y-4">
+              <h3 className="font-medium text-card-foreground">Phân loại KCN</h3>
+              
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Loại sản phẩm
+                </label>
+                <div className="space-y-2">
+                  {loadingLookupData ? (
+                    <p className="text-sm text-muted-foreground">Đang tải...</p>
+                  ) : (
+                    productTypes.map((pt) => (
+                      <label key={pt.code} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.product_types?.includes(pt.code) || false}
+                          onChange={(e) => {
+                            const current = formData.product_types || [];
+                            if (e.target.checked) {
+                              setFormData({ ...formData, product_types: [...current, pt.code] });
+                            } else {
+                              setFormData({ ...formData, product_types: current.filter((c) => c !== pt.code) });
+                            }
+                          }}
+                          className="rounded border-input text-primary focus:ring-2 focus:ring-ring"
+                        />
+                        <span className="text-sm text-foreground">{pt.name_vi}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Loại giao dịch
+                </label>
+                <div className="space-y-2">
+                  {loadingLookupData ? (
+                    <p className="text-sm text-muted-foreground">Đang tải...</p>
+                  ) : (
+                    transactionTypes.map((tt) => (
+                      <label key={tt.code} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.transaction_types?.includes(tt.code) || false}
+                          onChange={(e) => {
+                            const current = formData.transaction_types || [];
+                            if (e.target.checked) {
+                              setFormData({ ...formData, transaction_types: [...current, tt.code] });
+                            } else {
+                              setFormData({ ...formData, transaction_types: current.filter((c) => c !== tt.code) });
+                            }
+                          }}
+                          className="rounded border-input text-primary focus:ring-2 focus:ring-ring"
+                        />
+                        <span className="text-sm text-foreground">{tt.name_vi}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Loại vị trí
+                </label>
+                <div className="space-y-2">
+                  {loadingLookupData ? (
+                    <p className="text-sm text-muted-foreground">Đang tải...</p>
+                  ) : (
+                    locationTypes.map((lt) => (
+                      <label key={lt.code} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.location_types?.includes(lt.code) || false}
+                          onChange={(e) => {
+                            const current = formData.location_types || [];
+                            if (e.target.checked) {
+                              setFormData({ ...formData, location_types: [...current, lt.code] });
+                            } else {
+                              setFormData({ ...formData, location_types: current.filter((c) => c !== lt.code) });
+                            }
+                          }}
+                          className="rounded border-input text-primary focus:ring-2 focus:ring-ring"
+                        />
+                        <span className="text-sm text-foreground">{lt.name_vi}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
 
@@ -1267,6 +1437,16 @@ export default function IndustrialParkFormPage() {
                   </div>
                 </div>
               )}
+
+              <label className="flex items-center gap-2 text-sm text-foreground">
+                <input
+                  type="checkbox"
+                  checked={formData.has_factory}
+                  onChange={(e) => setFormData({ ...formData, has_factory: e.target.checked })}
+                  className="h-5 w-5 rounded border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-0"
+                />
+                Có nhà xưởng
+              </label>
             </div>
 
             {/* SEO */}
@@ -1331,7 +1511,7 @@ export default function IndustrialParkFormPage() {
               className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="h-4 w-4" />
-              {loading ? 'Đang lưu...' : 'Lưu khu công nghiệp'}
+              {loading ? 'Đang lưu...' : 'Lưu sản phẩm'}
             </button>
           </div>
         </form>

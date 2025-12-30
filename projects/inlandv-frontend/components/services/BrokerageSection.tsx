@@ -304,7 +304,7 @@ export default function BrokerageSection({ section }: BrokerageSectionProps = {}
 
 
   return (
-    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-screen py-8' : 'h-screen'
     }`}>
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
@@ -350,11 +350,11 @@ export default function BrokerageSection({ section }: BrokerageSectionProps = {}
               {sectionData.badge}
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2E8C4F] mb-2 md:mb-3">
             {sectionData.title} {sectionData.title_highlight && <span className="text-goldLight">{sectionData.title_highlight}</span>}
           </h2>
           {sectionData.subtitle && (
-            <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base md:text-lg text-[#2E8C4F] max-w-3xl mx-auto">
               {sectionData.subtitle}
             </p>
           )}
@@ -366,16 +366,16 @@ export default function BrokerageSection({ section }: BrokerageSectionProps = {}
             initial={{ opacity: 0, x: -40 }}
             animate={revealed ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
             transition={{ duration: 0.6, delay: revealed ? 0.1 : 0 }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Ưu điểm</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4">Ưu điểm</h3>
             <ul className="space-y-3">
               {sectionData.advantages.map((item, i) => (
                 <li key={i} className="flex gap-3">
                   <div className="w-5 h-5 rounded-full bg-goldLight/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <div className="w-2 h-2 rounded-full bg-goldLight" />
                   </div>
-                  <span className="text-sm text-gray-200">{item}</span>
+                  <span className="text-sm text-[#2E8C4F]">{item}</span>
                 </li>
               ))}
             </ul>
@@ -387,14 +387,14 @@ export default function BrokerageSection({ section }: BrokerageSectionProps = {}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Quy trình</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4">Quy trình</h3>
             <ol className="space-y-3 list-none">
               {sectionData.process.map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
                     <div className="w-6 h-6 rounded-full bg-goldLight/30 text-goldLight flex items-center justify-center text-xs font-bold flex-shrink-0">{i + 1}</div>
-                    <span className="text-sm text-gray-200">{step}</span>
+                    <span className="text-sm text-[#2E8C4F]">{step}</span>
                 </li>
               ))}
             </ol>
@@ -406,16 +406,16 @@ export default function BrokerageSection({ section }: BrokerageSectionProps = {}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Diện tích đa dạng</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4">Diện tích đa dạng</h3>
             <ul className="space-y-3">
               {sectionData.diverseAreas.map((item, i) => (
                 <li key={i} className="flex gap-3">
                   <div className="w-5 h-5 rounded-full bg-goldLight/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <div className="w-2 h-2 rounded-full bg-goldLight" />
                   </div>
-                  <span className="text-sm text-gray-200">{item}</span>
+                  <span className="text-sm text-[#2E8C4F]">{item}</span>
                 </li>
               ))}
             </ul>
@@ -433,13 +433,13 @@ export default function BrokerageSection({ section }: BrokerageSectionProps = {}
           {sectionData.categories.map((cat, i) => {
             const Icon = cat.icon
             return (
-              <div key={i} className="flex items-center gap-4 p-5 bg-[#1f1b1b] rounded-2xl shadow-md border border-gray-700 hover:shadow-lg transition-shadow">
+              <div key={i} className="flex items-center gap-4 p-5 bg-white rounded-2xl shadow-md border border-gray-300 hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 rounded-xl bg-goldLight/20 flex items-center justify-center">
                   <Icon className="w-6 h-6 text-goldLight" />
                 </div>
                 <div>
-                  <div className="font-bold text-white mb-1">{cat.title}</div>
-                  <div className="text-sm text-gray-300">{cat.desc}</div>
+                  <div className="font-bold text-[#2E8C4F] mb-1">{cat.title}</div>
+                  <div className="text-sm text-[#2E8C4F]">{cat.desc}</div>
                 </div>
               </div>
             )

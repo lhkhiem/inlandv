@@ -379,3 +379,19 @@ export function generateLegalInvestmentHTML(data: LegalInvestmentSectionData): s
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

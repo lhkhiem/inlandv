@@ -8,7 +8,7 @@ import ProductGrid from '@/components/products/ProductGrid'
 function ChuyenNhuongPageContent(){
   const searchParams = useSearchParams()
   const initialQ = searchParams.get('q') || ''
-  const [filters, setFilters] = useState<ProductFilters>({ q: initialQ, type: undefined, provinces: [], wards: [], price: [0, 500_000_000_000], area: [0, 100000] })
+  const [filters, setFilters] = useState<ProductFilters>({ q: initialQ, type: undefined, locationTypes: [], provinces: [], wards: [], price: [0, 500_000_000_000], area: [0, 100000] })
 
   return (
     <div className="min-h-screen bg-[#151313]">

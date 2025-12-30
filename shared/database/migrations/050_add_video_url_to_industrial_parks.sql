@@ -7,3 +7,19 @@ ADD COLUMN IF NOT EXISTS video_url TEXT;
 COMMENT ON COLUMN industrial_parks.video_url IS 'URL của video giới thiệu khu công nghiệp';
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

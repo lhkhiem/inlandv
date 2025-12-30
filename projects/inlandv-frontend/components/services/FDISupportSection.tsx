@@ -56,7 +56,7 @@ function parseFDISupportHTML(html: string): {
       { value: '0', label: 'Sự cố pháp lý phát sinh' }
     ],
     summary_title: 'Tại sao quan trọng',
-    summary_description: '12 tháng đầu là giai đoạn quyết định hiệu suất dài hạn. Inland đồng hành giúp doanh nghiệp thiết lập nền tảng nhân sự, văn hoá & quy trình chuẩn thay vì tự xử lý manh mún gây phát sinh rủi ro.',
+    summary_description: '12 tháng đầu quyết định hiệu suất dài hạn. Inland đồng hành thiết lập nền tảng nhân sự, văn hoá & quy trình chuẩn, tránh tự xử lý manh mún gây rủi ro.',
     stats: [
       { value: 'Giảm 40% chi phí sai sót', label: 'So với thiếu chuẩn hoá ban đầu' },
       { value: 'Thiết lập nhanh hệ thống HR', label: 'Quy trình, biểu mẫu, hồ sơ' },
@@ -234,7 +234,7 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
       { value: '0', label: 'Sự cố pháp lý phát sinh' }
     ],
     summary_title: 'Tại sao quan trọng',
-    summary_description: '12 tháng đầu là giai đoạn quyết định hiệu suất dài hạn. Inland đồng hành giúp doanh nghiệp thiết lập nền tảng nhân sự, văn hoá & quy trình chuẩn thay vì tự xử lý manh mún gây phát sinh rủi ro.',
+    summary_description: '12 tháng đầu quyết định hiệu suất dài hạn. Inland đồng hành thiết lập nền tảng nhân sự, văn hoá & quy trình chuẩn, tránh tự xử lý manh mún gây rủi ro.',
     stats: [
       { value: 'Giảm 40% chi phí sai sót', label: 'So với thiếu chuẩn hoá ban đầu' },
       { value: 'Thiết lập nhanh hệ thống HR', label: 'Quy trình, biểu mẫu, hồ sơ' },
@@ -355,8 +355,8 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
       }`}
       style={{ backgroundImage: 'url(/images/processed-image-2-3.webp)' }}
     >
-      {/* Dark overlay - tăng độ tối thêm 50% (từ 60% lên 90%) */}
-      <div className="absolute inset-0 bg-black/90 z-10" />
+      {/* White overlay - tăng độ sáng thêm 50% (từ 60% lên 90%) */}
+      <div className="absolute inset-0 bg-white/90 z-10" />
       
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
@@ -400,14 +400,14 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
           className="text-center mb-5 md:mb-6"
         >
           <div className="inline-block px-4 py-2 bg-goldLight/10 rounded-full mb-3">
-            <span className="text-goldDark text-sm font-semibold tracking-wide uppercase">
+            <span className="text-goldDark text-xs font-semibold tracking-wide uppercase">
               {sectionData.badge}
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+          <h2 className="text-xl md:text-2xl font-bold text-[#2E8C4F] mb-2">
             {sectionData.title} <span className="text-goldLight">{sectionData.title_highlight}</span> Ngay Từ Ngày Đầu
           </h2>
-          <p className="text-sm md:text-base text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xs md:text-sm text-[#2E8C4F] max-w-3xl mx-auto">
             {sectionData.subtitle}
           </p>
         </motion.div>
@@ -421,13 +421,13 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
                 initial={{ opacity: 0 }}
                 animate={revealed ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ duration: 0.5, delay: revealed ? i * 0.05 : 0 }}
-                className="p-5 rounded-2xl bg-[#1f1b1b] border border-gray-700 shadow-sm hover:shadow-md transition-shadow"
+                className="p-5 rounded-2xl bg-white border border-gray-300 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="w-12 h-12 rounded-xl bg-goldLight/25 flex items-center justify-center mb-3">
                   <Icon className="w-6 h-6 text-goldLight" />
                 </div>
-                <div className="font-bold text-white mb-1 text-sm md:text-base">{p.title}</div>
-                <div className="text-xs md:text-sm text-gray-300 leading-relaxed">{p.desc}</div>
+                <div className="font-bold text-[#2E8C4F] mb-1 text-xs md:text-sm">{p.title}</div>
+                <div className="text-[11px] md:text-xs text-[#2E8C4F] leading-relaxed">{p.desc}</div>
               </motion.div>
             )
           })}
@@ -442,12 +442,12 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
             viewport={{ once: true }}
             className="bg-[#2E8C4F] rounded-2xl p-6 shadow-lg border border-[#2E8C4F]"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Danh mục hỗ trợ</h3>
+            <h3 className="text-base font-bold text-white mb-4">Danh mục hỗ trợ</h3>
             <ul className="space-y-3">
               {services.map((s, i) => (
                 <li key={i} className="flex gap-3">
                   <div className="w-5 h-5 rounded-md bg-white text-[#2E8C4F] flex items-center justify-center text-xs font-bold">✓</div>
-                    <span className="text-sm text-white">{s}</span>
+                    <span className="text-xs text-white">{s}</span>
                 </li>
               ))}
             </ul>
@@ -459,14 +459,14 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+              className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
             >
-              <h3 className="text-lg font-bold text-white mb-4">Kết quả</h3>
+              <h3 className="text-base font-bold text-[#2E8C4F] mb-4">Kết quả</h3>
               <div className="grid grid-cols-2 gap-4">
                 {outcomes.map((o, i) => (
                   <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
-                    <div className="text-[#2E8C4F] font-bold text-xl">{o.value}</div>
-                    <div className="text-xs text-gray-900">{o.label}</div>
+                    <div className="text-[#2E8C4F] font-bold text-lg">{o.value}</div>
+                    <div className="text-[11px] text-[#2E8C4F]">{o.label}</div>
                   </div>
                 ))}
               </div>
@@ -480,15 +480,15 @@ export default function FDISupportSection({ section }: FDISupportSectionProps = 
             viewport={{ once: true }}
             className="bg-gradient-to-br from-goldLight/25 to-goldLight/10 rounded-2xl p-6 shadow-lg border border-goldLight/40"
           >
-            <h3 className="text-lg font-bold text-white mb-3">{sectionData.summary_title}</h3>
-            <p className="text-sm text-gray-100 leading-relaxed mb-4">
+              <h3 className="text-base font-bold text-[#2E8C4F] mb-3">{sectionData.summary_title}</h3>
+            <p className="text-xs text-[#2E8C4F] leading-relaxed mb-4 line-clamp-3">
               {sectionData.summary_description}
             </p>
             <div className="space-y-3">
               {sectionData.stats.map((stat, i) => (
-                <div key={i} className="p-3 rounded-xl bg-[#151313] shadow-sm border border-goldLight/40">
+                <div key={i} className="p-3 rounded-xl bg-white shadow-sm border border-goldLight/40">
                   <div className="text-goldLight font-bold">{stat.value}</div>
-                  <div className="text-xs text-gray-200">{stat.label}</div>
+                  <div className="text-[11px] text-[#2E8C4F]">{stat.label}</div>
                 </div>
               ))}
             </div>

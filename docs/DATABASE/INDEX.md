@@ -73,14 +73,6 @@ Tài liệu database được tổ chức như sau:
 **SQL schema cũ (tham khảo)**
 - Schema cũ, không khuyến nghị dùng
 
-## ⚠️ Tài liệu cũ (Tham khảo)
-
-### 10. **[database-design.md](./database-design.md)**
-**Thiết kế cũ (đã deprecated)**
-- Giữ lại để tham khảo lịch sử
-- Đã được cập nhật để reference đến `database-design-final.md`
-- **KHÔNG nên dùng làm tài liệu chính thức**
-
 ## 🎯 Quick Start
 
 1. **Muốn xem schema cuối cùng đã chốt?**

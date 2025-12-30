@@ -76,3 +76,19 @@ COMMENT ON COLUMN industrial_parks.ward IS 'Phường/Xã (mã từ API province
 COMMENT ON COLUMN industrial_parks.address IS 'Địa chỉ chi tiết (nhập tay)';
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

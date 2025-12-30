@@ -98,7 +98,7 @@ export default function AboutHeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#2E8C4F] mb-6">
             Về Inland Real Estate
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">

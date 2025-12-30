@@ -27,7 +27,11 @@ export const getIndustrialParks = async (req: Request, res: Response) => {
       has_rental,
       has_transfer,
       province,
-      q 
+      q,
+      product_types,
+      transaction_types,
+      location_types,
+      park_type
     } = req.query;
     
     const offset = ((page as any) - 1) * (pageSize as any);
@@ -35,6 +39,12 @@ export const getIndustrialParks = async (req: Request, res: Response) => {
 
     const whereConditions: string[] = [];
     const replacements: any = { limit, offset };
+    let joinClauses = '';
+
+    if (park_type) {
+      whereConditions.push(`ip.park_type = :park_type`);
+      replacements.park_type = park_type;
+    }
 
     if (scope) {
       whereConditions.push(`ip.scope = :scope`);
@@ -56,6 +66,36 @@ export const getIndustrialParks = async (req: Request, res: Response) => {
       replacements.province = `%${province}%`;
     }
 
+    // Product types filter (using satellite table)
+    if (product_types) {
+      const productTypesArray = Array.isArray(product_types) ? product_types : [product_types];
+      if (productTypesArray.length > 0) {
+        joinClauses += ` INNER JOIN industrial_park_product_types ippt ON ip.id = ippt.industrial_park_id`;
+        whereConditions.push(`ippt.product_type_code IN (:product_types)`);
+        replacements.product_types = productTypesArray;
+      }
+    }
+
+    // Transaction types filter (using satellite table)
+    if (transaction_types) {
+      const transactionTypesArray = Array.isArray(transaction_types) ? transaction_types : [transaction_types];
+      if (transactionTypesArray.length > 0) {
+        joinClauses += ` INNER JOIN industrial_park_transaction_types iptt ON ip.id = iptt.industrial_park_id`;
+        whereConditions.push(`iptt.transaction_type_code IN (:transaction_types)`);
+        replacements.transaction_types = transactionTypesArray;
+      }
+    }
+
+    // Location types filter (using satellite table)
+    if (location_types) {
+      const locationTypesArray = Array.isArray(location_types) ? location_types : [location_types];
+      if (locationTypesArray.length > 0) {
+        joinClauses += ` INNER JOIN industrial_park_location_types iplt ON ip.id = iplt.industrial_park_id`;
+        whereConditions.push(`iplt.location_type_code IN (:location_types)`);
+        replacements.location_types = locationTypesArray;
+      }
+    }
+
     if (q) {
       whereConditions.push(`(
         ip.name ILIKE :search OR 
@@ -71,10 +111,11 @@ export const getIndustrialParks = async (req: Request, res: Response) => {
       ? `WHERE ${whereConditions.join(' AND ')}`
       : '';
 
-    // Get total count
+    // Get total count (with DISTINCT to handle multiple joins)
     const countQuery = `
-      SELECT COUNT(*) as total
+      SELECT COUNT(DISTINCT ip.id) as total
       FROM industrial_parks ip
+      ${joinClauses}
       ${whereClause}
     `;
     const countResult: any = await sequelize.query(countQuery, {
@@ -83,11 +124,24 @@ export const getIndustrialParks = async (req: Request, res: Response) => {
     });
     const total = parseInt(countResult[0].total);
 
-    // Get industrial parks
+    // Get industrial parks with satellite data
     const query = `
-      SELECT 
-        ip.*
+      SELECT DISTINCT
+        ip.*,
+        COALESCE(
+          (SELECT array_agg(product_type_code) FROM industrial_park_product_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as product_types,
+        COALESCE(
+          (SELECT array_agg(transaction_type_code) FROM industrial_park_transaction_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as transaction_types,
+        COALESCE(
+          (SELECT array_agg(location_type_code) FROM industrial_park_location_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as location_types
       FROM industrial_parks ip
+      ${joinClauses}
       ${whereClause}
       ORDER BY ip.created_at DESC
       LIMIT :limit OFFSET :offset
@@ -143,9 +197,33 @@ export const getIndustrialParkById = async (req: Request, res: Response) => {
       type: QueryTypes.SELECT
     });
 
+    // Get satellite data from industrial_park satellite tables
+    const satelliteQuery = `
+      SELECT 
+        COALESCE(
+          (SELECT array_agg(product_type_code) FROM industrial_park_product_types WHERE industrial_park_id = :id),
+          ARRAY[]::VARCHAR[]
+        ) as product_types,
+        COALESCE(
+          (SELECT array_agg(transaction_type_code) FROM industrial_park_transaction_types WHERE industrial_park_id = :id),
+          ARRAY[]::VARCHAR[]
+        ) as transaction_types,
+        COALESCE(
+          (SELECT array_agg(location_type_code) FROM industrial_park_location_types WHERE industrial_park_id = :id),
+          ARRAY[]::VARCHAR[]
+        ) as location_types
+    `;
+    const satelliteResult: any = await sequelize.query(satelliteQuery, {
+      replacements: { id },
+      type: QueryTypes.SELECT
+    });
+
     res.json({
       ...result[0],
-      images
+      images,
+      product_types: satelliteResult[0]?.product_types || [],
+      transaction_types: satelliteResult[0]?.transaction_types || [],
+      location_types: satelliteResult[0]?.location_types || []
     });
   } catch (error) {
     console.error('Failed to fetch industrial park:', error);
@@ -164,6 +242,7 @@ export const createIndustrialPark = async (req: Request, res: Response) => {
       scope,
       has_rental,
       has_transfer,
+      has_factory,
       province,
       ward,
       address,
@@ -182,7 +261,11 @@ export const createIndustrialPark = async (req: Request, res: Response) => {
       meta_title,
       meta_description,
       published_at,
-      images
+      images,
+      // KCN redesign fields
+      product_types,
+      transaction_types,
+      location_types
     } = req.body;
 
     // Validate required fields
@@ -257,7 +340,7 @@ export const createIndustrialPark = async (req: Request, res: Response) => {
 
     const query = `
       INSERT INTO industrial_parks (
-        id, code, name, slug, scope, has_rental, has_transfer,
+        id, code, name, slug, scope, has_rental, has_transfer, has_factory,
         province, ward, address,
         total_area, available_area,
         rental_price_min, rental_price_max,
@@ -267,7 +350,7 @@ export const createIndustrialPark = async (req: Request, res: Response) => {
         meta_title, meta_description, published_at
       )
       VALUES (
-        :id::uuid, :code, :name, :slug, :scope, :has_rental, :has_transfer,
+        :id::uuid, :code, :name, :slug, :scope, :has_rental, :has_transfer, :has_factory,
         :province, :ward, :address,
         :total_area, :available_area,
         :rental_price_min::bigint, :rental_price_max::bigint,
@@ -288,6 +371,7 @@ export const createIndustrialPark = async (req: Request, res: Response) => {
       scope,
       has_rental: has_rental ?? false,
       has_transfer: has_transfer ?? false,
+      has_factory: has_factory ?? false,
       province: province ? String(province) : null,
       ward: ward ? String(ward) : null,
       address: address ? String(address) : null,
@@ -338,10 +422,96 @@ export const createIndustrialPark = async (req: Request, res: Response) => {
       }
     }
 
+    // Add product types to satellite table
+    if (product_types && Array.isArray(product_types) && product_types.length > 0) {
+      for (const productType of product_types) {
+        await sequelize.query(
+          `INSERT INTO industrial_park_product_types (industrial_park_id, product_type_code) VALUES (:industrial_park_id, :product_type_code) ON CONFLICT DO NOTHING`,
+          {
+            replacements: { industrial_park_id: id, product_type_code: productType },
+            type: QueryTypes.INSERT
+          }
+        );
+      }
+    }
+
+    // Add transaction types to satellite table
+    if (transaction_types && Array.isArray(transaction_types) && transaction_types.length > 0) {
+      for (const transactionType of transaction_types) {
+        await sequelize.query(
+          `INSERT INTO industrial_park_transaction_types (industrial_park_id, transaction_type_code) VALUES (:industrial_park_id, :transaction_type_code) ON CONFLICT DO NOTHING`,
+          {
+            replacements: { industrial_park_id: id, transaction_type_code: transactionType },
+            type: QueryTypes.INSERT
+          }
+        );
+      }
+    } else {
+      // Auto-add based on has_rental/has_transfer
+      if (has_transfer) {
+        await sequelize.query(
+          `INSERT INTO industrial_park_transaction_types (industrial_park_id, transaction_type_code) VALUES (:industrial_park_id, 'chuyen-nhuong') ON CONFLICT DO NOTHING`,
+          { replacements: { industrial_park_id: id }, type: QueryTypes.INSERT }
+        );
+      }
+      if (has_rental) {
+        await sequelize.query(
+          `INSERT INTO industrial_park_transaction_types (industrial_park_id, transaction_type_code) VALUES (:industrial_park_id, 'cho-thue') ON CONFLICT DO NOTHING`,
+          { replacements: { industrial_park_id: id }, type: QueryTypes.INSERT }
+        );
+      }
+    }
+
+    // Add location types to satellite table
+    if (location_types && Array.isArray(location_types) && location_types.length > 0) {
+      for (const locationType of location_types) {
+        await sequelize.query(
+          `INSERT INTO industrial_park_location_types (industrial_park_id, location_type_code) VALUES (:industrial_park_id, :location_type_code) ON CONFLICT DO NOTHING`,
+          {
+            replacements: { industrial_park_id: id, location_type_code: locationType },
+            type: QueryTypes.INSERT
+          }
+        );
+      }
+    } else if (scope) {
+      // Auto-add based on scope
+      await sequelize.query(
+        `INSERT INTO industrial_park_location_types (industrial_park_id, location_type_code) VALUES (:industrial_park_id, :location_type_code) ON CONFLICT DO NOTHING`,
+        {
+          replacements: { industrial_park_id: id, location_type_code: scope },
+          type: QueryTypes.INSERT
+        }
+      );
+    }
+
     // Log activity
     await logActivity(req, 'create', 'industrial_park', id, name, `Created industrial park "${name}"`);
 
-    res.status(201).json(industrialPark);
+    // Fetch park with satellite data
+    const getQuery = `
+      SELECT 
+        ip.*,
+        COALESCE(
+          (SELECT array_agg(product_type_code) FROM industrial_park_product_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as product_types,
+        COALESCE(
+          (SELECT array_agg(transaction_type_code) FROM industrial_park_transaction_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as transaction_types,
+        COALESCE(
+          (SELECT array_agg(location_type_code) FROM industrial_park_location_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as location_types
+      FROM industrial_parks ip
+      WHERE ip.id = :id
+    `;
+    const finalResult: any = await sequelize.query(getQuery, {
+      replacements: { id },
+      type: QueryTypes.SELECT
+    });
+
+    res.status(201).json(finalResult[0] || industrialPark);
   } catch (error: any) {
     console.error('[createIndustrialPark] Error:', error.message, error.stack);
     res.status(500).json({ error: 'Failed to create industrial park', message: error.message });
@@ -360,6 +530,7 @@ export const updateIndustrialPark = async (req: Request, res: Response) => {
       scope,
       has_rental,
       has_transfer,
+      has_factory,
       province,
       ward,
       address,
@@ -378,7 +549,11 @@ export const updateIndustrialPark = async (req: Request, res: Response) => {
       meta_title,
       meta_description,
       published_at,
-      images
+      images,
+      // KCN redesign fields
+      product_types,
+      transaction_types,
+      location_types
     } = req.body;
 
     // Build dynamic update query
@@ -431,6 +606,11 @@ export const updateIndustrialPark = async (req: Request, res: Response) => {
     if (has_transfer !== undefined) {
       updateFields.push('has_transfer = :has_transfer');
       replacements.has_transfer = has_transfer;
+    }
+
+    if (has_factory !== undefined) {
+      updateFields.push('has_factory = :has_factory');
+      replacements.has_factory = has_factory;
     }
 
     // Validate: at least one service must be true
@@ -660,10 +840,127 @@ export const updateIndustrialPark = async (req: Request, res: Response) => {
       }
     }
 
+    // Update satellite tables if provided
+    if (product_types !== undefined) {
+      // Delete existing product types
+      await sequelize.query('DELETE FROM industrial_park_product_types WHERE industrial_park_id = :id', {
+        replacements: { id },
+        type: QueryTypes.DELETE
+      });
+      // Insert new product types
+      if (Array.isArray(product_types) && product_types.length > 0) {
+        for (const productType of product_types) {
+          await sequelize.query(
+            `INSERT INTO industrial_park_product_types (industrial_park_id, product_type_code) VALUES (:industrial_park_id, :product_type_code)`,
+            {
+              replacements: { industrial_park_id: id, product_type_code: productType },
+              type: QueryTypes.INSERT
+            }
+          );
+        }
+      }
+    }
+
+    if (transaction_types !== undefined) {
+      // Delete existing transaction types
+      await sequelize.query('DELETE FROM industrial_park_transaction_types WHERE industrial_park_id = :id', {
+        replacements: { id },
+        type: QueryTypes.DELETE
+      });
+      // Insert new transaction types
+      if (Array.isArray(transaction_types) && transaction_types.length > 0) {
+        for (const transactionType of transaction_types) {
+          await sequelize.query(
+            `INSERT INTO industrial_park_transaction_types (industrial_park_id, transaction_type_code) VALUES (:industrial_park_id, :transaction_type_code)`,
+            {
+              replacements: { industrial_park_id: id, transaction_type_code: transactionType },
+              type: QueryTypes.INSERT
+            }
+          );
+        }
+      } else if (has_rental !== undefined || has_transfer !== undefined) {
+        // Auto-update based on has_rental/has_transfer if transaction_types not provided
+        const checkQuery = `SELECT has_rental, has_transfer FROM industrial_parks WHERE id = :id`;
+        const current: any = await sequelize.query(checkQuery, {
+          replacements: { id },
+          type: QueryTypes.SELECT
+        });
+        if (current.length > 0) {
+          const finalHasRental = has_rental !== undefined ? has_rental : current[0].has_rental;
+          const finalHasTransfer = has_transfer !== undefined ? has_transfer : current[0].has_transfer;
+          if (finalHasTransfer) {
+            await sequelize.query(
+              `INSERT INTO industrial_park_transaction_types (industrial_park_id, transaction_type_code) VALUES (:industrial_park_id, 'chuyen-nhuong') ON CONFLICT DO NOTHING`,
+              { replacements: { industrial_park_id: id }, type: QueryTypes.INSERT }
+            );
+          }
+          if (finalHasRental) {
+            await sequelize.query(
+              `INSERT INTO industrial_park_transaction_types (industrial_park_id, transaction_type_code) VALUES (:industrial_park_id, 'cho-thue') ON CONFLICT DO NOTHING`,
+              { replacements: { industrial_park_id: id }, type: QueryTypes.INSERT }
+            );
+          }
+        }
+      }
+    }
+
+    if (location_types !== undefined) {
+      // Delete existing location types
+      await sequelize.query('DELETE FROM industrial_park_location_types WHERE industrial_park_id = :id', {
+        replacements: { id },
+        type: QueryTypes.DELETE
+      });
+      // Insert new location types
+      if (Array.isArray(location_types) && location_types.length > 0) {
+        for (const locationType of location_types) {
+          await sequelize.query(
+            `INSERT INTO industrial_park_location_types (industrial_park_id, location_type_code) VALUES (:industrial_park_id, :location_type_code)`,
+            {
+              replacements: { industrial_park_id: id, location_type_code: locationType },
+              type: QueryTypes.INSERT
+            }
+          );
+        }
+      } else if (scope !== undefined && scope) {
+        // Auto-update based on scope if location_types not provided
+        await sequelize.query(
+          `INSERT INTO industrial_park_location_types (industrial_park_id, location_type_code) VALUES (:industrial_park_id, :location_type_code) ON CONFLICT DO NOTHING`,
+          {
+            replacements: { industrial_park_id: id, location_type_code: scope },
+            type: QueryTypes.INSERT
+          }
+        );
+      }
+    }
+
     // Log activity
     await logActivity(req, 'update', 'industrial_park', id, result[0][0].name, `Updated industrial park "${result[0][0].name}"`);
 
-    res.json(result[0][0]);
+    // Fetch park with satellite data
+    const getQuery = `
+      SELECT 
+        ip.*,
+        COALESCE(
+          (SELECT array_agg(product_type_code) FROM industrial_park_product_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as product_types,
+        COALESCE(
+          (SELECT array_agg(transaction_type_code) FROM industrial_park_transaction_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as transaction_types,
+        COALESCE(
+          (SELECT array_agg(location_type_code) FROM industrial_park_location_types WHERE industrial_park_id = ip.id),
+          ARRAY[]::VARCHAR[]
+        ) as location_types
+      FROM industrial_parks ip
+      WHERE ip.id = :id
+    `;
+    const finalResult: any = await sequelize.query(getQuery, {
+      replacements: { id },
+      type: QueryTypes.SELECT
+    });
+
+    res.json(finalResult[0] || result[0][0]);
   } catch (error: any) {
     console.error('[updateIndustrialPark] Error:', error.message, error.stack);
     res.status(500).json({ error: 'Failed to update industrial park', message: error.message });
@@ -768,7 +1065,7 @@ export const copyIndustrialPark = async (req: Request, res: Response) => {
 
     const insertQuery = `
       INSERT INTO industrial_parks (
-        id, code, name, slug, scope, has_rental, has_transfer,
+        id, code, name, slug, scope, has_rental, has_transfer, has_factory,
         province, ward, address, latitude, longitude, google_maps_link,
         total_area, available_area,
         rental_price_min, rental_price_max,
@@ -778,7 +1075,7 @@ export const copyIndustrialPark = async (req: Request, res: Response) => {
         meta_title, meta_description, published_at
       )
       VALUES (
-        :id::uuid, :code, :name, :slug, :scope, :has_rental, :has_transfer,
+        :id::uuid, :code, :name, :slug, :scope, :has_rental, :has_transfer, :has_factory,
         :province, :ward, :address, :latitude, :longitude, :google_maps_link,
         :total_area, :available_area,
         :rental_price_min::bigint, :rental_price_max::bigint,
@@ -798,6 +1095,7 @@ export const copyIndustrialPark = async (req: Request, res: Response) => {
       scope: original.scope,
       has_rental: original.has_rental ?? false,
       has_transfer: original.has_transfer ?? false,
+      has_factory: original.has_factory ?? false,
       province: original.province,
       ward: original.ward,
       address: original.address,

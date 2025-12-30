@@ -48,7 +48,7 @@ export default function AboutCTASection() {
           viewport={{ once: true }}
           className="max-w-3xl mx-auto"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2E8C4F] mb-6">
             Bắt đầu hành trình cùng chúng tôi
           </h2>
           <p className="text-xl md:text-2xl text-goldLight mb-10 max-w-2xl mx-auto">

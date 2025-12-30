@@ -43,12 +43,12 @@ export default function Testimonials() {
               Khách hàng nói gì
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2E8C4F] mb-4">
             Đánh Giá
             <br />
             <span className="text-goldDark">Từ Khách Hàng</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#2E8C4F] max-w-2xl mx-auto">
             Hàng nghìn khách hàng đã tin tưởng và hài lòng với dịch vụ của Inland
           </p>
         </motion.div>
@@ -78,7 +78,7 @@ export default function Testimonials() {
                 </div>
 
                 {/* Feedback */}
-                <p className="text-gray-700 leading-relaxed mb-6 flex-grow italic">
+                <p className="text-[#2E8C4F] leading-relaxed mb-6 flex-grow italic">
                   &ldquo;{testimonial.feedback}&rdquo;
                 </p>
 
@@ -96,8 +96,8 @@ export default function Testimonials() {
                     <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white" />
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
+                    <div className="font-bold text-[#2E8C4F]">{testimonial.name}</div>
+                    <div className="text-sm text-[#2E8C4F]">{testimonial.role}</div>
                   </div>
                 </div>
 
@@ -116,7 +116,7 @@ export default function Testimonials() {
           viewport={{ once: true }}
           className="mt-12 text-center"
         >
-          <p className="text-gray-600 mb-4">
+          <p className="text-[#2E8C4F] mb-4">
             Đánh giá trung bình: <span className="font-bold text-goldDark text-xl">4.9/5.0</span> từ hơn 5000+ khách hàng
           </p>
           <button className="px-6 py-3 bg-gradient-to-r from-goldDark to-goldLight text-white rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">

@@ -52,12 +52,12 @@ export default function Services() {
               Dịch vụ của chúng tôi
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2E8C4F] mb-4">
             Ngành Nghề
             <br />
             <span className="text-goldDark">& Dịch Vụ</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#2E8C4F] max-w-2xl mx-auto">
             Giải pháp toàn diện cho mọi nhu cầu bất động sản của bạn
           </p>
         </motion.div>
@@ -82,12 +82,12 @@ export default function Services() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-goldDark transition-colors">
+                <h3 className="text-xl font-bold text-[#2E8C4F] mb-3 group-hover:text-goldDark transition-colors">
                   {service.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-[#2E8C4F] text-sm leading-relaxed">
                   {service.description}
                 </p>
 

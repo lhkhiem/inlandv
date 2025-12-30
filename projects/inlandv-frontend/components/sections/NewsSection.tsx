@@ -49,9 +49,128 @@ export default function NewsSection() {
   const [adjustedScale, setAdjustedScale] = useState(1)
   const [maxContainerWidth, setMaxContainerWidth] = useState<number | undefined>(undefined)
   
+  // Hardcoded fallback data for "Tin Tức"
+  const FALLBACK_POSTS: Post[] = [
+    {
+      id: 'hardcoded-post-1',
+      title: 'Thị trường bất động sản công nghiệp quý 1/2025',
+      slug: 'thi-truong-bat-dong-san-cong-nghiep-quy-1-2025',
+      category: 'tin-thi-truong',
+      thumbnail_url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800',
+      content: 'Phân tích xu hướng và biến động giá bất động sản công nghiệp trong quý 1/2025. Thị trường tiếp tục tăng trưởng mạnh với nhu cầu cao từ các doanh nghiệp FDI.',
+      excerpt: 'Phân tích xu hướng và biến động giá bất động sản công nghiệp trong quý 1/2025.',
+      author: 'Inland Real Estate',
+      featured: true,
+      created_at: '2025-01-15T08:00:00Z',
+      updated_at: '2025-01-15T08:00:00Z',
+    },
+    {
+      id: 'hardcoded-post-2',
+      title: 'Quy hoạch mới các khu công nghiệp tại miền Bắc',
+      slug: 'quy-hoach-moi-cac-khu-cong-nghiep-tai-mien-bac',
+      category: 'quy-hoach-chinh-sach',
+      thumbnail_url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=800',
+      content: 'Chính phủ công bố quy hoạch mới cho các khu công nghiệp tại miền Bắc, tập trung phát triển hạ tầng và thu hút đầu tư.',
+      excerpt: 'Chính phủ công bố quy hoạch mới cho các khu công nghiệp tại miền Bắc.',
+      author: 'Inland Real Estate',
+      featured: false,
+      created_at: '2025-01-14T10:00:00Z',
+      updated_at: '2025-01-14T10:00:00Z',
+    },
+    {
+      id: 'hardcoded-post-3',
+      title: 'Hướng dẫn thủ tục thuê đất trong KCN',
+      slug: 'huong-dan-thu-tuc-thue-dat-trong-kcn',
+      category: 'tu-van-hoi-dap',
+      thumbnail_url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800',
+      content: 'Tổng hợp đầy đủ các bước và giấy tờ cần thiết để thuê đất trong khu công nghiệp. Hướng dẫn chi tiết từ A-Z.',
+      excerpt: 'Tổng hợp đầy đủ các bước và giấy tờ cần thiết để thuê đất trong khu công nghiệp.',
+      author: 'Inland Real Estate',
+      featured: false,
+      created_at: '2025-01-13T14:00:00Z',
+      updated_at: '2025-01-13T14:00:00Z',
+    },
+    {
+      id: 'hardcoded-post-4',
+      title: 'Top 10 khu công nghiệp đáng đầu tư 2025',
+      slug: 'top-10-khu-cong-nghiep-dang-dau-tu-2025',
+      category: 'tin-thi-truong',
+      thumbnail_url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800',
+      content: 'Danh sách các khu công nghiệp có tiềm năng sinh lời cao nhất trong năm 2025, dựa trên phân tích chuyên sâu.',
+      excerpt: 'Danh sách các khu công nghiệp có tiềm năng sinh lời cao nhất trong năm 2025.',
+      author: 'Inland Real Estate',
+      featured: true,
+      created_at: '2025-01-12T09:00:00Z',
+      updated_at: '2025-01-12T09:00:00Z',
+    },
+    {
+      id: 'hardcoded-post-5',
+      title: 'Chính sách mới về thuế đất công nghiệp',
+      slug: 'chinh-sach-moi-ve-thue-dat-cong-nghiep',
+      category: 'quy-hoach-chinh-sach',
+      thumbnail_url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=800',
+      content: 'Bộ Tài chính công bố chính sách mới về thuế đất công nghiệp, có nhiều ưu đãi cho doanh nghiệp đầu tư.',
+      excerpt: 'Bộ Tài chính công bố chính sách mới về thuế đất công nghiệp.',
+      author: 'Inland Real Estate',
+      featured: false,
+      created_at: '2025-01-11T11:00:00Z',
+      updated_at: '2025-01-11T11:00:00Z',
+    },
+    {
+      id: 'hardcoded-post-6',
+      title: 'Tư vấn chọn vị trí đặt nhà máy',
+      slug: 'tu-van-chon-vi-tri-dat-nha-may',
+      category: 'tu-van-hoi-dap',
+      thumbnail_url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800',
+      content: 'Chuyên gia tư vấn cách chọn vị trí đặt nhà máy phù hợp, cân nhắc các yếu tố quan trọng.',
+      excerpt: 'Chuyên gia tư vấn cách chọn vị trí đặt nhà máy phù hợp.',
+      author: 'Inland Real Estate',
+      featured: false,
+      created_at: '2025-01-10T15:00:00Z',
+      updated_at: '2025-01-10T15:00:00Z',
+    },
+  ]
+
+  const FALLBACK_JOBS: Job[] = [
+    {
+      id: 'hardcoded-job-1',
+      title: 'Giám đốc Kinh doanh',
+      slug: 'giam-doc-kinh-doanh',
+      location: 'TP. Hồ Chí Minh',
+      salary_range: 'Thỏa thuận',
+      description: 'Quản lý và phát triển đội ngũ kinh doanh bất động sản công nghiệp. Yêu cầu kinh nghiệm 5+ năm trong lĩnh vực BĐS.',
+      requirements: 'Kinh nghiệm 5+ năm trong lĩnh vực BĐS, kỹ năng quản lý tốt.',
+      created_at: '2025-01-15T08:00:00Z',
+      updated_at: '2025-01-15T08:00:00Z',
+    },
+    {
+      id: 'hardcoded-job-2',
+      title: 'Chuyên viên Pháp lý Dự án',
+      slug: 'chuyen-vien-phap-ly-du-an',
+      location: 'TP. Hồ Chí Minh',
+      salary_range: '15-25 triệu',
+      description: 'Thẩm định pháp lý các dự án bất động sản công nghiệp. Yêu cầu tốt nghiệp Luật, am hiểu pháp luật BĐS.',
+      requirements: 'Tốt nghiệp Luật, am hiểu pháp luật BĐS.',
+      created_at: '2025-01-14T10:00:00Z',
+      updated_at: '2025-01-14T10:00:00Z',
+    },
+    {
+      id: 'hardcoded-job-3',
+      title: 'Nhân viên Tư vấn Bất động sản',
+      slug: 'nhan-vien-tu-van-bat-dong-san',
+      location: 'Hà Nội',
+      salary_range: '10-15 triệu',
+      description: 'Tư vấn và hỗ trợ khách hàng tìm kiếm bất động sản công nghiệp phù hợp. Yêu cầu giao tiếp tốt, nhiệt tình.',
+      requirements: 'Giao tiếp tốt, nhiệt tình, có kinh nghiệm bán hàng.',
+      created_at: '2025-01-13T14:00:00Z',
+      updated_at: '2025-01-13T14:00:00Z',
+    },
+  ]
+
   // State cho data, loading, error
-  const [posts, setPosts] = useState<Post[]>([])
-  const [jobs, setJobs] = useState<Job[]>([])
+  // Initialize with hardcoded data as fallback
+  const [posts, setPosts] = useState<Post[]>(FALLBACK_POSTS)
+  const [jobs, setJobs] = useState<Job[]>(FALLBACK_JOBS)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   
@@ -76,35 +195,64 @@ export default function NewsSection() {
           setLoading(true)
           setError(null)
           
+          // Add timeout to prevent waiting too long
+          const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Request timeout')), 5000)
+          })
+          
           if (activeCategory === 'tuyen-dung') {
             // Fetch jobs
-            const response = await api.getJobs(1, 6)
+            const response = await Promise.race([
+              api.getJobs(1, 6),
+              timeoutPromise
+            ]) as any
             if (isMounted) {
-              setJobs(response.data || [])
-              setPosts([])
+              if (response && response.data && response.data.length > 0) {
+                setJobs(response.data)
+                setPosts([])
+              } else {
+                console.warn('[Component] No data from API, using hardcoded data')
+                setJobs(FALLBACK_JOBS)
+                setPosts([])
+              }
             }
           } else {
             // Fetch posts by category
-            // Use slug directly (tin-thi-truong, quy-hoach-chinh-sach, tu-van-hoi-dap)
-            // API will match by slug from news_categories table
-            const category = activeCategory // Use slug directly
+            const category = activeCategory
             console.log('[Component] Fetching posts with category:', category)
-            const response = await api.getPosts(category, 1, 6)
+            const response = await Promise.race([
+              api.getPosts(category, 1, 6),
+              timeoutPromise
+            ]) as any
             console.log('[Component] Received posts:', response.data)
             if (isMounted) {
-              setPosts(response.data || [])
-              setJobs([])
-              if (response.data && response.data.length === 0) {
-                console.warn('[Component] No posts found for category:', category)
+              if (response && response.data && response.data.length > 0) {
+                setPosts(response.data)
+                setJobs([])
+              } else {
+                console.warn('[Component] No data from API, using hardcoded data')
+                // Filter hardcoded posts by category
+                const filteredPosts = FALLBACK_POSTS.filter(p => p.category === category)
+                setPosts(filteredPosts.length > 0 ? filteredPosts : FALLBACK_POSTS)
+                setJobs([])
               }
             }
           }
         } catch (err) {
           if (isMounted) {
             console.error('Error fetching news:', err)
-            setError('Không thể tải dữ liệu. Vui lòng thử lại sau.')
-            setPosts([])
-            setJobs([])
+            console.log('[Component] Using hardcoded data as fallback')
+            // Use hardcoded data when API fails
+            if (activeCategory === 'tuyen-dung') {
+              setJobs(FALLBACK_JOBS)
+              setPosts([])
+            } else {
+              // Filter hardcoded posts by category
+              const filteredPosts = FALLBACK_POSTS.filter(p => p.category === activeCategory)
+              setPosts(filteredPosts.length > 0 ? filteredPosts : FALLBACK_POSTS)
+              setJobs([])
+            }
+            setError(null) // Don't show error, use hardcoded data instead
           }
         } finally {
           if (isMounted) {
@@ -232,7 +380,7 @@ export default function NewsSection() {
   const [colLeft, colRight] = filteredPosts
 
   return (
-    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-0' : 'h-screen'
     }`}>
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
@@ -274,7 +422,7 @@ export default function NewsSection() {
           transition={{ duration: 0.6 }}
           className={isPortrait ? "mb-3" : "mb-4"}
         >
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold text-white mb-3">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold text-[#2E8C4F] mb-3">
             Tin Tức
           </h2>
 
@@ -289,7 +437,7 @@ export default function NewsSection() {
                   className={`px-3 py-1 rounded-full border text-xs md:text-sm transition-colors duration-200 ${
                     isActive
                       ? 'bg-goldLight border-goldLight text-black font-semibold'
-                      : 'bg-transparent border-white/15 text-white/70 hover:border-goldLight hover:text-white'
+                      : 'bg-transparent border-[#2E8C4F]/15 text-[#2E8C4F]/70 hover:border-goldLight hover:text-[#2E8C4F]'
                   }`}
                 >
                   {cat.label}
@@ -303,7 +451,7 @@ export default function NewsSection() {
         {loading && (
           <div className="text-center py-12">
             <div className="inline-block w-8 h-8 border-4 border-goldLight border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-4 text-white/70">Đang tải dữ liệu...</p>
+            <p className="mt-4 text-[#2E8C4F]/70">Đang tải dữ liệu...</p>
           </div>
         )}
 
@@ -364,24 +512,24 @@ export default function NewsSection() {
                       </div>
 
                       {/* Nội dung chính – cột phải: 4 dòng */}
-                      <div className="px-2 py-1.5 text-[10px] md:text-xs text-white flex flex-col justify-between">
+                      <div className="px-2 py-1.5 text-[10px] md:text-xs text-[#2E8C4F] flex flex-col justify-between">
                         {/* Dòng 1: Tiêu đề */}
                         <h3 className="font-semibold text-[11px] md:text-xs mb-0.5 line-clamp-1 leading-tight">
                           {article.title}
                         </h3>
                         
                         {/* Dòng 2: Mô tả */}
-                        <p className="text-[9px] md:text-[10px] text-white/80 leading-snug italic line-clamp-1 mb-1">
+                        <p className="text-[9px] md:text-[10px] text-[#2E8C4F]/80 leading-snug italic line-clamp-1 mb-1">
                           {article.excerpt}
                         </p>
                         
                         {/* Dòng 3: Chuyên mục */}
-                        <p className="text-[9px] md:text-[10px] text-white/70 mb-1">
+                        <p className="text-[9px] md:text-[10px] text-[#2E8C4F]/70 mb-1">
                           Chuyên mục: <span className="text-goldLight font-semibold">{newsCategoryLabels[article.category]}</span>
                         </p>
                         
                         {/* Dòng 4: Time và Date chia 2 cột */}
-                        <div className="flex items-center justify-between text-[9px] md:text-[10px] text-white/70">
+                        <div className="flex items-center justify-between text-[9px] md:text-[10px] text-[#2E8C4F]/70">
                           <span>{formattedTime}</span>
                           <span>{formattedDate}</span>
                         </div>
@@ -398,7 +546,7 @@ export default function NewsSection() {
         {/* Empty state */}
         {!loading && !error && filteredPosts[0].length === 0 && filteredPosts[1].length === 0 && (
           <div className="text-center py-12">
-            <p className="text-white/70">Hiện chưa có bài viết nào.</p>
+            <p className="text-[#2E8C4F]/70">Hiện chưa có bài viết nào.</p>
           </div>
         )}
 

@@ -244,7 +244,7 @@ class ApiClient {
 
   // Properties
   async getProperties(
-    filters?: PropertyFilter & { q?: string },
+    filters?: PropertyFilter & { q?: string; location_types?: string[] },
     page = 1,
     limit = 12
   ): Promise<PaginatedResponse<Property>> {
@@ -264,6 +264,13 @@ class ApiClient {
       ...(filters?.q && { q: filters.q }),
     })
 
+    // Add location_types as array params
+    if (filters?.location_types && filters.location_types.length > 0) {
+      filters.location_types.forEach(locationType => {
+        params.append('location_types', locationType)
+      })
+    }
+
     return this.request<PaginatedResponse<Property>>(
       `/properties?${params.toString()}`
     )
@@ -278,12 +285,66 @@ class ApiClient {
     return this.request<ApiResponse<Array<{ value: string; label: string; count: number }>>>(`/properties/types`)
   }
 
+  // Products API
+  async getProducts(
+    filters?: {
+      location_types?: string[]
+      has_rental?: boolean
+      has_transfer?: boolean
+      has_factory?: boolean
+      province?: string
+      district?: string
+      rental_price_min?: number
+      rental_price_max?: number
+      transfer_price_min?: number
+      transfer_price_max?: number
+      available_area_min?: number
+      available_area_max?: number
+      q?: string
+    },
+    page = 1,
+    limit = 12
+  ): Promise<PaginatedResponse<any>> {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...(filters?.has_rental !== undefined && { has_rental: filters.has_rental.toString() }),
+      ...(filters?.has_transfer !== undefined && { has_transfer: filters.has_transfer.toString() }),
+      ...(filters?.has_factory !== undefined && { has_factory: filters.has_factory.toString() }),
+      ...(filters?.province && { province: filters.province }),
+      ...(filters?.district && { district: filters.district }),
+      ...(filters?.rental_price_min && { rental_price_min: filters.rental_price_min.toString() }),
+      ...(filters?.rental_price_max && { rental_price_max: filters.rental_price_max.toString() }),
+      ...(filters?.transfer_price_min && { transfer_price_min: filters.transfer_price_min.toString() }),
+      ...(filters?.transfer_price_max && { transfer_price_max: filters.transfer_price_max.toString() }),
+      ...(filters?.available_area_min && { available_area_min: filters.available_area_min.toString() }),
+      ...(filters?.available_area_max && { available_area_max: filters.available_area_max.toString() }),
+      ...(filters?.q && { q: filters.q }),
+    })
+
+    // Add location_types as array params
+    if (filters?.location_types && filters.location_types.length > 0) {
+      filters.location_types.forEach(locationType => {
+        params.append('location_types', locationType)
+      })
+    }
+
+    return this.request<PaginatedResponse<any>>(
+      `/products?${params.toString()}`
+    )
+  }
+
+  async getProductBySlug(slug: string): Promise<ApiResponse<any>> {
+    return this.request<ApiResponse<any>>(`/products/${slug}`)
+  }
+
   // Industrial Parks API
   async getIndustrialParks(
     filters?: {
       scope?: 'trong-kcn' | 'ngoai-kcn'
       has_rental?: boolean
       has_transfer?: boolean
+      has_factory?: boolean
       province?: string
     },
     page = 1,
@@ -295,6 +356,7 @@ class ApiClient {
       ...(filters?.scope && { scope: filters.scope }),
       ...(filters?.has_rental !== undefined && { has_rental: filters.has_rental.toString() }),
       ...(filters?.has_transfer !== undefined && { has_transfer: filters.has_transfer.toString() }),
+      ...(filters?.has_factory !== undefined && { has_factory: filters.has_factory.toString() }),
       ...(filters?.province && { province: filters.province }),
     })
 
@@ -307,12 +369,12 @@ class ApiClient {
     return this.request<ApiResponse<IndustrialPark>>(`/industrial-parks/${slug}`)
   }
 
-  // Helper methods for homepage sections - Now using industrial_parks table
+  // Helper methods for homepage sections - Now using products table
   async getPropertiesChuyenNhuongTrongKCN(limit = 6): Promise<IndustrialPark[]> {
     try {
-      const response = await this.getIndustrialParks(
+      const response = await this.getProducts(
         {
-          scope: 'trong-kcn',
+          location_types: ['trong-kcn'],
           has_transfer: true,
         },
         1,
@@ -322,7 +384,38 @@ class ApiClient {
         total: response.data?.length || 0,
         data: response.data,
       })
-      return response.data || []
+      // Map products to IndustrialPark format
+      return (response.data || []).map((product: any) => {
+        // Extract infrastructure from JSONB if it exists
+        const infrastructure = product.infrastructure || {}
+        return {
+          id: product.id,
+          name: product.name || '',
+          slug: product.slug || '',
+          code: product.code || '',
+          description: product.description || product.description_full || '',
+          province: product.province || '',
+          district: product.district || '',
+          total_area: product.total_area || product.area || 0,
+          available_area: product.available_area || 0,
+          rental_price_min: product.rental_price_min || undefined,
+          rental_price_max: product.rental_price_max || undefined,
+          transfer_price_min: product.transfer_price_min || undefined,
+          transfer_price_max: product.transfer_price_max || undefined,
+          thumbnail_url: product.thumbnail_url || '',
+          contact_phone: product.contact_phone || '',
+          allowed_industries: product.allowed_industries || [],
+          infrastructure_power: infrastructure.power || false,
+          infrastructure_water: infrastructure.water || false,
+          infrastructure_drainage: infrastructure.drainage || false,
+          infrastructure_waste: infrastructure.waste || false,
+          infrastructure_internet: infrastructure.internet || false,
+          infrastructure_road: infrastructure.road || false,
+          infrastructure_security: infrastructure.security || false,
+          created_at: product.created_at || new Date().toISOString(),
+          updated_at: product.updated_at || new Date().toISOString(),
+        }
+      })
     } catch (error) {
       console.error('Error fetching chuyen nhuong trong KCN:', error)
       return []
@@ -331,9 +424,9 @@ class ApiClient {
 
   async getPropertiesChuyenNhuongNgoaiKCN(limit = 6): Promise<IndustrialPark[]> {
     try {
-      const response = await this.getIndustrialParks(
+      const response = await this.getProducts(
         {
-          scope: 'ngoai-kcn',
+          location_types: ['ngoai-kcn', 'ngoai-kcn-ccn'],
           has_transfer: true,
         },
         1,
@@ -343,7 +436,38 @@ class ApiClient {
         total: response.data?.length || 0,
         data: response.data,
       })
-      return response.data || []
+      // Map products to IndustrialPark format
+      return (response.data || []).map((product: any) => {
+        // Extract infrastructure from JSONB if it exists
+        const infrastructure = product.infrastructure || {}
+        return {
+          id: product.id,
+          name: product.name || '',
+          slug: product.slug || '',
+          code: product.code || '',
+          description: product.description || product.description_full || '',
+          province: product.province || '',
+          district: product.district || '',
+          total_area: product.total_area || product.area || 0,
+          available_area: product.available_area || 0,
+          rental_price_min: product.rental_price_min || undefined,
+          rental_price_max: product.rental_price_max || undefined,
+          transfer_price_min: product.transfer_price_min || undefined,
+          transfer_price_max: product.transfer_price_max || undefined,
+          thumbnail_url: product.thumbnail_url || '',
+          contact_phone: product.contact_phone || '',
+          allowed_industries: product.allowed_industries || [],
+          infrastructure_power: infrastructure.power || false,
+          infrastructure_water: infrastructure.water || false,
+          infrastructure_drainage: infrastructure.drainage || false,
+          infrastructure_waste: infrastructure.waste || false,
+          infrastructure_internet: infrastructure.internet || false,
+          infrastructure_road: infrastructure.road || false,
+          infrastructure_security: infrastructure.security || false,
+          created_at: product.created_at || new Date().toISOString(),
+          updated_at: product.updated_at || new Date().toISOString(),
+        }
+      })
     } catch (error) {
       console.error('Error fetching chuyen nhuong ngoai KCN:', error)
       return []
@@ -352,8 +476,7 @@ class ApiClient {
 
   async getPropertiesChoThue(limit = 6): Promise<IndustrialPark[]> {
     try {
-      // Cho thuê có thể là từ industrial_parks (has_rental = true)
-      const response = await this.getIndustrialParks(
+      const response = await this.getProducts(
         {
           has_rental: true,
         },
@@ -364,7 +487,38 @@ class ApiClient {
         total: response.data?.length || 0,
         data: response.data,
       })
-      return response.data || []
+      // Map products to IndustrialPark format
+      return (response.data || []).map((product: any) => {
+        // Extract infrastructure from JSONB if it exists
+        const infrastructure = product.infrastructure || {}
+        return {
+          id: product.id,
+          name: product.name || '',
+          slug: product.slug || '',
+          code: product.code || '',
+          description: product.description || product.description_full || '',
+          province: product.province || '',
+          district: product.district || '',
+          total_area: product.total_area || product.area || 0,
+          available_area: product.available_area || 0,
+          rental_price_min: product.rental_price_min || undefined,
+          rental_price_max: product.rental_price_max || undefined,
+          transfer_price_min: product.transfer_price_min || undefined,
+          transfer_price_max: product.transfer_price_max || undefined,
+          thumbnail_url: product.thumbnail_url || '',
+          contact_phone: product.contact_phone || '',
+          allowed_industries: product.allowed_industries || [],
+          infrastructure_power: infrastructure.power || false,
+          infrastructure_water: infrastructure.water || false,
+          infrastructure_drainage: infrastructure.drainage || false,
+          infrastructure_waste: infrastructure.waste || false,
+          infrastructure_internet: infrastructure.internet || false,
+          infrastructure_road: infrastructure.road || false,
+          infrastructure_security: infrastructure.security || false,
+          created_at: product.created_at || new Date().toISOString(),
+          updated_at: product.updated_at || new Date().toISOString(),
+        }
+      })
     } catch (error) {
       console.error('Error fetching cho thue:', error)
       return []
@@ -378,6 +532,11 @@ class ApiClient {
 
   async getSettingByNamespace(namespace: string): Promise<ApiResponse<any>> {
     return this.request<ApiResponse<any>>(`/settings/${namespace}`)
+  }
+
+  // Lookup APIs
+  async getLocationTypes(): Promise<ApiResponse<Array<{ code: string; label: string; name_vi: string; name_en: string; display_order: number }>>> {
+    return this.request<ApiResponse<Array<{ code: string; label: string; name_vi: string; name_en: string; display_order: number }>>>(`/lookup/location-types`)
   }
 }
 

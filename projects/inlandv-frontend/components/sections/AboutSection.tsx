@@ -7,10 +7,12 @@ import { useSectionReveal } from '@/hooks/useSectionReveal'
 import { sampleIndustrialParks } from '@/lib/realEstateData'
 import { useLayoutMeasurements } from '@/components/LayoutMeasurementsContext'
 import { useCanvasScale } from '@/hooks/useCanvasScale'
+import { useContactSettings } from '@/hooks/useContactSettings'
 
 export default function IndustrialLandTransferKCNSection() {
   const revealed = useSectionReveal(1) // Section index in homepage
   const { headerHeight, timelineWidth } = useLayoutMeasurements()
+  const { settings: contactSettings } = useContactSettings()
   
   // Uniform scaling hook
   const { scale: uniformScale, isLandscape, viewport } = useCanvasScale(1920, 1080, 0.5, 1.0)
@@ -40,7 +42,7 @@ export default function IndustrialLandTransferKCNSection() {
     advantage: 'Loại: Chuyển nhượng đất có XN trong KCN',
       location: park.province,
       area: `Diện tích: ${areaM2} m²`,
-      contact: park.contact_phone ? `Liên hệ: ${park.contact_phone}` : 'Liên hệ: 0896 686 645',
+      contact: `Liên hệ: ${contactSettings?.hotline || '0896 686 645'}`,
       thumbnail: park.thumbnail_url,
     }
   })
@@ -77,7 +79,7 @@ export default function IndustrialLandTransferKCNSection() {
   }, [uniformScale, isLandscape, timelineWidth, viewport])
 
   return (
-    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] ${
       isPortrait ? 'min-h-0 py-4' : 'h-screen'
     }`}>
       {/* Wrapper Container - Căn giữa viewport hoàn toàn */}
@@ -158,14 +160,14 @@ export default function IndustrialLandTransferKCNSection() {
               {/* Nội dung chính - Bên phải, flex column */}
               <div className="flex flex-col flex-1 min-w-0">
                 {/* Phần nội dung trên */}
-                <div className="px-3 py-2 text-[10px] md:text-xs text-black flex flex-col justify-between flex-1">
+                <div className="px-3 py-2 text-[10px] md:text-xs text-[#2E8C4F] flex flex-col justify-between flex-1">
                   <div>
                     {/* Hàng giá thuê + mã đối diện nhau */}
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <div className="font-semibold text-[11px] md:text-[12px]">
                         {card.price}
                       </div>
-                      <div className="text-[11px] md:text-[12px] text-gray-700 font-semibold">
+                      <div className="text-[11px] md:text-[12px] text-[#2E8C4F] font-semibold">
                         {card.code}
                       </div>
                     </div>
@@ -175,7 +177,7 @@ export default function IndustrialLandTransferKCNSection() {
                       <div className="font-semibold text-[10px] md:text-[11px]">
                         {card.park}
                       </div>
-                      <p className="text-[9px] md:text-[10px] text-gray-700 leading-snug italic line-clamp-2">
+                      <p className="text-[9px] md:text-[10px] text-[#2E8C4F] leading-snug italic line-clamp-2">
                         {card.desc}
                       </p>
                       <p className="text-[9px] md:text-[10px] text-red-500 leading-snug font-semibold">
@@ -186,7 +188,7 @@ export default function IndustrialLandTransferKCNSection() {
                 </div>
 
                 {/* Hàng dưới cùng: chia đều 3 cột */}
-                <div className="flex items-center justify-between border-t border-gray-300 px-3 py-1.5 text-[9px] md:text-[10px] text-gray-700 font-semibold mt-auto">
+                <div className="flex items-center justify-between border-t border-gray-300 px-3 py-1.5 text-[9px] md:text-[10px] text-[#2E8C4F] font-semibold mt-auto">
                   <span className="flex-1 text-left truncate">{card.location}</span>
                   <span className="flex-1 text-center truncate">{card.area}</span>
                   <span className="flex-1 text-right text-red-500 truncate">{card.contact}</span>

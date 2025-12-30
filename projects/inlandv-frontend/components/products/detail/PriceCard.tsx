@@ -8,7 +8,11 @@ interface PriceCardProps {
   pricePerSqm?: number
   rentalPriceMin?: number
   rentalPriceMax?: number
+  transferPriceMin?: number // Giá chuyển nhượng tối thiểu (tỷ VND)
+  transferPriceMax?: number // Giá chuyển nhượng tối đa (tỷ VND)
   negotiable?: boolean
+  hasRental?: boolean // Có dịch vụ cho thuê
+  hasTransfer?: boolean // Có dịch vụ chuyển nhượng
 }
 
 export const PriceCard: React.FC<PriceCardProps> = ({
@@ -17,11 +21,15 @@ export const PriceCard: React.FC<PriceCardProps> = ({
   pricePerSqm,
   rentalPriceMin,
   rentalPriceMax,
-  negotiable
+  transferPriceMin,
+  transferPriceMax,
+  negotiable,
+  hasRental,
+  hasTransfer
 }) => {
   return (
     <InfoCard title="Tầm giá" icon={DollarSign}>
-      <div className="space-y-2 text-sm">
+      <div className="space-y-3 text-sm">
         {type === 'property' && (
           <>
             {price && (
@@ -43,24 +51,70 @@ export const PriceCard: React.FC<PriceCardProps> = ({
         )}
         {type === 'industrialPark' && (
           <>
-            {rentalPriceMin && rentalPriceMax && (
-              <div className="flex justify-between">
-                <span className="text-gray-600">Giá thuê:</span>
-                <span className="font-semibold text-[#358b4e]">
-                  {rentalPriceMin.toLocaleString('vi-VN')} - {rentalPriceMax.toLocaleString('vi-VN')}₫/m²/tháng
-                </span>
-              </div>
+            {/* Giá thuê */}
+            {hasRental && (
+              <>
+                {rentalPriceMin && rentalPriceMax && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá thuê:</span>
+                    <span className="font-semibold text-[#358b4e]">
+                      {rentalPriceMin.toLocaleString('vi-VN')} - {rentalPriceMax.toLocaleString('vi-VN')}₫/m²/tháng
+                    </span>
+                  </div>
+                )}
+                {rentalPriceMin && !rentalPriceMax && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá thuê:</span>
+                    <span className="font-semibold text-[#358b4e]">Từ {rentalPriceMin.toLocaleString('vi-VN')}₫/m²/tháng</span>
+                  </div>
+                )}
+                {!rentalPriceMin && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá thuê:</span>
+                    <span className="font-medium text-gray-500">Liên hệ</span>
+                  </div>
+                )}
+              </>
             )}
-            {rentalPriceMin && !rentalPriceMax && (
-              <div className="flex justify-between">
-                <span className="text-gray-600">Giá thuê:</span>
-                <span className="font-semibold text-[#358b4e]">Từ {rentalPriceMin.toLocaleString('vi-VN')}₫/m²/tháng</span>
-              </div>
+            
+            {/* Giá chuyển nhượng */}
+            {hasTransfer && (
+              <>
+                {transferPriceMin && transferPriceMax && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá chuyển nhượng:</span>
+                    <span className="font-semibold text-[#358b4e]">
+                      {transferPriceMin.toLocaleString('vi-VN')} - {transferPriceMax.toLocaleString('vi-VN')} tỷ VND
+                    </span>
+                  </div>
+                )}
+                {transferPriceMin && !transferPriceMax && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá chuyển nhượng:</span>
+                    <span className="font-semibold text-[#358b4e]">Từ {transferPriceMin.toLocaleString('vi-VN')} tỷ VND</span>
+                  </div>
+                )}
+                {!transferPriceMin && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá chuyển nhượng:</span>
+                    <span className="font-medium text-gray-500">Liên hệ</span>
+                  </div>
+                )}
+              </>
             )}
-            <div className="mt-2 text-xs text-gray-500">* Giá tham khảo, liên hệ để biết thêm chi tiết</div>
+            
+            {/* Nếu không có dịch vụ nào */}
+            {!hasRental && !hasTransfer && (
+              <div className="text-sm text-gray-500">Liên hệ để biết giá</div>
+            )}
+            
+            {/* Disclaimer */}
+            {(hasRental || hasTransfer) && (
+              <div className="mt-2 text-xs text-gray-500">* Giá tham khảo, liên hệ để biết thêm chi tiết</div>
+            )}
           </>
         )}
-        {!price && !rentalPriceMin && (
+        {type === 'property' && !price && !pricePerSqm && (
           <div className="text-sm text-gray-500">Liên hệ để biết giá</div>
         )}
       </div>

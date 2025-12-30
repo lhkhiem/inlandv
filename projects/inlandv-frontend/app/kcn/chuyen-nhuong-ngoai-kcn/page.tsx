@@ -3,82 +3,100 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { SlidersHorizontal } from 'lucide-react'
 import IndustrialParkFilterBar from '@/components/products/IndustrialParkFilterBar'
-import IndustrialParkCard from '@/components/products/IndustrialParkCard'
-import { sampleIndustrialParks, filterIndustrialParks } from '@/lib/realEstateData'
+import IndustrialParkGrid, { type IndustrialParkFilters } from '@/components/products/IndustrialParkGrid'
 import { IndustrialParkFilter } from '@/lib/types'
-import ProductFilterDropdown from '@/components/products/ProductFilterDropdown'
 
 function ChuyenNhuongNgoaiKCNPageContent() {
   const searchParams = useSearchParams()
-  const [filters, setFilters] = useState<IndustrialParkFilter>({
-    scope: 'ngoai-kcn',
-  })
-  const [sortBy, setSortBy] = useState<string>('newest')
-  const [sub2Filter, setSub2Filter] = useState<string>('')
-
-  // Lấy filter từ query params
-  useEffect(() => {
-    const scope = searchParams.get('scope')
-    const nx = searchParams.get('nx')
-    
-    if (scope === 'trong-ccn') {
-      setSub2Filter('trong-ccn')
-      setFilters(prev => ({ ...prev, scope: 'trong-ccn', nx: nx || undefined }))
-    } else if (scope === 'ngoai-kcn-ccn') {
-      setSub2Filter(nx === 'co' ? 'ngoai-kcn-ccn-co-nx' : 'ngoai-kcn-ccn')
-      setFilters(prev => ({ ...prev, scope: 'ngoai-kcn-ccn', nx: nx || undefined }))
-    } else {
-      setSub2Filter('')
-      setFilters(prev => ({ ...prev, scope: 'ngoai-kcn', nx: undefined }))
+  const initialQ = searchParams.get('q') || ''
+  const scopeParam = searchParams.get('scope') as 'trong-ccn' | 'ngoai-kcn-ccn' | null
+  const nxParam = searchParams.get('nx')
+  
+  // Determine title based on URL params
+  const getTitle = () => {
+    if (scopeParam === 'trong-ccn') {
+      return nxParam === 'co' 
+        ? 'Chuyển nhượng đất có NX trong CCN'
+        : 'Chuyển nhượng đất trong CCN'
+    } else if (scopeParam === 'ngoai-kcn-ccn') {
+      return nxParam === 'co'
+        ? 'Chuyển nhượng đất có NX ngoài KCN / CCN'
+        : 'Chuyển nhượng đất ngoài KCN / CCN'
     }
-  }, [searchParams])
-
-  // Sub 2 options cho dropdown
-  const sub2Options = [
-    { label: 'Tất cả', value: '' },
-    { label: 'Chuyển nhượng đất trong CCN', value: 'trong-ccn' },
-    { label: 'Chuyển nhượng đất có NX trong CCN', value: 'trong-ccn-co-nx' },
-    { label: 'Chuyển nhượng đất ngoài KCN / CCN', value: 'ngoai-kcn-ccn' },
-    { label: 'Chuyển nhượng đất có NX ngoài KCN / CCN', value: 'ngoai-kcn-ccn-co-nx' },
-  ]
-
-  const handleSub2Change = (value: string) => {
-    setSub2Filter(value)
-    if (value === 'trong-ccn') {
-      setFilters(prev => ({ ...prev, scope: 'trong-ccn', nx: undefined }))
-    } else if (value === 'trong-ccn-co-nx') {
-      setFilters(prev => ({ ...prev, scope: 'trong-ccn', nx: 'co' }))
-    } else if (value === 'ngoai-kcn-ccn') {
-      setFilters(prev => ({ ...prev, scope: 'ngoai-kcn-ccn', nx: undefined }))
-    } else if (value === 'ngoai-kcn-ccn-co-nx') {
-      setFilters(prev => ({ ...prev, scope: 'ngoai-kcn-ccn', nx: 'co' }))
-    } else {
-      setFilters(prev => ({ ...prev, scope: 'ngoai-kcn', nx: undefined }))
-    }
+    return 'Chuyển nhượng đất ngoài KCN'
   }
 
-  const filteredParks = filterIndustrialParks(sampleIndustrialParks, filters)
-
-  const sortedParks = [...filteredParks].sort((a, b) => {
-    switch (sortBy) {
-      case 'price-asc':
-        return (a.rental_price_min || 0) - (b.rental_price_min || 0)
-      case 'price-desc':
-        return (b.rental_price_max || 0) - (a.rental_price_max || 0)
-      case 'area-desc':
-        return b.total_area - a.total_area
-      case 'newest':
-      default:
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  const getDescription = () => {
+    if (scopeParam === 'trong-ccn') {
+      return nxParam === 'co'
+        ? 'Tìm kiếm đất có nhà xưởng chuyển nhượng trong cụm công nghiệp phù hợp'
+        : 'Tìm kiếm đất chuyển nhượng trong cụm công nghiệp phù hợp'
+    } else if (scopeParam === 'ngoai-kcn-ccn') {
+      return nxParam === 'co'
+        ? 'Tìm kiếm đất có nhà xưởng chuyển nhượng ngoài khu công nghiệp và cụm công nghiệp phù hợp'
+        : 'Tìm kiếm đất chuyển nhượng ngoài khu công nghiệp và cụm công nghiệp phù hợp'
     }
+    return 'Tìm kiếm đất chuyển nhượng ngoài khu công nghiệp phù hợp'
+  }
+  
+  // Determine scope from URL params
+  const getScope = (): 'trong-ccn' | 'ngoai-kcn-ccn' | undefined => {
+    if (scopeParam === 'trong-ccn') {
+      return 'trong-ccn'
+    } else if (scopeParam === 'ngoai-kcn-ccn') {
+      return 'ngoai-kcn-ccn'
+    }
+    // Default to ngoai-kcn-ccn if no scope param
+    return 'ngoai-kcn-ccn'
+  }
+
+  const [filters, setFilters] = useState<IndustrialParkFilters>({
+    q: initialQ,
+    scope: getScope(), // Filter based on URL params
+    has_transfer: true, // Filter for chuyen-nhuong
+    has_factory: nxParam === 'co', // Filter for has factory if nx=co
   })
 
+  // Update filters when URL params change
+  useEffect(() => {
+    const q = searchParams.get('q') || ''
+    const nx = searchParams.get('nx')
+    const scope = getScope()
+    setFilters(prev => ({ 
+      ...prev, 
+      q,
+      scope, // Filter based on URL params
+      has_transfer: true, // Always filter for chuyen-nhuong on this page
+      has_factory: nx === 'co', // Filter for has factory if nx=co
+    }))
+  }, [searchParams])
+
+  // Get current title and description
+  const title = getTitle()
+  const description = getDescription()
+
+  // Handle filter changes from IndustrialParkFilterBar
+  const handleFilterChange = (newFilters: IndustrialParkFilter) => {
+    const scope = getScope()
+    setFilters({
+      q: newFilters.q || '',
+      scope, // Preserve scope from URL params
+      has_transfer: true, // Always filter for chuyen-nhuong on this page
+      has_factory: nxParam === 'co', // Filter for has factory if nx=co
+      province: newFilters.province,
+      district: newFilters.district,
+      rental_price_min: newFilters.rental_price_min,
+      rental_price_max: newFilters.rental_price_max,
+      available_area_min: newFilters.available_area_min,
+      available_area_max: newFilters.available_area_max,
+    })
+  }
+
   return (
-    <div className="min-h-screen bg-[#151313] pt-20">
+    <div className="min-h-screen bg-[#F5F5F5] pt-20">
       {/* Hero Section */}
-      <div className="relative text-white bg-[#151313] border-b border-gray-800">
+      <div className="relative text-[#2E8C4F] bg-white border-b border-gray-300">
         <div className="py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -86,9 +104,9 @@ function ChuyenNhuongNgoaiKCNPageContent() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Chuyển nhượng đất ngoài KCN</h1>
-              <p className="text-lg md:text-xl text-gray-300">
-                Tìm kiếm đất chuyển nhượng ngoài khu công nghiệp phù hợp
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#2E8C4F]">{title}</h1>
+              <p className="text-lg md:text-xl text-[#2E8C4F]">
+                {description}
               </p>
             </motion.div>
           </div>
@@ -97,88 +115,29 @@ function ChuyenNhuongNgoaiKCNPageContent() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Sub 2 Filter Dropdown */}
-        <motion.div
-          initial={{ y: 20 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-6"
-        >
-          <div className="bg-[#1f1b1b] rounded-xl shadow-md border border-gray-700 p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-              <label className="text-sm font-semibold text-white whitespace-nowrap flex-shrink-0">
-                Loại chuyển nhượng:
-              </label>
-              <div className="flex-1 min-w-0 sm:max-w-md">
-                <ProductFilterDropdown
-                  label="Chọn loại"
-                  options={sub2Options}
-                  value={sub2Filter}
-                  onChange={handleSub2Change}
-                />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Filter Section */}
         <motion.div
           initial={{ y: 20 }}
           animate={{ y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className="mb-8"
         >
-          <IndustrialParkFilterBar 
-            mode="chuyen-nhuong"
-            onChange={(newFilters) => setFilters(prev => ({ ...prev, ...newFilters, scope: filters.scope }))} 
+          <IndustrialParkFilterBar
+            onChange={handleFilterChange}
           />
         </motion.div>
 
-        {/* Toolbar */}
+        {/* Results Grid */}
         <motion.div
           initial={{ y: 20 }}
           animate={{ y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          className="bg-[#1f1b1b] rounded-xl shadow-md border border-gray-700 p-4 mb-8 text-gray-100"
+          transition={{ duration: 0.4, delay: 0.2 }}
         >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="text-sm text-gray-300">
-              Tìm thấy <span className="font-semibold text-white">{sortedParks.length}</span> kết quả
-            </div>
-            <div className="flex items-center gap-4">
-              <select
-                value={sortBy}
-                onChange={e => setSortBy(e.target.value)}
-                className="px-3 py-2 border border-gray-600 bg-[#151313] text-gray-100 rounded-lg text-sm focus:outline-none focus:border-goldDark"
-              >
-                <option value="newest">Mới nhất</option>
-                <option value="price-asc">Giá thấp → cao</option>
-                <option value="price-desc">Giá cao → thấp</option>
-                <option value="area-desc">Diện tích lớn → nhỏ</option>
-              </select>
-            </div>
-          </div>
+          <IndustrialParkGrid
+            filters={filters}
+            pageSize={12}
+          />
         </motion.div>
-
-        {/* Results Grid */}
-        {sortedParks.length === 0 ? (
-          <motion.div
-            animate={{ opacity: 1 }}
-            className="bg-[#1f1b1b] rounded-2xl shadow-lg p-12 text-center"
-          >
-            <div className="text-gray-500 mb-4">
-              <SlidersHorizontal className="w-16 h-16 mx-auto" />
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2">Không tìm thấy kết quả</h3>
-            <p className="text-gray-300">Vui lòng thử điều chỉnh bộ lọc để xem nhiều kết quả hơn.</p>
-          </motion.div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedParks.map(park => (
-              <IndustrialParkCard key={park.id} park={park} />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   )
@@ -186,7 +145,7 @@ function ChuyenNhuongNgoaiKCNPageContent() {
 
 export default function ChuyenNhuongNgoaiKCNPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#151313] flex items-center justify-center"><div className="text-white">Loading...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center"><div className="text-[#2E8C4F]">Loading...</div></div>}>
       <ChuyenNhuongNgoaiKCNPageContent />
     </Suspense>
   )

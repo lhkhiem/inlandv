@@ -4,11 +4,20 @@ import { IndustrialPark, SimilarItemCardData } from '../../../lib/types'
 import { api, getAssetUrl } from '../../../lib/api'
 import { notFound } from 'next/navigation'
 
-export default async function IndustrialParkDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+/**
+ * KCN Detail Page - Chỉ fetch từ bảng industrial_parks
+ * 
+ * Phân biệt rõ ràng:
+ * - Khu công nghiệp (IndustrialPark) = bảng industrial_parks → route /kcn/[slug]
+ * - Bất động sản (Property) = bảng properties → route /bat-dong-san/[slug] hoặc /san-pham/[slug]
+ * 
+ * KCN properties (main_category='kcn') vẫn là Property, không phải IndustrialPark
+ */
+export default async function KCNDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   
   try {
-    // Fetch industrial park data from API
+    // Chỉ fetch từ bảng industrial_parks (Khu công nghiệp)
     const response = await api.getIndustrialParkBySlug(slug)
     
     if (!response.success || !response.data) {
@@ -18,16 +27,14 @@ export default async function IndustrialParkDetailPage({ params }: { params: Pro
 
     const industrialPark = response.data as IndustrialPark
     
-    // Debug: Log data received
     console.log('[Page] Industrial Park data:', {
       id: industrialPark.id,
       name: industrialPark.name,
       thumbnail_url: industrialPark.thumbnail_url,
       images_count: industrialPark.images?.length || 0,
-      images: industrialPark.images?.slice(0, 2) || []
     })
 
-    // Fetch similar industrial parks
+    // Fetch similar industrial parks (chỉ từ bảng industrial_parks)
     let similarItems: SimilarItemCardData[] = []
     try {
       const similarResponse = await api.getIndustrialParks(
@@ -70,6 +77,11 @@ export default async function IndustrialParkDetailPage({ params }: { params: Pro
     if (error?.cause?.code === 'ECONNREFUSED' || error?.message?.includes('fetch failed')) {
       console.error('[Page] Backend connection failed. Make sure backend is running on port 4000')
     }
-    notFound()
+    // If it's a 404, show not found
+    if (error?.status === 404) {
+      notFound()
+    }
+    // For other errors, rethrow to show error page
+    throw error
   }
 }

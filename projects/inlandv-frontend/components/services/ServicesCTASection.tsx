@@ -47,7 +47,7 @@ export default function ServicesCTASection() {
         className="absolute inset-0"
         style={{ y }}
       >
-        <div className="absolute inset-0 bg-black/70 z-[5]" />
+        <div className="absolute inset-0 bg-white/70 z-[5]" />
         <div
           className="absolute inset-0 w-full h-[120%]"
           style={{
@@ -71,10 +71,10 @@ export default function ServicesCTASection() {
               Bắt đầu hợp tác
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2E8C4F] mb-3 md:mb-4">
             Tăng Tốc <span className="text-goldLight">Dự Án FDI</span> Của Bạn
           </h2>
-          <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-[#2E8C4F] max-w-2xl mx-auto">
             Chọn hành động phù hợp để Inland đồng hành cùng bạn trong giai đoạn tiếp theo: tư vấn định hướng, đánh giá nhu cầu hay cung cấp hồ sơ năng lực.
           </p>
         </motion.div>
@@ -91,8 +91,8 @@ export default function ServicesCTASection() {
                 className="group relative p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition"
               >
                 <Icon className="w-8 h-8 text-goldLight mb-4 mx-auto" />
-                <div className="font-bold text-white mb-2 text-sm md:text-base">{a.label}</div>
-                <div className="text-xs md:text-sm text-gray-300 mb-4 leading-relaxed">{a.desc}</div>
+                <div className="font-bold text-[#2E8C4F] mb-2 text-sm md:text-base">{a.label}</div>
+                <div className="text-xs md:text-sm text-[#2E8C4F] mb-4 leading-relaxed">{a.desc}</div>
                 <Link
                   href={a.href}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-goldLight/20 text-goldLight text-xs font-semibold hover:bg-goldLight/30 transition"
@@ -109,7 +109,7 @@ export default function ServicesCTASection() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
-          className="mt-10 text-[11px] text-gray-500"
+          className="mt-10 text-[11px] text-[#2E8C4F]"
         >
           * Inland bảo mật thông tin & chỉ sử dụng để tư vấn chuyên môn.
         </motion.div>

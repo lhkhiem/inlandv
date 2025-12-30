@@ -120,9 +120,9 @@ function IndustrialParksPageContent() {
   })
 
   return (
-    <div className="min-h-screen bg-[#151313] pt-20">
+    <div className="min-h-screen bg-[#F5F5F5] pt-20">
       {/* Hero Section */}
-      <div className="relative text-white bg-[#151313] border-b border-gray-800">
+      <div className="relative text-[#2E8C4F] bg-white border-b border-gray-300">
         <div className="py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -130,8 +130,8 @@ function IndustrialParksPageContent() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Khu công nghiệp</h1>
-              <p className="text-lg md:text-xl text-gray-300">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#2E8C4F]">Khu công nghiệp</h1>
+              <p className="text-lg md:text-xl text-[#2E8C4F]">
                 Tìm kiếm khu công nghiệp phù hợp cho doanh nghiệp của bạn
               </p>
             </motion.div>
@@ -148,9 +148,9 @@ function IndustrialParksPageContent() {
           transition={{ duration: 0.4, delay: 0.1 }}
           className="mb-6"
         >
-          <div className="bg-[#1f1b1b] rounded-xl shadow-md border border-gray-700 p-4">
+          <div className="bg-white rounded-xl shadow-md border border-gray-300 p-4">
             <div className="flex items-center gap-4">
-              <label className="text-sm font-semibold text-white whitespace-nowrap">
+              <label className="text-sm font-semibold text-[#2E8C4F] whitespace-nowrap">
                 Loại bất động sản:
               </label>
               <div className="flex-1 max-w-md">
@@ -180,12 +180,12 @@ function IndustrialParksPageContent() {
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}
-          className="bg-[#1f1b1b] rounded-xl shadow-md border border-gray-700 p-4 mb-8 text-gray-100"
+          className="bg-white rounded-xl shadow-md border border-gray-300 p-4 mb-8 text-[#2E8C4F]"
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             {/* Results Count */}
-            <div className="text-sm text-gray-300">
-              Tìm thấy <span className="font-semibold text-white">{sortedParks.length}</span> khu công nghiệp
+            <div className="text-sm text-[#2E8C4F]">
+              Tìm thấy <span className="font-semibold text-[#2E8C4F]">{sortedParks.length}</span> khu công nghiệp
             </div>
 
             {/* Sort Dropdown */}
@@ -193,7 +193,7 @@ function IndustrialParksPageContent() {
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value)}
-                className="px-3 py-2 border border-gray-600 bg-[#151313] text-gray-100 rounded-lg text-sm focus:outline-none focus:border-goldDark"
+                className="px-3 py-2 border border-gray-300 bg-white text-[#2E8C4F] rounded-lg text-sm focus:outline-none focus:border-goldDark"
               >
                 <option value="newest">Mới nhất</option>
                 <option value="price-asc">Giá thuê thấp → cao</option>
@@ -208,13 +208,13 @@ function IndustrialParksPageContent() {
         {sortedParks.length === 0 ? (
           <motion.div
             animate={{ opacity: 1 }}
-            className="bg-[#1f1b1b] rounded-2xl shadow-lg p-12 text-center"
+            className="bg-white rounded-2xl shadow-lg p-12 text-center"
           >
-            <div className="text-gray-500 mb-4">
+            <div className="text-[#2E8C4F] mb-4">
               <SlidersHorizontal className="w-16 h-16 mx-auto" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">Không tìm thấy kết quả</h3>
-            <p className="text-gray-300">Vui lòng thử điều chỉnh bộ lọc để xem nhiều khu công nghiệp hơn.</p>
+            <h3 className="text-xl font-semibold text-[#2E8C4F] mb-2">Không tìm thấy kết quả</h3>
+            <p className="text-[#2E8C4F]">Vui lòng thử điều chỉnh bộ lọc để xem nhiều khu công nghiệp hơn.</p>
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -238,10 +238,10 @@ function IndustrialParksPageContent() {
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 rounded-2xl bg-[#1f1b1b] border border-gray-700 text-white text-center p-8 md:p-12"
+          className="mt-16 rounded-2xl bg-white border border-gray-300 text-[#2E8C4F] text-center p-8 md:p-12"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Cần tư vấn về khu công nghiệp?</h2>
-          <p className="text-lg text-gray-300 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#2E8C4F]">Cần tư vấn về khu công nghiệp?</h2>
+          <p className="text-lg text-[#2E8C4F] mb-6">
             Đội ngũ chuyên gia của chúng tôi sẵn sàng hỗ trợ bạn tìm kiếm khu công nghiệp phù hợp nhất
           </p>
           <a
@@ -258,7 +258,7 @@ function IndustrialParksPageContent() {
 
 export default function IndustrialParksPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#151313] flex items-center justify-center"><div className="text-white">Loading...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center"><div className="text-[#2E8C4F]">Loading...</div></div>}>
       <IndustrialParksPageContent />
     </Suspense>
   )

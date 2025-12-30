@@ -17,14 +17,14 @@ export default function TimelineNav({ sections, activeSection, onSectionClick, b
   const { setTimelineWidth } = useLayoutMeasurements()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
-  // Color palette: green when active/hover, white with opacity when inactive
+  // Color palette: green when active/hover, green with opacity when inactive
   const ACTIVE_COLOR = '#2E8C4F' // Green for active
   const HOVER_COLOR = '#2E8C4F' // Green for hover
-  const INACTIVE_COLOR = 'rgba(255,255,255,0.4)' // White with low opacity for inactive
+  const INACTIVE_COLOR = 'rgba(46, 140, 79, 0.4)' // Green with low opacity for inactive
   const DOT_ACTIVE_COLOR = '#2E8C4F' // Green dot for active
   const DOT_HOVER_COLOR = '#2E8C4F' // Green dot for hover
-  const DOT_INACTIVE_COLOR = 'rgba(255,255,255,0.4)' // White dot with low opacity for inactive
-  const LINE_COLOR = 'rgba(255,255,255,0.2)' // Light white line
+  const DOT_INACTIVE_COLOR = 'rgba(46, 140, 79, 0.4)' // Green dot with low opacity for inactive
+  const LINE_COLOR = 'rgba(46, 140, 79, 0.2)' // Light green line
 
   // Measure timeline width
   useEffect(() => {

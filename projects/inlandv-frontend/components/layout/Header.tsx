@@ -64,16 +64,12 @@ export default function Header() {
     return () => window.removeEventListener('resize', measureHeader)
   }, [setHeaderHeight])
 
-  // Color mode: BDS/KCN luôn nền sáng + text xanh; còn lại theo backgroundType
-  const isLight = isProductListPage || backgroundType === 'light'
-  const textClass = isLight || isScrolled ? 'text-[#2E8C4F]' : 'text-white'
-  // Inactive links: on light background use gray, on dark use white with opacity
-  const inactiveLink =
-    isLight || isScrolled
-      ? 'text-gray-400 hover:text-[#2E8C4F]' // Gray for inactive, green on hover
-      : 'text-white/80 hover:text-[#2E8C4F]' // White for inactive, green on hover
-  const activeLink =
-    isLight || isScrolled ? 'text-[#2E8C4F]' : 'text-white'
+  // Color mode: Always light background with black text
+  const isLight = true
+  const textClass = 'text-[#2E8C4F]'
+  // Inactive links: lighter green text, darker green on hover
+  const inactiveLink = 'text-[#2E8C4F]/70 hover:text-[#2E8C4F]'
+  const activeLink = 'text-[#2E8C4F]'
 
   // Desktop navigation tree (exclude Trang chủ vì đã dùng cho logo)
   const mainItems: NavItem[] = navigationTree.filter(
@@ -92,7 +88,7 @@ export default function Header() {
     <motion.header
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-sm transition-colors duration-300 ${
-        isScrolled ? 'bg-black/95 shadow-sm' : 'bg-black/80'
+        isScrolled ? 'bg-white/95 shadow-sm' : 'bg-white/95'
       }`}
     >
       <div
@@ -246,7 +242,7 @@ export default function Header() {
 
                 {/* Dropdown for children */}
                 {hasChildren && isOpen && (
-                  <div className="absolute left-0 mt-3 min-w-[260px] rounded-xl bg-[#151313] border border-white/5 shadow-xl py-3">
+                  <div className="absolute left-0 mt-3 min-w-[260px] rounded-xl bg-white border border-gray-200 shadow-xl py-3">
                     <ul className="space-y-1">
                       {item.children!.map((child) => {
                         // Check if any grandchild is active first (exact match with query params)
@@ -284,7 +280,7 @@ export default function Header() {
                                 className={`block py-1.5 text-sm rounded-md transition-colors hover:text-[#2E8C4F] ${
                                   shouldHighlightChild
                                     ? 'text-[#2E8C4F]'
-                                    : 'text-gray-100 hover:bg-white/5'
+                                    : 'text-[#2E8C4F] hover:bg-gray-50'
                                 }`}
                               >
                                 {child.title}
@@ -300,7 +296,7 @@ export default function Header() {
                                   }
                                 }}
                                 className={`py-1.5 text-sm font-semibold cursor-pointer transition-colors hover:text-[#2E8C4F] ${
-                                  shouldHighlightChild ? 'text-[#2E8C4F]' : 'text-gray-300'
+                                  shouldHighlightChild ? 'text-[#2E8C4F]' : 'text-[#2E8C4F]'
                                 }`}
                               >
                                 <div className="flex items-center gap-1">
@@ -316,7 +312,7 @@ export default function Header() {
                               </div>
                             ) : (
                               <div className={`py-1.5 text-sm font-semibold transition-colors hover:text-[#2E8C4F] ${
-                                shouldHighlightChild ? 'text-[#2E8C4F]' : 'text-gray-300'
+                                shouldHighlightChild ? 'text-[#2E8C4F]' : 'text-[#2E8C4F]'
                               }`}
                               >
                                 {child.title}
@@ -325,7 +321,7 @@ export default function Header() {
 
                             {/* Grand-children - chỉ show khi click vào sub 1 */}
                             {hasGrandchildren && isChildOpen && (
-                              <ul className="mt-1 mb-1 ml-3 border-l border-white/10 pl-3 space-y-1">
+                              <ul className="mt-1 mb-1 ml-3 border-l border-gray-200 pl-3 space-y-1">
                                 {child.children!.map((g) => {
                                   // Exact match for grandchild (must match full path with query params)
                                   const isGrandchildActive = g.href && currentFullPath === g.href
@@ -335,17 +331,17 @@ export default function Header() {
                                       {g.href ? (
                                         <Link
                                           href={g.href}
-                                          className={`block py-1 text-xs rounded-md transition-colors hover:text-[#2E8C4F] hover:bg-white/5 ${
+                                          className={`block py-1 text-xs rounded-md transition-colors hover:text-[#2E8C4F] hover:bg-gray-50 ${
                                             isGrandchildActive
                                               ? 'text-[#2E8C4F]'
-                                              : 'text-gray-300'
+                                              : 'text-[#2E8C4F]'
                                           }`}
                                         >
                                           {g.title}
                                         </Link>
                                       ) : (
                                         <span className={`block py-1 text-xs transition-colors hover:text-[#2E8C4F] ${
-                                          isGrandchildActive ? 'text-[#2E8C4F]' : 'text-gray-300'
+                                          isGrandchildActive ? 'text-[#2E8C4F]' : 'text-[#2E8C4F]'
                                         }`}
                                         >
                                           {g.title}
@@ -353,7 +349,7 @@ export default function Header() {
                                       )}
 
                                   {g.children && g.children.length > 0 && (
-                                    <ul className="mt-1 ml-3 border-l border-white/10 pl-3 space-y-1">
+                                    <ul className="mt-1 ml-3 border-l border-gray-200 pl-3 space-y-1">
                                       {g.children.map((gg) => {
                                         // Exact match (including query params)
                                         const isGGActive = gg.href && (
@@ -366,17 +362,17 @@ export default function Header() {
                                             {gg.href ? (
                                               <Link
                                                 href={gg.href}
-                                                className={`block py-1 text-[11px] rounded-md transition-colors hover:text-[#2E8C4F] hover:bg-white/5 ${
+                                                className={`block py-1 text-[11px] rounded-md transition-colors hover:text-[#2E8C4F] hover:bg-gray-50 ${
                                                   isGGActive
-                                                    ? 'text-[#2E8C4F] bg-white/10'
-                                                    : 'text-gray-300'
+                                                    ? 'text-[#2E8C4F] bg-gray-100'
+                                                    : 'text-[#2E8C4F]'
                                                 }`}
                                               >
                                                 {gg.title}
                                               </Link>
                                             ) : (
                                               <span className={`block py-1 text-[11px] transition-colors hover:text-[#2E8C4F] ${
-                                                isGGActive ? 'text-[#2E8C4F]' : 'text-gray-300'
+                                                isGGActive ? 'text-[#2E8C4F]' : 'text-[#2E8C4F]'
                                               }`}
                                               >
                                                 {gg.title}

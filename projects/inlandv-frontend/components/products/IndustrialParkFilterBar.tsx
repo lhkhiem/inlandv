@@ -156,7 +156,7 @@ export default function IndustrialParkFilterBar({
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 md:p-6">
       <div className="flex items-center justify-between mb-3">
-        <div className="text-sm font-semibold text-gray-900">Tìm kiếm khu công nghiệp</div>
+        <div className="text-sm font-semibold text-[#2E8C4F]">Tìm kiếm khu công nghiệp</div>
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
           className="flex items-center gap-2 text-sm text-goldDark hover:text-goldDark/80"
@@ -215,7 +215,7 @@ export default function IndustrialParkFilterBar({
       {/* Row 2: Price & Area Sliders */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-3">
         <div>
-          <div className="text-sm text-gray-500 mb-1">
+          <div className="text-sm text-[#2E8C4F] mb-1">
             {mode === 'cho-thue' ? 'Giá thuê' : mode === 'chuyen-nhuong' ? 'Giá chuyển nhượng' : 'Khoảng giá'}
           </div>
           <DualThumbPriceSlider
@@ -235,7 +235,7 @@ export default function IndustrialParkFilterBar({
           />
         </div>
         <div>
-          <div className="text-sm text-gray-500 mb-1">Diện tích còn trống</div>
+          <div className="text-sm text-[#2E8C4F] mb-1">Diện tích còn trống</div>
           <DualThumbPriceSlider
             min={0}
             max={currentConfig.areaMax}
@@ -248,10 +248,12 @@ export default function IndustrialParkFilterBar({
         </div>
       </div>
 
-      {/* Rental Price Quick Presets - Only show for cho-thue mode */}
-      {mode === 'cho-thue' && (
+      {/* Price Quick Presets - Show based on mode */}
+      {(mode === 'cho-thue' || mode === 'chuyen-nhuong') && (
         <div className="mt-3">
-          <div className="text-xs text-gray-500 mb-2">Giá thuê phổ biến:</div>
+          <div className="text-xs text-gray-500 mb-2">
+            {mode === 'cho-thue' ? 'Giá thuê phổ biến:' : 'Giá chuyển nhượng phổ biến:'}
+          </div>
           <div className="flex flex-wrap gap-2">
             {rentalPricePresets.map(preset => {
               const isActive = isPricePresetActive(preset)
@@ -262,7 +264,7 @@ export default function IndustrialParkFilterBar({
                   className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
                     isActive
                       ? 'bg-white border-[#2E8C4F] text-[#2E8C4F]'
-                      : 'bg-white border-gray-300 text-gray-600 hover:border-gray-400'
+                      : 'bg-white border-gray-300 text-[#2E8C4F] hover:border-gray-400'
                   }`}
                 >
                   {preset.label}
@@ -273,34 +275,9 @@ export default function IndustrialParkFilterBar({
         </div>
       )}
 
-      {/* Transfer Price Quick Presets - Only show for chuyen-nhuong mode */}
-      {mode === 'chuyen-nhuong' && (
-        <div className="mt-3">
-          <div className="text-xs text-gray-500 mb-2">Giá chuyển nhượng phổ biến:</div>
-          <div className="flex flex-wrap gap-2">
-            {rentalPricePresets.map(preset => {
-              const isActive = isPricePresetActive(preset)
-              return (
-                <button
-                  key={preset.label}
-                  onClick={() => emit({ rental_price_min: preset.min, rental_price_max: preset.max })}
-                  className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
-                    isActive
-                      ? 'bg-white border-[#2E8C4F] text-[#2E8C4F]'
-                      : 'bg-white border-gray-300 text-gray-600 hover:border-gray-400'
-                  }`}
-                >
-                  {preset.label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Area Quick Presets */}
+      {/* Area Quick Presets - Always show */}
       <div className="mt-3">
-        <div className="text-xs text-gray-500 mb-2">Diện tích còn trống:</div>
+        <div className="text-xs text-[#2E8C4F] mb-2">Diện tích còn trống:</div>
         <div className="flex flex-wrap gap-2">
           {areaPresets.map(preset => {
             const isActive = isAreaPresetActive(preset)
@@ -319,7 +296,7 @@ export default function IndustrialParkFilterBar({
                 className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
                   isActive
                     ? 'bg-white border-[#2E8C4F] text-[#2E8C4F]'
-                    : 'bg-white border-gray-300 text-gray-600 hover:border-gray-400'
+                    : 'bg-white border-gray-300 text-[#2E8C4F] hover:border-gray-400'
                 }`}
               >
                 {preset.label}
@@ -375,7 +352,7 @@ export default function IndustrialParkFilterBar({
                 setFilters(reset)
                 onChange(reset)
               }}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:border-goldDark/50 transition-colors"
+              className="px-4 py-2 text-sm text-[#2E8C4F] hover:text-[#2E8C4F] border border-gray-200 rounded-lg hover:border-goldDark/50 transition-colors"
             >
               Đặt lại bộ lọc
             </button>

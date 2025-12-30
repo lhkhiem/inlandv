@@ -33,7 +33,7 @@ export default function Section({
   children, 
   className = '',
   isActive = false,
-  background = 'bg-white',
+  background = 'bg-[#F5F5F5]',
   backgroundType = 'light',
   centerContent = false
 }: SectionProps) {

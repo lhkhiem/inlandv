@@ -97,7 +97,7 @@ export default function SocialShare({ url, title }: SocialShareProps) {
             className={`w-12 h-12 rounded-full ${
               copied 
                 ? 'bg-green-500 hover:bg-green-600' 
-                : 'bg-gray-700 hover:bg-gray-800'
+                : 'bg-[#2E8C4F] hover:bg-[#23673b]'
             } text-white flex items-center justify-center shadow-lg transition-all duration-300`}
             aria-label="Copy link"
           >

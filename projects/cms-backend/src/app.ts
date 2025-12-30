@@ -21,12 +21,14 @@ import newsletterRoutes from './routes/newsletter';
 import leadsRoutes from './routes/leads';
 import propertiesRoutes from './routes/properties';
 import industrialParksRoutes from './routes/industrialParks';
+import productsRoutes from './routes/products';
 import newsRoutes from './routes/news';
 import newsCategoriesRoutes from './routes/newsCategories';
 import jobsRoutes from './routes/jobs';
 import jobApplicationsRoutes from './routes/jobApplications';
 import pagesRoutes from './routes/pages';
 import pageSectionsRoutes from './routes/pageSections';
+import lookupRoutes from './routes/lookup';
 import Asset from './models/Asset';
 
 // Load .env.local first, then fallback to .env
@@ -235,12 +237,14 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/properties', propertiesRoutes);
 app.use('/api/industrial-parks', industrialParksRoutes);
+app.use('/api/products', productsRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/news-categories', newsCategoriesRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/job-applications', jobApplicationsRoutes);
 app.use('/api/pages', pagesRoutes);
 app.use('/api/page-sections', pageSectionsRoutes);
+app.use('/api/lookup', lookupRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

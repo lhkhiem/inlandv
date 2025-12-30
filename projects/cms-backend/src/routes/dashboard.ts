@@ -7,9 +7,10 @@ const router = Router()
 // GET /api/dashboard/stats - Get dashboard statistics (ADMIN)
 router.get('/stats', authenticate, isAdmin, async (req, res) => {
   try {
-    // Get counts
-    const [projectsCount, postsCount, leadsCount, jobsCount] = await Promise.all([
-      query('SELECT COUNT(*) FROM projects'),
+    // Get counts - using properties and industrial_parks instead of projects
+    const [propertiesCount, industrialParksCount, postsCount, leadsCount, jobsCount] = await Promise.all([
+      query('SELECT COUNT(*) FROM properties'),
+      query('SELECT COUNT(*) FROM industrial_parks'),
       query('SELECT COUNT(*) FROM posts'),
       query('SELECT COUNT(*) FROM leads'),
       query('SELECT COUNT(*) FROM jobs'),
@@ -21,10 +22,10 @@ router.get('/stats', authenticate, isAdmin, async (req, res) => {
        WHERE created_at >= NOW() - INTERVAL '7 days'`
     )
 
-    // Get projects by status
-    const projectsByStatus = await query(
+    // Get properties by status
+    const propertiesByStatus = await query(
       `SELECT status, COUNT(*) as count 
-       FROM projects 
+       FROM properties 
        GROUP BY status`
     )
 
@@ -32,13 +33,14 @@ router.get('/stats', authenticate, isAdmin, async (req, res) => {
       success: true,
       data: {
         counts: {
-          projects: parseInt(projectsCount.rows[0].count),
+          properties: parseInt(propertiesCount.rows[0].count),
+          industrialParks: parseInt(industrialParksCount.rows[0].count),
           posts: parseInt(postsCount.rows[0].count),
           leads: parseInt(leadsCount.rows[0].count),
           jobs: parseInt(jobsCount.rows[0].count),
         },
         recentLeads: parseInt(recentLeads.rows[0].count),
-        projectsByStatus: projectsByStatus.rows,
+        propertiesByStatus: propertiesByStatus.rows,
       },
     })
   } catch (error) {

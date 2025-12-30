@@ -303,9 +303,23 @@ export default function LegalInvestmentSection({ section }: LegalInvestmentSecti
   const benefits = sectionData.benefits;
 
   return (
-    <section className={`relative w-full flex items-center justify-center overflow-hidden bg-[#151313] ${
+    <section className={`relative w-full flex items-center justify-center overflow-hidden ${
       isPortrait ? 'min-h-screen py-8' : 'h-screen'
     }`}>
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${encodeURI('/images/PressUp - SOoMBKcIfH-2.webp')})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* White Overlay */}
+      <div className="absolute inset-0 bg-white/70 z-[1]" />
+      
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
         className={`relative z-[90] ${
@@ -349,10 +363,10 @@ export default function LegalInvestmentSection({ section }: LegalInvestmentSecti
               {sectionData.badge}
             </span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#2E8C4F] mb-2 md:mb-3">
             {sectionData.title} <span className="text-goldLight">{sectionData.title_highlight}</span>
           </h2>
-          <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-[#2E8C4F] max-w-3xl mx-auto">
             {sectionData.subtitle}
           </p>
         </motion.div>
@@ -363,9 +377,9 @@ export default function LegalInvestmentSection({ section }: LegalInvestmentSecti
             initial={{ opacity: 0, x: -40 }}
             animate={revealed ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
             transition={{ duration: 0.6, delay: revealed ? 0.1 : 0 }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Dịch vụ cụ thể</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4">Dịch vụ cụ thể</h3>
             <div className="space-y-4">
               {services.map((s, i) => {
                 const Icon = s.icon
@@ -375,8 +389,8 @@ export default function LegalInvestmentSection({ section }: LegalInvestmentSecti
                         <Icon className="w-6 h-6 text-goldLight" />
                     </div>
                     <div>
-                      <div className="font-bold text-white text-sm md:text-base mb-1">{s.title}</div>
-                      <div className="text-xs md:text-sm text-gray-300">{s.desc}</div>
+                      <div className="font-bold text-[#2E8C4F] text-sm md:text-base mb-1">{s.title}</div>
+                      <div className="text-xs md:text-sm text-[#2E8C4F]">{s.desc}</div>
                     </div>
                   </div>
                 )
@@ -390,14 +404,14 @@ export default function LegalInvestmentSection({ section }: LegalInvestmentSecti
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-[#1f1b1b] rounded-2xl p-6 shadow-lg border border-gray-700"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-300"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Lợi ích</h3>
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-4">Lợi ích</h3>
             <ul className="space-y-3">
               {benefits.map((b, i) => (
                 <li key={i} className="flex gap-3">
                   <div className="w-5 h-5 rounded-md bg-goldLight/30 text-goldDark flex items-center justify-center text-xs font-bold">✓</div>
-                  <span className="text-sm text-gray-200">{b}</span>
+                  <span className="text-sm text-[#2E8C4F]">{b}</span>
                 </li>
               ))}
             </ul>
@@ -411,15 +425,15 @@ export default function LegalInvestmentSection({ section }: LegalInvestmentSecti
             viewport={{ once: true }}
             className="bg-gradient-to-br from-goldLight/25 to-goldLight/10 rounded-2xl p-6 shadow-lg border border-goldLight/40"
           >
-            <h3 className="text-lg font-bold text-white mb-3">{sectionData.summary_title}</h3>
-            <p className="text-sm text-gray-100 leading-relaxed mb-4">
+            <h3 className="text-lg font-bold text-[#2E8C4F] mb-3">{sectionData.summary_title}</h3>
+            <p className="text-sm text-[#2E8C4F] leading-relaxed mb-4">
               {sectionData.summary_description}
             </p>
             <div className="space-y-3">
               {sectionData.stats.map((stat, i) => (
-                <div key={i} className="p-3 rounded-xl bg-[#151313] shadow-sm border border-goldLight/40">
+                <div key={i} className="p-3 rounded-xl bg-white shadow-sm border border-goldLight/40">
                   <div className="text-goldLight font-bold">{stat.value}</div>
-                  <div className="text-xs text-gray-200">{stat.label}</div>
+                  <div className="text-xs text-[#2E8C4F]">{stat.label}</div>
                 </div>
               ))}
             </div>

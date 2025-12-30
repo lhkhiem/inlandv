@@ -46,3 +46,19 @@ Script sẽ tự động đọc `POSTGRES_PASSWORD` từ `.env.local`.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

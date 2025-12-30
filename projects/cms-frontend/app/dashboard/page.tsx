@@ -234,7 +234,7 @@ export default function DashboardPage() {
             </Link>
 
             <Link
-              href="/dashboard/industrial-parks"
+              href="/dashboard/products"
               className={cn(
                 'group relative overflow-hidden rounded-lg border border-border bg-card p-6',
                 'transition-all hover:shadow-md hover:border-primary'

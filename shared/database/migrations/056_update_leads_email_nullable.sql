@@ -10,3 +10,19 @@ UPDATE leads SET email = NULL WHERE email = '';
 -- Add comment
 COMMENT ON COLUMN leads.email IS 'Email của khách hàng (có thể để trống)';
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

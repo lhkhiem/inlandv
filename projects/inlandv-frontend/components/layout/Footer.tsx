@@ -95,7 +95,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-[#151313] text-white">
+    <footer className="bg-white text-[#2E8C4F]">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 py-8 md:py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-12">
           {/* Cột 1: THÔNG TIN LIÊN HỆ */}
@@ -117,7 +117,7 @@ export default function Footer() {
             </h3>
 
             {/* Contact Details */}
-            <div className="space-y-3 text-sm text-white/80">
+            <div className="space-y-3 text-sm text-[#2E8C4F]">
               <div className="text-justify">
                 <span className="font-semibold">Địa chỉ:</span>{' '}
                 <span>
@@ -144,7 +144,7 @@ export default function Footer() {
                 href="https://facebook.com" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-white hover:text-goldLight transition-colors flex-shrink-0"
+                className="text-[#2E8C4F] hover:text-goldLight transition-colors flex-shrink-0"
                 aria-label="Facebook"
               >
                 <Facebook size={24} />
@@ -153,7 +153,7 @@ export default function Footer() {
                 href="https://wechat.com" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-white hover:text-goldLight transition-colors flex-shrink-0"
+                className="text-[#2E8C4F] hover:text-goldLight transition-colors flex-shrink-0"
                 aria-label="WeChat"
               >
                 <Wechat size={24} />
@@ -162,7 +162,7 @@ export default function Footer() {
                 href="https://tiktok.com" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-white hover:text-goldLight transition-colors flex-shrink-0"
+                className="text-[#2E8C4F] hover:text-goldLight transition-colors flex-shrink-0"
                 aria-label="TikTok"
               >
                 <Tiktok size={24} />
@@ -175,7 +175,7 @@ export default function Footer() {
             <h3 className="text-goldLight font-heading font-bold text-lg md:text-xl mb-4">
               SẢN PHẨM
             </h3>
-            <ul className="space-y-3 text-sm text-white/80">
+            <ul className="space-y-3 text-sm text-[#2E8C4F]">
               <li>
                 <Link href="/kcn/chuyen-nhuong-trong-kcn" className="hover:text-goldLight transition-colors">
                   Khu Công Nghiệp
@@ -194,7 +194,7 @@ export default function Footer() {
             <h3 className="text-goldLight font-heading font-bold text-lg md:text-xl mb-4">
               DỊCH VỤ
             </h3>
-            <ul className="space-y-3 text-sm text-white/80">
+            <ul className="space-y-3 text-sm text-[#2E8C4F]">
               <li>
                 <Link href="/dich-vu?section=moi-gioi" className="hover:text-goldLight transition-colors">
                   Môi giới BĐS Công nghiệp
@@ -220,11 +220,11 @@ export default function Footer() {
 
           {/* Cột 4: Danh sách KCN/CCN */}
           <div className="bg-white rounded-lg p-3 md:p-4 max-h-[300px] md:max-h-[400px] overflow-y-auto scrollbar-hide mt-0 md:mt-[36.4px]">
-            <ul className="space-y-2 text-xs md:text-sm text-black">
+            <ul className="space-y-2 text-xs md:text-sm text-[#2E8C4F]">
               {industrialParks.map((park, index) => (
                 <li key={index} className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center mt-0.5 flex-shrink-0">
-                    <ArrowRight className="w-2.5 h-2.5 text-gray-600" />
+                    <ArrowRight className="w-2.5 h-2.5 text-[#2E8C4F]" />
                   </span>
                   <Link 
                     href={park.detailLink}
@@ -239,11 +239,11 @@ export default function Footer() {
 
           {/* Cột 5: Danh sách hành động đất */}
           <div className="bg-white rounded-lg p-3 md:p-4 max-h-[300px] md:max-h-[400px] overflow-y-auto scrollbar-hide mt-0 md:mt-[36.4px]">
-            <ul className="space-y-2 text-xs md:text-sm text-black">
+            <ul className="space-y-2 text-xs md:text-sm text-[#2E8C4F]">
               {landActions.map((action, index) => (
                 <li key={index} className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center mt-0.5 flex-shrink-0">
-                    <ArrowRight className="w-2.5 h-2.5 text-gray-600" />
+                    <ArrowRight className="w-2.5 h-2.5 text-[#2E8C4F]" />
                   </span>
                   <Link 
                     href={action.link} 
@@ -258,16 +258,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/10">
+        <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-white/60 text-sm">
+            <p className="text-[#2E8C4F] text-sm">
               © 2025 Inlandv Real Estate. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
-              <Link href="/dieu-khoan" className="text-white/60 hover:text-goldLight transition-colors">
+              <Link href="/dieu-khoan" className="text-[#2E8C4F] hover:text-goldLight transition-colors">
                 Điều khoản sử dụng
               </Link>
-              <Link href="/chinh-sach" className="text-white/60 hover:text-goldLight transition-colors">
+              <Link href="/chinh-sach" className="text-[#2E8C4F] hover:text-goldLight transition-colors">
                 Chính sách bảo mật
               </Link>
             </div>

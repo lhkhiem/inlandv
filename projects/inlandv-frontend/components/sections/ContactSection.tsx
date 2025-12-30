@@ -8,6 +8,7 @@ import type { Lead } from '@/lib/types'
 import { validateEmail, validatePhone } from '@/lib/utils'
 import { useLayoutMeasurements } from '@/components/LayoutMeasurementsContext'
 import { useCanvasScale } from '@/hooks/useCanvasScale'
+import { getProvinces, type Province } from '@/lib/provinces-api'
 
 export default function ContactSection() {
   const { headerHeight, timelineWidth } = useLayoutMeasurements()
@@ -33,6 +34,8 @@ export default function ContactSection() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [provinces, setProvinces] = useState<Province[]>([])
+  const [loadingProvinces, setLoadingProvinces] = useState(true)
 
   const needOptions = [
     { value: 'mua', label: 'Mua bất động sản' },
@@ -42,18 +45,23 @@ export default function ContactSection() {
     { value: 'khac', label: 'Dịch vụ khác' },
   ]
 
-  const cities = [
-    'TP. Hồ Chí Minh',
-    'Hà Nội',
-    'Đà Nẵng',
-    'Hải Phòng',
-    'Cần Thơ',
-    'Bình Dương',
-    'Đồng Nai',
-    'Long An',
-    'Bình Định',
-    'Khác',
-  ]
+  // Load provinces from API
+  useEffect(() => {
+    const loadProvinces = async () => {
+      try {
+        setLoadingProvinces(true)
+        const data = await getProvinces()
+        setProvinces(data)
+      } catch (error) {
+        console.error('Error loading provinces:', error)
+        // Fallback to empty array if API fails
+        setProvinces([])
+      } finally {
+        setLoadingProvinces(false)
+      }
+    }
+    loadProvinces()
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -178,8 +186,8 @@ export default function ContactSection() {
       }`}
       style={{ backgroundImage: 'url(/images/processed-image-5-6.webp)' }}
     >
-      {/* Dark overlay - tăng độ tối thêm 20% (từ 60% lên 80%) */}
-      <div className="absolute inset-0 bg-black/80 z-10" />
+      {/* White overlay - tăng độ sáng thêm 20% (từ 60% lên 80%) */}
+      <div className="absolute inset-0 bg-white/80 z-10" />
       {/* Wrapper container - Căn giữa viewport (cả ngang và dọc) */}
       <div
         className={`relative z-[90] ${
@@ -197,7 +205,7 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className={isPortrait ? 'w-full py-4' : 'w-full max-h-[85vh] overflow-y-auto scrollbar-hide'}
+          className={isPortrait ? 'w-full py-4' : 'w-full max-h-[80vh] overflow-y-auto scrollbar-hide'}
           style={!isPortrait ? {
             // Max-width động để đảm bảo không chạm timeline
             maxWidth: maxContainerWidth ? `${maxContainerWidth}px` : '1600px',
@@ -213,13 +221,13 @@ export default function ContactSection() {
           } : {}}
         >
           <div className="flex flex-col">
-        <div className="text-center mb-6 md:mb-8">
+        <div className="text-center mb-3 md:mb-4">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-heading font-bold text-goldLight text-[40px] md:text-[56px] lg:text-[80px] leading-[170%] tracking-normal mb-3"
+            className="font-heading font-bold text-goldLight text-[32px] md:text-[48px] lg:text-[72px] leading-[170%] tracking-normal mb-[0.125rem]"
           >
             Nhận Báo Giá Ngay
           </motion.h2>
@@ -228,9 +236,9 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-heading font-bold italic text-[14px] md:text-[18px] lg:text-[20px] leading-[170%] text-center text-white/80 max-w-3xl mx-auto whitespace-pre-line"
+            className="font-heading font-bold italic text-[14px] md:text-[18px] lg:text-[20px] leading-[170%] text-center text-[#2E8C4F] max-w-3xl mx-auto whitespace-pre-line"
           >
-            {`Nắm bắt nhanh nhu cầu và nhanh chóng gửi báo giá,\ntiết kiệm thời gian giá trị của Quý Khách hàng.`}
+            {`Nắm bắt nhanh nhu cầu và nhanh chóng gửi báo giá.`}
           </motion.p>
         </div>
 
@@ -251,7 +259,7 @@ export default function ContactSection() {
 
               {/* Họ và tên */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-white mb-1">
+                <label htmlFor="name" className="block text-sm font-medium text-[#2E8C4F] mb-1">
                   Họ và tên <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -260,8 +268,8 @@ export default function ContactSection() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 text-sm border border-white rounded-lg bg-gray-800/50 text-white focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all ${
-                    errors.name ? 'border-red-500' : 'border-white'
+                  className={`w-full px-3 py-2 text-sm border border-[#2E8C4F] rounded-lg bg-white/50 text-[#2E8C4F] focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all ${
+                    errors.name ? 'border-red-500' : 'border-[#2E8C4F]'
                   }`}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
@@ -269,7 +277,7 @@ export default function ContactSection() {
 
               {/* Số điện thoại */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-white mb-1">
+                <label htmlFor="phone" className="block text-sm font-medium text-[#2E8C4F] mb-1">
                   Số điện thoại <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -278,8 +286,8 @@ export default function ContactSection() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 text-sm border border-white rounded-lg bg-gray-800/50 text-white focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all ${
-                    errors.phone ? 'border-red-500' : 'border-white'
+                  className={`w-full px-3 py-2 text-sm border border-[#2E8C4F] rounded-lg bg-white/50 text-[#2E8C4F] focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all ${
+                    errors.phone ? 'border-red-500' : 'border-[#2E8C4F]'
                   }`}
                 />
                 {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
@@ -287,7 +295,7 @@ export default function ContactSection() {
 
               {/* Nhu cầu */}
               <div>
-                <label htmlFor="need" className="block text-sm font-medium text-white mb-1">
+                <label htmlFor="need" className="block text-sm font-medium text-[#2E8C4F] mb-1">
                   Nhu cầu <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -295,8 +303,8 @@ export default function ContactSection() {
                   name="need"
                   value={formData.need}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 text-sm border border-white rounded-lg bg-gray-800/50 text-white focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all ${
-                    errors.need ? 'border-red-500' : 'border-white'
+                  className={`w-full px-3 py-2 text-sm border border-[#2E8C4F] rounded-lg bg-white/50 text-[#2E8C4F] focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all ${
+                    errors.need ? 'border-red-500' : 'border-[#2E8C4F]'
                   }`}
                 >
                   <option value="">-- Chọn nhu cầu --</option>
@@ -311,7 +319,7 @@ export default function ContactSection() {
 
               {/* Địa điểm dự kiến */}
               <div>
-                <label htmlFor="location" className="block text-sm font-medium text-white mb-1">
+                <label htmlFor="location" className="block text-sm font-medium text-[#2E8C4F] mb-1">
                   Địa điểm dự kiến <span className="text-gray-400 text-xs">(Dropdown list thành phố)</span>
                 </label>
                 <select
@@ -319,12 +327,13 @@ export default function ContactSection() {
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 text-sm border border-white rounded-lg bg-gray-800/50 text-white focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all"
+                  disabled={loadingProvinces}
+                  className="w-full px-3 py-2 text-sm border border-[#2E8C4F] rounded-lg bg-white/50 text-[#2E8C4F] focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="">-- Chọn thành phố --</option>
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
+                  {provinces.map((province) => (
+                    <option key={province.code} value={province.name}>
+                      {province.name}
                     </option>
                   ))}
                 </select>
@@ -332,7 +341,7 @@ export default function ContactSection() {
 
               {/* Yêu cầu khác */}
               <div>
-                <label htmlFor="otherRequest" className="block text-sm font-medium text-white mb-1">
+                <label htmlFor="otherRequest" className="block text-sm font-medium text-[#2E8C4F] mb-1">
                   Yêu cầu khác
                 </label>
                 <textarea
@@ -340,8 +349,8 @@ export default function ContactSection() {
                   name="otherRequest"
                   value={formData.otherRequest}
                   onChange={handleChange}
-                  rows={4}
-                  className="w-full px-3 py-2 text-sm border border-white rounded-lg bg-gray-800/50 text-white focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all resize-none"
+                  rows={3}
+                  className="w-full px-3 py-2 text-sm border border-[#2E8C4F] rounded-lg bg-white/50 text-[#2E8C4F] focus:ring-2 focus:ring-goldLight focus:border-goldLight transition-all resize-none"
                 />
               </div>
 

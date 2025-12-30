@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLayoutMeasurements } from '@/components/LayoutMeasurementsContext'
 import { useCanvasScale } from '@/hooks/useCanvasScale'
+import { useHomepageSettings } from '@/hooks/useHomepageSettings'
 
 // Counter animation hook
 function useCounter(end: number, duration: number = 2000, start: number = 0) {
@@ -66,6 +67,7 @@ export default function HeroSection() {
   const [keyword, setKeyword] = useState('')
   const sectionRef = useRef<HTMLElement>(null)
   const { headerHeight, safeAreaLeft, safeAreaRight, timelineWidth } = useLayoutMeasurements()
+  const { settings: homepageSettings } = useHomepageSettings()
   
   // Uniform Canvas Scaler: Scale content uniformly based on viewport dimensions
   // Reference: 1920×1080 (FullHD 23") = scale 1.0
@@ -201,8 +203,8 @@ export default function HeroSection() {
         />
       </motion.div>
       
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 z-10 bg-black/70" />
+      {/* White Overlay */}
+      <div className="absolute inset-0 z-10 bg-white/70" />
       
       {/* Wrapper container - Căn giữa viewport hoàn toàn (cả ngang và dọc) */}
       {/* Cùng z-index với timeline (z-[90]) để xử lý overlap */}
@@ -244,11 +246,11 @@ export default function HeroSection() {
           {/* Tất cả nội dung căn giữa */}
           <div className="flex flex-col items-center text-center">
             <h1 className="font-heading font-bold text-goldLight tracking-normal text-[64px] md:text-[96px] lg:text-[150px] leading-[120%]">
-              INLANDV
+              {homepageSettings.heroTitle || 'INLANDV'}
             </h1>
             
-            <p className="font-bold text-white text-[20px] md:text-[32px] lg:text-[50px] leading-[140%] mb-4 lg:whitespace-nowrap">
-              Cầu Nối Thịnh Vượng – Dẫn Bước Thành Công
+            <p className="font-bold text-[#2E8C4F] text-[20px] md:text-[32px] lg:text-[50px] leading-[140%] mb-4 lg:whitespace-nowrap">
+              {homepageSettings.heroSlogan || 'Cầu Nối Thịnh Vượng – Dẫn Bước Thành Công'}
             </p>
 
             <form
@@ -263,7 +265,7 @@ export default function HeroSection() {
                 className={`px-4 py-1.5 border border-[#e5e5e5] ${
                   mode === 'mua-ban'
                     ? 'bg-goldLight text-white border-goldLight'
-                    : 'bg-[#e5e5e5] text-black/80'
+                    : 'bg-[#e5e5e5] text-[#2E8C4F]'
                 }`}
               >
                 Chuyển nhượng
@@ -274,7 +276,7 @@ export default function HeroSection() {
                 className={`px-6 py-1.5 border border-[#e5e5e5] border-l-0 ${
                   mode === 'cho-thue'
                     ? 'bg-goldLight text-white border-goldLight'
-                    : 'bg-[#e5e5e5] text-black/80'
+                    : 'bg-[#e5e5e5] text-[#2E8C4F]'
                 }`}
               >
                 Cho thuê
@@ -283,12 +285,12 @@ export default function HeroSection() {
 
             {/* Thanh search dưới, viền trắng, nút xanh */}
             <div className="mt-0 flex h-12 md:h-14">
-              <div className="flex-1 flex items-center bg-[#151313] border border-white px-4">
+              <div className="flex-1 flex items-center bg-white border border-[#2E8C4F] px-4">
                 <input
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Tìm kiếm địa điểm, khu vực"
-                  className="w-full bg-transparent text-xs md:text-sm text-white outline-none placeholder:text-white/70"
+                  className="w-full bg-transparent text-xs md:text-sm text-[#2E8C4F] outline-none placeholder:text-[#2E8C4F]/70"
                 />
               </div>
               <button

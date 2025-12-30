@@ -300,3 +300,19 @@ export const deleteJobApplication = async (req: Request, res: Response) => {
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

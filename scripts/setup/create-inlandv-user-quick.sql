@@ -22,3 +22,19 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO in
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
